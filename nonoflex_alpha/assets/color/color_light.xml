@@ -1,0 +1,35 @@
+<resources>
+    <!--    SeniorClub signature-->
+    <color name="nono_blue">#1F6DE2</color>
+    <color name="nono_yellow">#FFA800</color>
+    <color name="nono_orange">#F96D39</color>
+
+    <!--    primary Color-->
+    <!--    button State-->
+    <color name="primaryLight">#6A9BFF</color>
+    <color name="primary">#1F6DE2</color>
+    <color name="primaryDark">#0043AF</color>
+    <color name="primaryDisabled">#1F6DE2</color>
+    <color name="secondaryLight">#F2F9FF</color>
+    <color name="secondary">#E2F1FF</color>
+    <color name="secondaryDark">#B0BECC</color>
+    <color name="base">#FFFFFF</color>
+    <color name="baseDark">#F1F4F8</color>
+    <color name="error">#E21F1F</color>
+    <color name="errorDisabled">#D43D3D</color>
+    <color name="shadow">#000000</color>
+
+    <!--    text Color-->
+    <color name="textDark">#2E2E2E</color>
+    <color name="textHint">#7A7A7D</color>
+    <color name="textDisable">#E9ECEF</color>
+    <color name="textLight">#FFFFFF</color>
+    <color name="textColor">#1F6DE2</color>
+    <color name="textColorDark">#0B005C</color>
+    <color name="textError">#E21F1F</color>
+
+    <!--    basic Color-->
+    <color name="bb_black">#000000</color>
+    <color name="bb_white">#ffffff</color>
+    <color name="bb_red">#E21F1F</color>
+</resources>
