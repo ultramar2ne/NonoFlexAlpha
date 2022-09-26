@@ -1,5 +1,5 @@
 name: nonoflex_alpha
-description: NonoFlex
+description: 노노유통의 재고관리 시스템
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.

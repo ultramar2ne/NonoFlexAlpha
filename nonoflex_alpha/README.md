@@ -1,6 +1,6 @@
 # nonoflex_alpha
 
-NonoFlex
+노노유통의 재고관리 시스템
 
 ## Getting Started
 

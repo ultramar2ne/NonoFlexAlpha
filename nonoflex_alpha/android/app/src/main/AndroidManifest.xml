@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.aloft.nonoflex.nonoflex_alpha">
+    package="com.aloft.nonoflex.alpha.nonoflex_alpha">
    <application
         android:label="nonoflex_alpha"
         android:name="${applicationName}"
