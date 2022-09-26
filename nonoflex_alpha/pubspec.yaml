@@ -19,6 +19,9 @@ dev_dependencies:
 
   flutter_lints: ^1.0.0
 
+  # firebase
+  firebase_core: ^1.23.0
+
   # flutter _ gen
   # flutter packages pub run build_runner build
   build_runner: 2.1.2
