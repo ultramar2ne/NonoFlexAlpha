@@ -25,10 +25,19 @@ dev_dependencies:
   flutter_gen_runner: 4.3.0
 
   # http
-
-  # toast
+  http: ^0.13.5
 
   # provider
+  provider: ^6.0.3
+
+  # path_provider
+  path_provider: ^2.0.11
+
+  # qr_code
+  qr_flutter: ^4.0.0
+
+  # toast
+  fluttertoast: ^8.0.9
 
 flutter_gen:
 
