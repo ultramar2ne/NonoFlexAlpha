@@ -25,3 +25,7 @@ class User {
 }
 
 enum UserType { admin, participant }
+
+class UserList{
+
+}

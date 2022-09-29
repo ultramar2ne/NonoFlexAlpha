@@ -2,36 +2,36 @@ abstract class DocumentRepository {
 
   /// temp Doc
   // 임시 문서 추가
-  void addTempDocument(){}
+  void addTempDocument();
 
   // 임시 문서 목록 조회
-  void getTempDocumentList(){}
+  void getTempDocumentList();
 
   // 임시 문서 상세 정보 조회
-  void getTempDocumentDetailInfo(){}
+  void getTempDocumentDetailInfo();
 
   // 임시 문서 정보 수정
-  void updateTempDocumentInfo(){}
+  void updateTempDocumentInfo();
 
   // 임시 문서 삭제
-  void deleteTempDocumentData(){}
+  void deleteTempDocumentData();
 
   /// Doc
   // 문서 추가
-  void addDocument(){}
+  void addDocument();
 
   // 문서 목록 조회
-  void getDocumentList(){}
+  void getDocumentList();
 
   // 거래처 별 문서 목록 조회
-  void getDocumentByComapny() {}
+  void getDocumentByComapny();
 
   // 문서 상세 정보 조회
-  void getDocumentDetailInfo(){}
+  void getDocumentDetailInfo();
 
   // 문서 정보 수정
-  void updateDocumentInfo(){}
+  void updateDocumentInfo();
 
   // 문서 정보 삭제
-  void deleteDcoumentData(){}
+  void deleteDcoumentData();
 }

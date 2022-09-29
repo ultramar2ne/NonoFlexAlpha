@@ -23,3 +23,7 @@ class Record {
   //   return Record(recordId, quantity, stock, price, createdAt, updatedAt)
   // }
 }
+
+class RecordList{
+
+}
