@@ -1,23 +1,28 @@
+import 'package:nonoflex_alpha/model/data/server.dart';
 import 'package:nonoflex_alpha/model/repository/auth/abs_auth_repository.dart';
 
 class AuthRepositoryImpl extends AuthRepository{
   @override
-  void getParticLoginInfo() {
-    // TODO: implement getParticLoginInfo
+  Future<String> getAdminLoginCode({required String email, required String password}) {
+    // TODO: implement getAdminLoginCode
+    throw UnimplementedError();
   }
 
   @override
-  void loginAdminUser() {
-    // TODO: implement loginAdminUser
+  Future<AuthToken> getAuthToken({required String loginCode}) {
+    // TODO: implement getAuthToken
+    throw UnimplementedError();
   }
 
   @override
-  void loginParticipantUser() {
-    // TODO: implement loginParticipantUser
+  Future<String> getParticipantLoginCode({required String userCode}) {
+    // TODO: implement getParticipantLoginCode
+    throw UnimplementedError();
   }
 
   @override
-  void requestTokenData() {
-    // TODO: implement requestTokenData
+  Future<AuthToken> refreshAuthToken({required String refreshToken}) {
+    // TODO: implement refreshAuthToken
+    throw UnimplementedError();
   }
 }

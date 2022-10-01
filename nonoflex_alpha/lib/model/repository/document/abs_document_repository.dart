@@ -1,37 +1,38 @@
-abstract class DocumentRepository {
+import 'package:nonoflex_alpha/model/data/document.dart';
 
+abstract class DocumentRepository {
   /// temp Doc
   // 임시 문서 추가
-  void addTempDocument();
+  Future<void> addTempDocument(TempDocument tempDocument);
 
   // 임시 문서 목록 조회
-  void getTempDocumentList();
+  Future<TempDocumentList> getTempDocumentList();
 
   // 임시 문서 상세 정보 조회
-  void getTempDocumentDetailInfo();
+  Future<TempDocument> getTempDocumentDetailInfo(int tempDocumentId);
 
   // 임시 문서 정보 수정
-  void updateTempDocumentInfo();
+  Future<void> updateTempDocumentInfo(TempDocument tempDocument);
 
   // 임시 문서 삭제
-  void deleteTempDocumentData();
+  Future<void> deleteTempDocumentData(int tempDocumentId);
 
   /// Doc
   // 문서 추가
-  void addDocument();
+  Future<void> addDocument(Document document);
 
   // 문서 목록 조회
-  void getDocumentList();
+  Future<DocumentList> getDocumentList();
 
   // 거래처 별 문서 목록 조회
   void getDocumentByComapny();
 
   // 문서 상세 정보 조회
-  void getDocumentDetailInfo();
+  Future<Document> getDocumentDetailInfo(int documentId);
 
   // 문서 정보 수정
-  void updateDocumentInfo();
+  Future<void> updateDocumentInfo(Document document);
 
   // 문서 정보 삭제
-  void deleteDcoumentData();
+  Future<void> deleteDcoumentData(int documentId);
 }

@@ -1,35 +1,34 @@
 import 'package:nonoflex_alpha/model/data/user.dart';
 import 'package:nonoflex_alpha/model/repository/user/abs_user_repository.dart';
 
-class UserMockRepository extends UserRepository{
+class UserMockRepository extends UserRepository {
   @override
-  Future<void> deleteUserData() {
+  Future<void> deleteUserData(String userCode) {
     // TODO: implement deleteUserData
     throw UnimplementedError();
   }
 
   @override
-  Future<User> getUserDetailInfo({required String userCode}) {
+  Future<User> getUserDetailInfo(String userCode) {
     // TODO: implement getUserDetailInfo
     throw UnimplementedError();
   }
 
   @override
-  Future<UserList> getUserList() {
+  Future<UserList> getUserList({String? searchValue}) {
     // TODO: implement getUserList
     throw UnimplementedError();
   }
 
   @override
-  Future<void> registerParticipant({required String name}) {
+  Future<User> registerParticipant({required String name}) {
     // TODO: implement registerParticipant
     throw UnimplementedError();
   }
 
   @override
-  Future<void> updateUserInfo() {
+  Future<void> updateUserInfo(User user) {
     // TODO: implement updateUserInfo
     throw UnimplementedError();
   }
-
 }

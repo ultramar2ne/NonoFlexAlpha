@@ -1,24 +1,29 @@
+import 'package:nonoflex_alpha/model/data/document.dart';
 import 'package:nonoflex_alpha/model/repository/document/abs_document_repository.dart';
 
 class DocumentMockRepository extends DocumentRepository {
   @override
-  void addDocument() {
+  Future<void> addDocument(Document document) {
     // TODO: implement addDocument
+    throw UnimplementedError();
   }
 
   @override
-  void addTempDocument() {
+  Future<void> addTempDocument(TempDocument tempDocument) {
     // TODO: implement addTempDocument
+    throw UnimplementedError();
   }
 
   @override
-  void deleteDcoumentData() {
+  Future<void> deleteDcoumentData(int documentId) {
     // TODO: implement deleteDcoumentData
+    throw UnimplementedError();
   }
 
   @override
-  void deleteTempDocumentData() {
+  Future<void> deleteTempDocumentData(int tempDocumentId) {
     // TODO: implement deleteTempDocumentData
+    throw UnimplementedError();
   }
 
   @override
@@ -27,33 +32,38 @@ class DocumentMockRepository extends DocumentRepository {
   }
 
   @override
-  void getDocumentDetailInfo() {
+  Future<Document> getDocumentDetailInfo(int documentId) {
     // TODO: implement getDocumentDetailInfo
+    throw UnimplementedError();
   }
 
   @override
-  void getDocumentList() {
+  Future<DocumentList> getDocumentList() {
     // TODO: implement getDocumentList
+    throw UnimplementedError();
   }
 
   @override
-  void getTempDocumentDetailInfo() {
+  Future<TempDocument> getTempDocumentDetailInfo(int tempDocumentId) {
     // TODO: implement getTempDocumentDetailInfo
+    throw UnimplementedError();
   }
 
   @override
-  void getTempDocumentList() {
+  Future<TempDocumentList> getTempDocumentList() {
     // TODO: implement getTempDocumentList
+    throw UnimplementedError();
   }
 
   @override
-  void updateDocumentInfo() {
+  Future<void> updateDocumentInfo(Document document) {
     // TODO: implement updateDocumentInfo
+    throw UnimplementedError();
   }
 
   @override
-  void updateTempDocumentInfo() {
+  Future<void> updateTempDocumentInfo(TempDocument tempDocument) {
     // TODO: implement updateTempDocumentInfo
+    throw UnimplementedError();
   }
-
 }
