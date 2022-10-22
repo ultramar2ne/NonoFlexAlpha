@@ -1,7 +1,10 @@
 import 'package:nonoflex_alpha/model/data/notice.dart';
 import 'package:nonoflex_alpha/model/repository/notice/abs_notice_repository.dart';
+import 'package:nonoflex_alpha/model/source/remote_data_source.dart';
 
-class NoticeRepositoryImpl extends NoticeRepository {
+class NoticeMockRepository extends NoticeRepository {
+  final RemoteDataSource _remoteDataSource = RemoteDataSource();
+
   @override
   Future<void> addNotice({required String title, required String contents, bool? isFocused}) {
     // TODO: implement addNotice

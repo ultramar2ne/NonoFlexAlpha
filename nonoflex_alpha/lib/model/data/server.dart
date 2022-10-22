@@ -1,7 +1,14 @@
 // 서버 기본 정보
 class ServerConfig {}
 
-enum TokenRequestType { authorization, refresh }
+/// 토큰 발급 또는 갱신 타입
+/// 로그인 코드를 통한 토큰 발급 시 [authorization_code] ,
+/// refresh token을 통한 갱신 시 [refresh_token] 을 토큰 발급 요청 시
+/// parameter로 포함시켜야 한다.
+enum TokenRequestType {
+  authorization,
+  refresh,
+}
 
 class AuthToken {
   final String accessToken;
@@ -17,6 +24,15 @@ class AuthToken {
       required this.accessExpiredAt,
       required this.refreshToken,
       required this.refreshExpiredAt});
+
+  factory AuthToken.fromJson(Map<String, dynamic> data) {
+    return AuthToken(
+      accessToken: data['access_token'],
+      accessExpiredAt: DateTime.fromMicrosecondsSinceEpoch(data['expires_in']),
+      refreshToken: data['refresh_token'],
+      refreshExpiredAt: DateTime.fromMicrosecondsSinceEpoch(data['refresh_token_expires_in']),
+    );
+  }
 }
 
 // {

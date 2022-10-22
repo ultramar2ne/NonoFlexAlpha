@@ -31,13 +31,13 @@ class Notice {
 
   factory Notice.fromJson(Map<String, dynamic> data) {
     return Notice(
-      noticeId: data['page'],
-      title: data['page'],
-      content: data['page'],
-      writer: data['page'],
-      createdAt: data['page'],
-      updatedAt: data['page'],
-      isFocused: data['page'],
+      noticeId: data['noticeId'],
+      title: data['title'],
+      content: data['content'],
+      writer: data['writer'],
+      createdAt: DateTime.parse(data['createdAt']),
+      updatedAt: DateTime.parse(data['updatedAt']),
+      isFocused: data['focus'],
     );
   }
 }
@@ -70,12 +70,17 @@ class NoticeList {
       required this.items});
 
   factory NoticeList.fromJson(Map<String, dynamic> data) {
+    final metaData = data['meta'];
+    final items = data['noticeList'];
+
+    // final List<Notice> kk = ;
+
     return NoticeList(
-        page: data['page'],
-        count: data['count'],
-        totalPages: data['totalPages'],
-        totalCount: data['totalCount'],
-        isLastPage: data['isLastPage'],
-        items: data['noticeList'].map((element) => Notice.fromJson(element)).toList());
+        page: metaData['page'],
+        count: metaData['count'],
+        totalPages: metaData['totalPages'],
+        totalCount: metaData['totalCount'],
+        isLastPage: metaData['lastPage'],
+        items: items.map<Notice>((el) => Notice.fromJson(el as Map<String,dynamic>)).toList());
   }
 }
