@@ -29,6 +29,18 @@ class Notice {
       required this.updatedAt,
       required this.isFocused});
 
+  Notice copyWith({String? title, String? content, bool? isFocused}) {
+    return Notice(
+      noticeId: noticeId,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      writer: writer,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      isFocused: isFocused ?? this.isFocused,
+    );
+  }
+
   factory Notice.fromJson(Map<String, dynamic> data) {
     return Notice(
       noticeId: data['noticeId'],
@@ -81,6 +93,6 @@ class NoticeList {
         totalPages: metaData['totalPages'],
         totalCount: metaData['totalCount'],
         isLastPage: metaData['lastPage'],
-        items: items.map<Notice>((el) => Notice.fromJson(el as Map<String,dynamic>)).toList());
+        items: items.map<Notice>((el) => Notice.fromJson(el as Map<String, dynamic>)).toList());
   }
 }

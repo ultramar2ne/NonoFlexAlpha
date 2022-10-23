@@ -1,7 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nonoflex_alpha/model/data/notice.dart';
 import 'package:nonoflex_alpha/model/data/server.dart';
+import 'package:nonoflex_alpha/model/repository/notice/abs_notice_repository.dart';
 import 'package:nonoflex_alpha/model/source/remote_data_source.dart';
 import 'package:logger/logger.dart';
+import 'package:mockito/mockito.dart';
 
 void main() {
   final logger = Logger();
@@ -100,44 +103,135 @@ void main() {
   });
 
   group('notice - success', () {
-
     // 공지사항 생성
-    test('공지사항 생성 - addNotice',() async {
+    test('공지사항 생성 - addNotice', () async {
+      /// 새로운 공지사항을 생성한다.
 
+      /// 준비
+      const title = 'test title';
+      const contents = 'test contents';
+      const isFocused = true;
+
+      /// 실행
+      final result = await remoteDataSource.addNotice(
+        title: title,
+        contents: contents,
+        isFocused: isFocused,
+      );
+
+      /// 검증
+      /// 성공할 경우 추가된 Notice를 반환한다.
+      expect(result.runtimeType == Notice, true);
     });
 
     // 공지사항 목록 조회
-    test('공지사항 목록 조회 - getNoticeList',() async {});
+    test('공지사항 목록 조회 - getNoticeList', () async {
+      /// 공지사항 목록을 조회한다.
+      /// 공지사항 목록의 조회 옵션은 다음과 같다.
+      /// - 검색
+      /// - NoticeListSortType (id / title / content..? / createdAt / updatedAt)
+      /// - 정렬 순서 (asc / desc default = desc)
+      /// - 목록 요청 갯수
+      /// - 요청 페이지
+      /// - 주요 공지사항만 보기
+      /// - contents 포함하지 않기
+
+      /// 테스트의 공통 기준
+      /// sortType / page 는 default 사용
+      const size = 5;
+      const onlyTitle = false;
+
+      /// 공지사항 목록을 조회한다.
+      /// 실행
+      final noticeList = await remoteDataSource.getNoticeList(
+        size: size,
+        onlyTitle: false,
+      );
+
+      // 검증
+      expect(
+          (noticeList.isLastPage == false && noticeList.items.length == size) ||
+              (noticeList.isLastPage == true),
+          true);
+
+      /// 공지사항을 검색한다.
+      /// 공지사항 목록이 마지막 페이지가 아닐 경우만 테스트한다.
+      if (!noticeList.isLastPage) {
+        // 준비
+        // 목록 중 두번째 요소를 검색하여 첫번째로 나타나는지 확인한다.
+        final targetNotice = noticeList.items[1];
+
+        // 실행
+        final searchedNoticeList = await remoteDataSource.getNoticeList(
+          searchValue: targetNotice.title,
+          size: size,
+          onlyTitle: false,
+        );
+
+        // 검증
+        expect(
+            searchedNoticeList.items.where((el) => el.noticeId == targetNotice.noticeId).isNotEmpty,
+            true);
+      }
+    });
 
     // 공지사항 상세 조회
-    test('공지사항 상세 조회 - getNoticeDetailInfo',() async {});
+    test('공지사항 상세 조회 - getNoticeDetailInfo', () async {
+      // 공지사항의 상세 정보를 조회한다.
+      // 준비
+      final noticeList = await remoteDataSource.getNoticeList();
+      final notice = noticeList.items.first;
+
+      // 실행
+      final noticeDetailInfo =
+          await remoteDataSource.getNoticeDetailInfo(noticeId: notice.noticeId);
+
+      // 검증
+      expect(noticeDetailInfo.noticeId == notice.noticeId, true);
+    });
 
     // 공지사항 수정
-    test('공지사항 수정 - updateNotice',() async {});
+    test('공지사항 수정 - updateNotice', () async {
+      // 공지사항 내용을 수정한다.
+      // 준비
+      final Notice noticeForTest =
+          await remoteDataSource.addNotice(title: 'title', contents: 'contents');
+      const changeValue = 'helloWorld';
+
+      // 실행
+      final updatedItem = await remoteDataSource.updateNotice(
+          notice: noticeForTest.copyWith(title: changeValue, content: changeValue));
+
+      // 검증
+      expect(updatedItem.runtimeType == Notice, true);
+      final item = updatedItem as Notice;
+      expect(item.title, changeValue);
+      expect(item.content, changeValue);
+    });
 
     // 공지사항 삭제
-    test('공지사항 삭제 - deleteNotice',() async {});
+    test('공지사항 삭제 - deleteNotice', () async {
+      // 공지사항을 삭제한다.
+      // 준비
+      final Notice noticeForTest =
+          await remoteDataSource.addNotice(title: 'title', contents: 'contents');
+
+      // 실행
+      final result = await remoteDataSource.deleteNotice(noticeId: noticeForTest.noticeId);
+
+      // 검증
+      expect(result.runtimeType == String, true);
+      logger.i('공지사항 삭제 결과 : $result');
+    });
   });
 
-  group('product - success', () {
+  group('product - success', () {});
 
-  });
+  group('company - success', () {});
 
-  group('company - success', () {
+  group('temp document - success', () {});
 
-  });
+  group('document - success', () {});
 
-  group('temp document - success', () {
-
-  });
-
-  group('document - success', () {
-
-  });
-
-  group('admin - success', () {
-
-  });
-
-
+  group('admin - success', () {});
 }

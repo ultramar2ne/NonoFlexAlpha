@@ -11,7 +11,7 @@ class RemoteDataSource {
   static const String version = 'v1';
 
   static const String token =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJST0xFIjoiUk9MRV9BRE1JTiIsImlzcyI6ImJ1ZGR5IiwiZXhwIjoxNjY2NDY4NTEyLCJpYXQiOjE2NjY0NjEzMTIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLstIjsoIjsoJXqt4Dsl7zrkaXsnbTsnqXtg5ztmZgifQ.c3YImryp_1GeL4IXWVa4-oX09kF4CCDHJZxWIxlyadg';
+      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJST0xFIjoiUk9MRV9BRE1JTiIsImlzcyI6ImJ1ZGR5IiwiZXhwIjoxNjY2NTE5NjM0LCJpYXQiOjE2NjY1MTI0MzQsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLstIjsoIjsoJXqt4Dsl7zrkaXsnbTsnqXtg5ztmZgifQ.C7pcMxVGGCwpvOKpWVz6w5e6TeaVQOjiax6sjYH72EQ';
 
   final Map<String, String> header = {'Authorization': token, 'Content-Type': 'application/json'};
 
@@ -119,7 +119,7 @@ class RemoteDataSource {
 
   /// region Notice
   /// 공지사항 생성
-  Future<void> addNotice({required String title, required String contents, bool? isFocused}) async {
+  Future<dynamic> addNotice({required String title, required String contents, bool? isFocused}) async {
     /// post - api/v1/notice
     const path = '/api/$version/notice';
 
@@ -141,9 +141,8 @@ class RemoteDataSource {
         body: convert.jsonEncode(getBody()),
       );
       if (response.statusCode == 200) {
-        /// 성공 플래그가 필요한가 ?
-        /// final Map<String, dynamic> data = convert.jsonDecode(response.body);
-        /// return Notice.fromJson(data);
+        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        return Notice.fromJson(data);
       } else {
         /// error
         throw (response.body);
@@ -218,7 +217,7 @@ class RemoteDataSource {
   }
 
   // 공지사항 수정
-  Future<void> updateNotice({required Notice notice}) async {
+  Future<dynamic> updateNotice({required Notice notice}) async {
     /// put - api/v1/notice/[noticeId]
     final path = '/api/$version/notice/${notice.noticeId}';
 
@@ -240,7 +239,8 @@ class RemoteDataSource {
         body: convert.jsonEncode(getBody()),
       );
       if (response.statusCode == 200) {
-        // 처리 필요 한지?
+        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        return Notice.fromJson(data);
       } else {
         /// error
         throw (response.body);
@@ -251,19 +251,21 @@ class RemoteDataSource {
   }
 
   // 공지사항 삭제
-  Future<void> deleteNotice({required int noticeId}) async {
+  Future<dynamic> deleteNotice({required int noticeId}) async {
     /// delete - api/v1/notice/[noticeId]
     final path = '/api/$version/notice/$noticeId';
 
     try {
-      var response = await client.put(
+      var response = await client.delete(
         requestUrl(path),
         headers: header,
       );
       if (response.statusCode == 200) {
         final data = convert.jsonDecode(response.body);
-        if(data['result'] != 'true'){
+        if(data['result'] != true){
           throw(data['message']);
+        } else {
+          return data['message'];
         }
       } else {
         /// error
