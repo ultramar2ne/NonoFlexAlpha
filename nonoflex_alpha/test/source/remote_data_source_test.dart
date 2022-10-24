@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nonoflex_alpha/model/data/notice.dart';
 import 'package:nonoflex_alpha/model/data/server.dart';
-import 'package:nonoflex_alpha/model/repository/notice/abs_notice_repository.dart';
 import 'package:nonoflex_alpha/model/source/remote_data_source.dart';
 import 'package:logger/logger.dart';
 import 'package:mockito/mockito.dart';

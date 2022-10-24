@@ -1,3 +1,3 @@
-void parse(d){
-
+class Utils {
+  static void parse() {}
 }

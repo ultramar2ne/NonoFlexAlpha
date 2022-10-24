@@ -13,14 +13,20 @@ dependencies:
 
   cupertino_icons: ^1.0.2
 
+  firebase_core: ^1.24.0
+  fluttertoast: ^8.0.9
+  intl: ^0.17.0
+  logger: ^1.1.0
+  mockito: ^5.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^1.0.0
 
-  # firebase
-  firebase_core: ^1.23.0
+#  # firebase
+#  firebase_core: ^1.23.0
 
   # flutter _ gen
   # flutter packages pub run build_runner build
@@ -36,14 +42,17 @@ dev_dependencies:
   # provider
   provider: ^6.0.3
 
+  # get
+  get: 4.6.0
+
   # path_provider
   path_provider: ^2.0.11
 
   # qr_code
   qr_flutter: ^4.0.0
 
-  # toast
-  fluttertoast: ^8.0.9
+#  # toast
+#  fluttertoast: ^8.0.9
 
   # get it (DI)
   get_it: 7.2.0

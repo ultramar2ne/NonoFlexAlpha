@@ -6,7 +6,7 @@ import 'package:nonoflex_alpha/model/repository/company/company_repository.dart'
 import 'package:nonoflex_alpha/model/repository/document/abs_document_repository.dart';
 import 'package:nonoflex_alpha/model/repository/document/document_mock_repository.dart';
 import 'package:nonoflex_alpha/model/repository/notice/abs_notice_repository.dart';
-import 'package:nonoflex_alpha/model/repository/notice/notice_mock_repository.dart';
+import 'package:nonoflex_alpha/model/repository/notice/notice_repository.dart';
 import 'package:nonoflex_alpha/model/repository/product/abs_product_repository.dart';
 import 'package:nonoflex_alpha/model/repository/product/product_repository.dart';
 import 'package:nonoflex_alpha/model/repository/user/abs_user_repository.dart';
