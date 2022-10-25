@@ -5,21 +5,25 @@ import 'package:nonoflex_alpha/view/notice/notice_detail_view.dart';
 import 'package:nonoflex_alpha/view/notice/notice_list_view.dart';
 import 'package:nonoflex_alpha/view/notice/notice_list_viewmodel.dart';
 import 'package:nonoflex_alpha/view/splash/splash_view.dart';
+import 'package:nonoflex_alpha/view/util/scanner_view.dart';
 
 class NonoNavigatorManager {
 
+  // ==== Splash ====
   Future<dynamic> goSplashPage() async {
     const path = '/';
 
     return await Get.to(SplashView(), routeName: path, transition: Transition.fade);
   }
 
+  // ==== Login ====
   Future<dynamic> goLoginPage() async {
     const path = '/login';
 
-    return await Get.to(LoginView(), routeName: path, transition: Transition.fade);
+    return await Get.off(LoginView(), routeName: path, transition: Transition.fade);
   }
 
+  // ==== Notice ====
   Future<dynamic> goNoticeListPage() async {
     const path = '/notice';
 
@@ -40,5 +44,12 @@ class NonoNavigatorManager {
       routeName: path,
       arguments: {'noticeId': noticeId.toString()},
     );
+  }
+
+  // ==== Utils ====
+  Future<dynamic> goScannerPage() async {
+    const path = '/app/scanner';
+
+    return await Get.to(ScannerView(), routeName: path, transition: Transition.downToUp);
   }
 }

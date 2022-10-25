@@ -3,8 +3,11 @@ import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/conf/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
+import 'package:nonoflex_alpha/view/login/login_viewmodel.dart';
 
 class LoginView extends BaseFormatView {
+  LoginViewModel viewModel = LoginViewModel();
+
   @override
   Color backgroundColor() => ColorName.primaryDark;
 
@@ -54,8 +57,8 @@ class LoginView extends BaseFormatView {
             Expanded(
               child: TabBarView(
                 children: [
-                  Tab(child: drawAdminLoginBody()),
                   Tab(child: drawParticLoginBody()),
+                  Tab(child: drawAdminLoginBody()),
                 ],
               ),
             ),
@@ -90,7 +93,10 @@ class LoginView extends BaseFormatView {
     /// 참여자 로그인 body,
     /// qr코드 인식, 인증 코드로 로그인
     return Center(
-      child: qrcode,
+      child: BNOutlinedButton(
+        onPressed: () => viewModel.scanUserCode(),
+        child: Text('바코드'),
+      ),
     );
   }
 }

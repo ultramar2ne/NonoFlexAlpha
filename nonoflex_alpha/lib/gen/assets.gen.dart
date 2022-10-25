@@ -5,9 +5,33 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import
+// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal
 
 import 'package:flutter/widgets.dart';
+
+class $AssetsIconsGen {
+  const $AssetsIconsGen();
+
+  /// File path: assets/icons/ic_camera_flip.png
+  AssetGenImage get icCameraFlip =>
+      const AssetGenImage('assets/icons/ic_camera_flip.png');
+
+  /// File path: assets/icons/ic_flash_off.png
+  AssetGenImage get icFlashOff =>
+      const AssetGenImage('assets/icons/ic_flash_off.png');
+
+  /// File path: assets/icons/ic_flash_on.png
+  AssetGenImage get icFlashOn =>
+      const AssetGenImage('assets/icons/ic_flash_on.png');
+
+  /// File path: assets/icons/ic_refresh.png
+  AssetGenImage get icRefresh =>
+      const AssetGenImage('assets/icons/ic_refresh.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values =>
+      [icCameraFlip, icFlashOff, icFlashOn, icRefresh];
+}
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
@@ -21,11 +45,15 @@ class $AssetsImagesLogoGen {
   /// File path: assets/images/logo/app_icon.png
   AssetGenImage get appIcon =>
       const AssetGenImage('assets/images/logo/app_icon.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [appIcon];
 }
 
 class Assets {
   Assets._();
 
+  static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }
 
@@ -86,6 +114,8 @@ class AssetGenImage {
       cacheHeight: cacheHeight,
     );
   }
+
+  ImageProvider provider() => AssetImage(_assetName);
 
   String get path => _assetName;
 

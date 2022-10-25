@@ -155,3 +155,17 @@ class BNCheckBox extends Checkbox {
   BNCheckBox({required bool? value, required ValueChanged<bool?>? onChanged})
       : super(value: value, onChanged: onChanged);
 }
+
+class BNDefaultAppBar extends AppBar {
+  BNDefaultAppBar({
+    super.key,
+    Widget? leadeing,
+    String? title,
+    Color? backgroundColor,
+  }) : super(
+          leading: leadeing,
+          backgroundColor: backgroundColor ?? ColorName.base,
+          foregroundColor: ColorName.primaryDark,
+          elevation: 0,
+        );
+}
