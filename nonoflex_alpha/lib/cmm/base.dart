@@ -1,10 +1,13 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:nonoflex_alpha/conf/navigator.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
 
 abstract class BaseView extends StatelessWidget {
-  const BaseView({Key? key}) : super(key: key);
+  final logger = Logger();
+
+  BaseView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +19,7 @@ abstract class BaseView extends StatelessWidget {
 
 abstract class BaseFormatView extends StatelessWidget {
   late BuildContext context;
+  final logger = Logger();
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,8 @@ abstract class BaseFormatView extends StatelessWidget {
 }
 
 abstract class BaseViewModel extends GetxController {
+  final logger = Logger();
+  
   final NonoNavigatorManager navigator = NonoNavigatorManager();
 }
 
