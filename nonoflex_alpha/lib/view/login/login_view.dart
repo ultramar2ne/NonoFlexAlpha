@@ -28,38 +28,50 @@ class LoginView extends BaseFormatView {
   Widget drawBody() {
     return Container(
       width: double.infinity,
+      alignment: Alignment.center,
+      constraints: const BoxConstraints(maxWidth: 500, maxHeight: 600),
       margin: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        color: ColorName.base,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
       child: DefaultTabController(
         initialIndex: 0,
         length: 2,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TabBar(
-              labelPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              isScrollable: true,
-              indicatorColor: ColorName.primary,
-              tabs: <Widget>[
-                Text(
-                  '참여자',
-                  style: TextStyle(color: ColorName.primary),
-                ),
-                Text(
-                  '관리자',
-                  style: TextStyle(color: ColorName.primary),
-                ),
-              ],
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  Tab(child: drawParticLoginBody()),
-                  Tab(child: drawAdminLoginBody()),
+            Container(
+              decoration: BoxDecoration(
+                color: ColorName.base,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: const TabBar(
+                labelPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                isScrollable: true,
+                indicatorColor: ColorName.primary,
+                tabs: <Widget>[
+                  Text(
+                    '참여자',
+                    style: TextStyle(color: ColorName.primary),
+                  ),
+                  Text(
+                    '관리자',
+                    style: TextStyle(color: ColorName.primary),
+                  ),
                 ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: ColorName.base,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: TabBarView(
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    Tab(child: drawParticLoginBody()),
+                    Tab(child: drawAdminLoginBody()),
+                  ],
+                ),
               ),
             ),
           ],
