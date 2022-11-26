@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
-import 'package:nonoflex_alpha/conf/widgets.dart';
+import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
 import 'package:nonoflex_alpha/gen/fonts.gen.dart';
 import 'package:nonoflex_alpha/view/login/login_viewmodel.dart';
+
+import 'package:get/get.dart';
 
 class LoginView extends BaseFormatView {
   LoginViewModel viewModel = LoginViewModel();
@@ -20,7 +22,6 @@ class LoginView extends BaseFormatView {
         initialIndex: 0,
         length: 2,
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
@@ -28,13 +29,8 @@ class LoginView extends BaseFormatView {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '로그인',
-                  style: TextStyle(
-                    color: ColorName.textColorDark,
-                    fontFamily: FontFamily.notoSansKR,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 38,
-                  ),
+                  'LoginViewTitle'.tr,
+                  style: theme.title,
                 ),
                 // Assets.images.logo.appIcon.image(width: 100),
                 Container(
@@ -42,25 +38,26 @@ class LoginView extends BaseFormatView {
                     color: ColorName.base,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  child: const TabBar(
+                  child: TabBar(
                     labelPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                     isScrollable: true,
                     indicatorColor: ColorName.primary,
                     indicator: BoxDecoration(
-                        color: ColorName.baseDark,
-                        borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                      color: theme.baseDark,
+                      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                    ),
                     tabs: <Widget>[
                       Expanded(
                         child: Text(
-                          '참여자',
-                          style: TextStyle(color: ColorName.primary),
+                          'LoginViewLabelParticMode'.tr,
+                          style: theme.normal.copyWith(color: theme.primary),
                         ),
                       ),
                       Expanded(
                         flex: 1,
                         child: Text(
-                          '관리자',
-                          style: TextStyle(color: ColorName.primary),
+                          'LoginViewLabelAdminMode'.tr,
+                          style: theme.normal.copyWith(color: theme.primary),
                         ),
                       ),
                     ],
@@ -89,22 +86,11 @@ class LoginView extends BaseFormatView {
       ),
     );
   }
+}
 
-  // @override
-  // Widget drawFooter() {
-  //   // TODO: implement drawFooter
-  //   return Container(
-  //     height: 80,
-  //     width: double.infinity,
-  //     constraints: const BoxConstraints(maxWidth: 500),
-  //     padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-  //     child: BNColoredButton(
-  //       child: Text('로그인'),
-  //       onPressed: () {},
-  //     ),
-  //   );
-  // }
-
+/// 관리자 로그인 관련 ui
+extension LoginViewExtForAdminMode on LoginView {
+  // 관리자 영역 body 부분 ui
   Widget drawAdminLoginBody() {
     /// 관리자 로그인 body
     /// email, pw를 통한 입력
@@ -120,36 +106,29 @@ class LoginView extends BaseFormatView {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
               child: Text(
-                '아이디',
-                style: TextStyle(
-                    fontFamily: FontFamily.notoSansKR,
-                    fontSize: 12,
-                    color: ColorName.textHint
-                ),
+                'LoginViewLabelEmailField'.tr,
+                style: theme.label,
               ),
             ),
             BNInputBox(
               controller: TextEditingController(),
               onChanged: (value) {},
-              hintText: 'e-mail을 입력해주세요.',
+              hintText: 'LoginViewHintEmailField'.tr,
               showClearButton: true,
             ),
             const SizedBox(height: 10),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
               child: Text(
-                '비밀번호',
+                'LoginViewLabelPasswordField'.tr,
                 style: TextStyle(
-                  fontFamily: FontFamily.notoSansKR,
-                  fontSize: 12,
-                  color: ColorName.textHint
-                ),
+                    fontFamily: FontFamily.notoSansKR, fontSize: 12, color: ColorName.textHint),
               ),
             ),
             BNInputBox(
               controller: TextEditingController(),
               onChanged: (value) {},
-              hintText: '비밀번호를 입력해주세요.',
+              hintText: 'LoginViewHintPasswordField'.tr,
               obscureText: true,
               showClearButton: true,
             ),
@@ -159,7 +138,7 @@ class LoginView extends BaseFormatView {
               width: double.infinity,
               constraints: const BoxConstraints(maxWidth: 500),
               child: BNColoredButton(
-                child: Text('로그인'),
+                child: Text('LoginViewButtonLogin'.tr),
                 onPressed: () {
                   stateController.updateLoadingState(!stateController.isLoading.value);
                 },
@@ -171,7 +150,11 @@ class LoginView extends BaseFormatView {
       ),
     );
   }
+}
 
+/// 참여자 로그인 관련 ui
+extension LoginViewExtForParticMode on LoginView {
+  // 참여자 로그인 body 영역 ui
   Widget drawParticLoginBody() {
     /// 참여자 로그인 body,
     /// qr코드 인식, 인증 코드로 로그인
@@ -187,29 +170,25 @@ class LoginView extends BaseFormatView {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
               child: Text(
-                '인증코드',
-                style: TextStyle(
-                    fontFamily: FontFamily.notoSansKR,
-                    fontSize: 12,
-                    color: ColorName.textHint
-                ),
+                'LoginViewLabelAuthCodeField'.tr,
+                style: theme.subTitle,
               ),
             ),
             const SizedBox(height: 10),
             Container(
                 padding: const EdgeInsets.symmetric(vertical: 30),
-                child: _drawAuthCodePanel(),
                 decoration: const BoxDecoration(
                   color: ColorName.baseDark,
                   borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                )),
+                ),
+                child: _drawAuthCodePanel()),
             const SizedBox(height: 50),
             SizedBox(
               width: double.infinity,
               height: 52,
               child: BNOutlinedButton(
                 onPressed: () => viewModel.scanUserCode(),
-                child: Text('바코드로 인증하기'),
+                child: Text('LoginViewButtonLoginUseBarcode'.tr),
               ),
             ),
             const SizedBox(height: 10),
@@ -218,7 +197,7 @@ class LoginView extends BaseFormatView {
               width: double.infinity,
               constraints: const BoxConstraints(maxWidth: 500),
               child: BNColoredButton(
-                child: Text('로그인'),
+                child: Text('LoginViewButtonLogin'.tr),
                 onPressed: () {
                   stateController.updateLoadingState(!stateController.isLoading.value);
                 },
@@ -231,6 +210,7 @@ class LoginView extends BaseFormatView {
     );
   }
 
+  /// 6자리 인증 코드 입력 ui
   Widget _drawAuthCodePanel() {
     Widget codeInputBox(FocusNode node, TextEditingController controller,
         {bool isLast = false, FocusNode? nextNode}) {

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:nonoflex_alpha/conf/navigator.dart';
-import 'package:nonoflex_alpha/conf/widgets.dart';
+import 'package:nonoflex_alpha/conf/ui/resource.dart';
+import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
-import 'package:nonoflex_alpha/view/notice/notice_list_view.dart';
 import 'package:nonoflex_alpha/view/splash/splash_view.dart';
 
 import 'conf/locator.dart';
@@ -20,6 +20,8 @@ void main() {
 
   runApp(GetMaterialApp(
     home: SplashView(),
+    translations: Resource(),
+    locale: Get.deviceLocale,
     debugShowCheckedModeBanner: false,
   ));
 }

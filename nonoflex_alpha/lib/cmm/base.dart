@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:nonoflex_alpha/conf/navigator.dart';
+import 'package:nonoflex_alpha/conf/ui/theme.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
 
 abstract class BaseView extends StatelessWidget {
@@ -28,6 +29,7 @@ abstract class BaseView extends StatelessWidget {
 
 abstract class BaseFormatView extends StatelessWidget {
   late BuildContext context;
+  final BNTheme theme = LightTheme();
   final logger = Logger();
 
   final stateController = Get.put(BaseViewController());

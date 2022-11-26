@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
-import 'package:nonoflex_alpha/conf/widgets.dart';
+import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';

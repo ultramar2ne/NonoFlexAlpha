@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:nonoflex_alpha/conf/widgets.dart';
+import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
 import 'package:nonoflex_alpha/view/notice/add_notice_viewmodel.dart';
 

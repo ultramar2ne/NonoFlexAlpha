@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:nonoflex_alpha/conf/ui/theme.dart';
 import 'package:nonoflex_alpha/model/repository/auth/abs_auth_repository.dart';
 import 'package:nonoflex_alpha/model/repository/auth/auth_repository.dart';
 import 'package:nonoflex_alpha/model/repository/company/abs_company_repository.dart';
@@ -20,7 +21,8 @@ final GetIt locator = GetIt.instance;
 /// Provider -> Data Source -> Repository 순으로 등록해야함
 void setUpLocator(){
 
-  // server config
+  // config
+  locator.registerSingleton<BNTheme>(LightTheme());
 
   // data source
   locator.registerSingleton<LocalDataSource>(LocalDataSourceImpl());
