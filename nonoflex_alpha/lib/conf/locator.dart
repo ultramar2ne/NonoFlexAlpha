@@ -23,7 +23,7 @@ void setUpLocator(){
   // server config
 
   // data source
-  locator.registerSingleton<LocalDataSource>(LocalDataSource());
+  locator.registerSingleton<LocalDataSource>(LocalDataSourceImpl());
   locator.registerSingleton<RemoteDataSource>(RemoteDataSource());
 
   // repository

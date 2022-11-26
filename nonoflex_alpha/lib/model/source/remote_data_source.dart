@@ -1,5 +1,4 @@
 import 'dart:convert' as convert;
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:nonoflex_alpha/model/data/notice.dart';
 import 'package:nonoflex_alpha/model/data/server.dart';

@@ -33,6 +33,16 @@ class AuthToken {
       refreshExpiredAt: DateTime.fromMicrosecondsSinceEpoch(data['refresh_token_expires_in']),
     );
   }
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> data = {
+      'access_token': accessToken,
+      'expires_in': accessExpiredAt,
+      'refresh_token': refreshToken,
+      'refresh_token_expires_in': refreshExpiredAt,
+    };
+    return data;
+  }
 }
 
 // {
