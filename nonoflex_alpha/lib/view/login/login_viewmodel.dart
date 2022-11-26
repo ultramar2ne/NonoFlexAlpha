@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
@@ -10,8 +11,29 @@ class LoginViewModel extends BaseViewModel {
   /// 자동 로그인 여부
   bool checkedAutoLogin = true;
 
+  /// 인증번호 입력 controller
+  final authCodeInputcontroller = TextEditingController();
+
+  List<FocusNode> codeInputNodeList = [
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode()
+  ];
+
+  List<TextEditingController> codeInputControllerList = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+  ];
+
   LoginViewModel({AuthRepository? authRepository})
-      : _authRepository = authRepository ?? locator.get() {
+      : _authRepository = authRepository ?? locator.get<AuthRepository>() {
     _init();
   }
 
@@ -31,14 +53,22 @@ class LoginViewModel extends BaseViewModel {
       if (code == null || code.toString().length != 6) {
         Fluttertoast.showToast(msg: '정보가 올바르지 않습니다.\n다시 확인해주세요.');
       } else {
-        login(code);
+
       }
     }
   }
+}
 
-  void login(int loginCode) async {
-    // 참여자인 경우
+extension LoginViewModelForPartic on LoginViewModel{
+  // 인증코드를 활용한 참여자 로그인
+  void loginWidthCode(){
 
-    // 관리자인 경우
+  }
+}
+
+extension LoginViewModelForAdmin on LoginViewModel{
+  // 아이디, 비밀번호를 활용한 관리자 로그인
+  void loginWidthId(){
+
   }
 }

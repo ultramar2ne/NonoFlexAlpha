@@ -18,7 +18,7 @@ class ScannerView extends BaseFormatView {
 
   @override
   Widget drawBody() {
-    return QRScanner();
+    return const QRScanner();
     // return const QRScanner();
   }
 }
