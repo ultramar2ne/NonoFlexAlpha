@@ -12,9 +12,21 @@ import 'package:flutter/widgets.dart';
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/ic_calendar.png
+  AssetGenImage get icCalendar =>
+      const AssetGenImage('assets/icons/ic_calendar.png');
+
   /// File path: assets/icons/ic_camera_flip.png
   AssetGenImage get icCameraFlip =>
       const AssetGenImage('assets/icons/ic_camera_flip.png');
+
+  /// File path: assets/icons/ic_cancel.png
+  AssetGenImage get icCancel =>
+      const AssetGenImage('assets/icons/ic_cancel.png');
+
+  /// File path: assets/icons/ic_delete.png
+  AssetGenImage get icDelete =>
+      const AssetGenImage('assets/icons/ic_delete.png');
 
   /// File path: assets/icons/ic_flash_off.png
   AssetGenImage get icFlashOff =>
@@ -24,13 +36,29 @@ class $AssetsIconsGen {
   AssetGenImage get icFlashOn =>
       const AssetGenImage('assets/icons/ic_flash_on.png');
 
+  /// File path: assets/icons/ic_print.png
+  AssetGenImage get icPrint => const AssetGenImage('assets/icons/ic_print.png');
+
   /// File path: assets/icons/ic_refresh.png
   AssetGenImage get icRefresh =>
       const AssetGenImage('assets/icons/ic_refresh.png');
 
+  /// File path: assets/icons/ic_search.png
+  AssetGenImage get icSearch =>
+      const AssetGenImage('assets/icons/ic_search.png');
+
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [icCameraFlip, icFlashOff, icFlashOn, icRefresh];
+  List<AssetGenImage> get values => [
+        icCalendar,
+        icCameraFlip,
+        icCancel,
+        icDelete,
+        icFlashOff,
+        icFlashOn,
+        icPrint,
+        icRefresh,
+        icSearch
+      ];
 }
 
 class $AssetsImagesGen {
