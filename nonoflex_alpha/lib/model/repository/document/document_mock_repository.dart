@@ -1,5 +1,5 @@
 import 'package:nonoflex_alpha/model/data/document.dart';
-import 'package:nonoflex_alpha/model/repository/document/abs_document_repository.dart';
+import 'package:nonoflex_alpha/model/repository/document/document_repository.dart';
 
 class DocumentRepositoryImpl extends DocumentRepository {
   @override

@@ -1,5 +1,5 @@
 import 'package:nonoflex_alpha/model/data/server.dart';
-import 'package:nonoflex_alpha/model/repository/auth/abs_auth_repository.dart';
+import 'package:nonoflex_alpha/model/repository/auth/auth_repository.dart';
 
 class AuthMockRepository extends AuthRepository {
   @override

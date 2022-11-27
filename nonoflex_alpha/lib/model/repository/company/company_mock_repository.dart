@@ -1,5 +1,5 @@
 import 'package:nonoflex_alpha/model/data/company.dart';
-import 'package:nonoflex_alpha/model/repository/company/abs_company_repository.dart';
+import 'package:nonoflex_alpha/model/repository/company/company_repository.dart';
 
 class CompanyMockRepository extends CompanyRepository{
   @override

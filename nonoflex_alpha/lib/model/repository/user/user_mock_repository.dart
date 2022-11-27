@@ -1,5 +1,5 @@
 import 'package:nonoflex_alpha/model/data/user.dart';
-import 'package:nonoflex_alpha/model/repository/user/abs_user_repository.dart';
+import 'package:nonoflex_alpha/model/repository/user/user_repository.dart';
 
 class UserMockRepository extends UserRepository {
   @override

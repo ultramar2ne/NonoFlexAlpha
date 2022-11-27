@@ -1,6 +1,6 @@
 import 'package:nonoflex_alpha/model/data/product.dart';
 import 'package:nonoflex_alpha/model/data/record.dart';
-import 'package:nonoflex_alpha/model/repository/product/abs_product_repository.dart';
+import 'package:nonoflex_alpha/model/repository/product/product_repository.dart';
 
 class ProductMockRepository extends ProductRepository {
   @override

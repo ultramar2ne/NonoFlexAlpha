@@ -2,7 +2,7 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:nonoflex_alpha/model/data/notice.dart';
 import 'package:nonoflex_alpha/model/data/server.dart';
-import 'package:nonoflex_alpha/model/repository/notice/abs_notice_repository.dart';
+import 'package:nonoflex_alpha/model/repository/notice/notice_repository.dart';
 
 class RemoteDataSource {
   static const String serverAddr = '3.39.53.3';
@@ -49,7 +49,7 @@ class RemoteDataSource {
         throw (response.body);
       }
     } catch (e) {
-      rethrow;
+      throw(e);
     }
   }
 

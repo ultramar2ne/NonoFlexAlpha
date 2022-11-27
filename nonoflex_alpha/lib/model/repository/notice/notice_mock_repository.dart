@@ -1,5 +1,5 @@
 import 'package:nonoflex_alpha/model/data/notice.dart';
-import 'package:nonoflex_alpha/model/repository/notice/abs_notice_repository.dart';
+import 'package:nonoflex_alpha/model/repository/notice/notice_repository.dart';
 import 'package:nonoflex_alpha/model/source/remote_data_source.dart';
 
 class NoticeMockRepository extends NoticeRepository {
