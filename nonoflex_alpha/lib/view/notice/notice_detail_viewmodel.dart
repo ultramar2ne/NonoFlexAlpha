@@ -2,9 +2,10 @@ import 'package:get/get.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
 import 'package:nonoflex_alpha/model/data/notice.dart';
-import 'package:nonoflex_alpha/model/repository/notice/abs_notice_repository.dart';
+import 'package:nonoflex_alpha/model/repository/notice/notice_repository.dart';
 
-class NoticeDetailViewModel extends BaseViewModel {
+
+class NoticeDetailViewModel extends BaseController {
   NoticeRepository _noticeRepository;
 
   // final noticeId = Get.arguments['noticeId'];

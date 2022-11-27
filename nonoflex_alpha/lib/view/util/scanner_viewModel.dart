@@ -1,6 +1,6 @@
 import '../../cmm/base.dart';
 
-class ScannderViewModel extends BaseViewModel {
+class ScannerViewModel extends BaseController {
 
 
 

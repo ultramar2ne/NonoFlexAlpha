@@ -183,9 +183,9 @@ class LightTheme extends BNTheme {
   @override
   TextStyle get button => TextStyle(
         fontFamily: FontFamily.notoSansKR,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.w500,
         color: textHint,
-        fontSize: 14,
+        fontSize: 16,
       );
 
   @override
@@ -200,8 +200,8 @@ class LightTheme extends BNTheme {
   TextStyle get label => TextStyle(
         fontFamily: FontFamily.notoSansKR,
         fontWeight: FontWeight.normal,
-        color: textDark,
-        fontSize: 14,
+        color: textHint,
+        fontSize: 12,
       );
 
   @override

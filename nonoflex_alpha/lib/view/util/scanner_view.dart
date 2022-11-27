@@ -8,9 +8,10 @@ import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
+import 'package:nonoflex_alpha/view/util/scanner_viewModel.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class ScannerView extends BaseFormatView {
+class ScannerView extends BaseGetView<ScannerViewModel> {
   @override
   AppBar? defaultAppBar() {
     return BNDefaultAppBar();

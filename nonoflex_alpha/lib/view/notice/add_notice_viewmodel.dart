@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
-import 'package:nonoflex_alpha/model/repository/notice/abs_notice_repository.dart';
+import 'package:nonoflex_alpha/model/repository/notice/notice_repository.dart';
 
-class AddNoticeViewModel extends BaseViewModel {
+
+class AddNoticeViewModel extends BaseController {
   NoticeRepository _noticeRepository;
 
   /// 공지사항 제목 입력

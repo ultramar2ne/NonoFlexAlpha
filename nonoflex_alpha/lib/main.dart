@@ -6,11 +6,14 @@ import 'package:nonoflex_alpha/conf/ui/resource.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
 import 'package:nonoflex_alpha/view/splash/splash_view.dart';
+import 'package:nonoflex_alpha/view/splash/splash_viewmodel.dart';
 
 import 'conf/locator.dart';
 
 void main() {
   setUpLocator();
+
+  Get.put(SplashViewModel());
 
   // status Bar 색상 설정
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(

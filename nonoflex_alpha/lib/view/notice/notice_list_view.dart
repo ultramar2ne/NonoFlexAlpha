@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 
 import '../../cmm/base.dart';
 
-class NoticeListView extends BaseFormatView {
+class NoticeListView extends BaseGetView<NoticeListViewModel> {
   NoticeListViewModel viewModel = NoticeListViewModel();
 
   @override
@@ -22,7 +22,7 @@ class NoticeListView extends BaseFormatView {
         backgroundColor: ColorName.base,
         foregroundColor: ColorName.primary,
         actions: [
-          IconButton(onPressed: () => viewModel.navigator.goAddNoticePage(), icon: Icon(Icons.add)),
+          IconButton(onPressed: () => viewModel.baseNavigator.goAddNoticePage(), icon: Icon(Icons.add)),
         ],
         elevation: 0,
       ),

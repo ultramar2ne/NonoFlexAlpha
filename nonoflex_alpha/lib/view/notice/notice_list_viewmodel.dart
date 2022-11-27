@@ -2,16 +2,17 @@ import 'package:get/get.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
 import 'package:nonoflex_alpha/model/data/notice.dart';
-import 'package:nonoflex_alpha/model/repository/notice/abs_notice_repository.dart';
+import 'package:nonoflex_alpha/model/repository/notice/notice_repository.dart';
 
-class NoticeListViewModel extends BaseViewModel {
+
+class NoticeListViewModel extends BaseController {
   NoticeRepository _noticeRepository;
 
   List<Notice> noticeList = (List<Notice>.of([])).obs;
 
   final listSize = 20;
 
-  bool isLoading = true;
+  // bool isLoading = true;
 
   String title = '안녕 세상';
 
@@ -27,7 +28,7 @@ class NoticeListViewModel extends BaseViewModel {
   }
 
   Future<void> goNoticeDetail(int noticeId) async {
-    this.navigator.goNoticeDetailPage(noticeId);
+    this.baseNavigator.goNoticeDetailPage(noticeId);
   }
 
   Future<void> getNoticeList({int? pageNo}) async {

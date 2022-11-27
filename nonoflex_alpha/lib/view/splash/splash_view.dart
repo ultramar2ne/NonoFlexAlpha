@@ -3,8 +3,7 @@ import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
 import 'package:nonoflex_alpha/view/splash/splash_viewmodel.dart';
 
-class SplashView extends BaseFormatView{
-  SplashViewModel viewModel = SplashViewModel();
+class SplashView extends BaseGetView<SplashViewModel>{
 
   @override
   drawBody(){

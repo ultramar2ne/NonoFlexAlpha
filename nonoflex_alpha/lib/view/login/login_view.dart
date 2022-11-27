@@ -8,9 +8,7 @@ import 'package:nonoflex_alpha/view/login/login_viewmodel.dart';
 
 import 'package:get/get.dart';
 
-class LoginView extends BaseFormatView {
-  LoginViewModel viewModel = LoginViewModel();
-
+class LoginView extends BaseGetView<LoginViewModel> {
   @override
   Widget drawBody() {
     return Container(
@@ -104,44 +102,42 @@ extension LoginViewExtForAdminMode on LoginView {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
+              padding: const EdgeInsets.symmetric(vertical: 5),
               child: Text(
                 'LoginViewLabelEmailField'.tr,
                 style: theme.label,
               ),
             ),
             BNInputBox(
-              controller: TextEditingController(),
+              controller: controller.emailEditingController,
               onChanged: (value) {},
               hintText: 'LoginViewHintEmailField'.tr,
-              showClearButton: true,
             ),
             const SizedBox(height: 10),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
+              padding: const EdgeInsets.symmetric(vertical: 5),
               child: Text(
                 'LoginViewLabelPasswordField'.tr,
-                style: TextStyle(
-                    fontFamily: FontFamily.notoSansKR, fontSize: 12, color: ColorName.textHint),
+                style: theme.label,
               ),
             ),
             BNInputBox(
-              controller: TextEditingController(),
-              onChanged: (value) {},
+              controller: controller.passwordEditingController,
+              onChanged: (value) => controller.onChangedUserPassword(value),
               hintText: 'LoginViewHintPasswordField'.tr,
               obscureText: true,
-              showClearButton: true,
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 60),
             Container(
               height: 52,
               width: double.infinity,
               constraints: const BoxConstraints(maxWidth: 500),
               child: BNColoredButton(
-                child: Text('LoginViewButtonLogin'.tr),
-                onPressed: () {
-                  stateController.updateLoadingState(!stateController.isLoading.value);
-                },
+                child: Text(
+                  'LoginViewButtonLogin'.tr,
+                  style: theme.button.copyWith(color: theme.base),
+                ),
+                onPressed: () => controller.loginWidthId(),
               ),
             ),
             const SizedBox(height: 50),
@@ -168,13 +164,12 @@ extension LoginViewExtForParticMode on LoginView {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
+              padding: const EdgeInsets.symmetric(vertical: 6),
               child: Text(
                 'LoginViewLabelAuthCodeField'.tr,
-                style: theme.subTitle,
+                style: theme.label,
               ),
             ),
-            const SizedBox(height: 10),
             Container(
                 padding: const EdgeInsets.symmetric(vertical: 30),
                 decoration: const BoxDecoration(
@@ -187,8 +182,9 @@ extension LoginViewExtForParticMode on LoginView {
               width: double.infinity,
               height: 52,
               child: BNOutlinedButton(
-                onPressed: () => viewModel.scanUserCode(),
-                child: Text('LoginViewButtonLoginUseBarcode'.tr),
+                onPressed: () => controller.scanUserCode(),
+                child: Text('LoginViewButtonLoginUseBarcode'.tr,
+                    style: theme.button.copyWith(color: theme.primary)),
               ),
             ),
             const SizedBox(height: 10),
@@ -197,9 +193,11 @@ extension LoginViewExtForParticMode on LoginView {
               width: double.infinity,
               constraints: const BoxConstraints(maxWidth: 500),
               child: BNColoredButton(
-                child: Text('LoginViewButtonLogin'.tr),
+                child: Text('LoginViewButtonLogin'.tr,
+                    style: theme.button.copyWith(color: theme.base)),
                 onPressed: () {
-                  stateController.updateLoadingState(!stateController.isLoading.value);
+                  // controller.change('',status: RxStatus.loading());
+                  // stateController.updateLoadingState(!stateController.isLoading.value);
                 },
               ),
             ),
@@ -264,9 +262,9 @@ extension LoginViewExtForParticMode on LoginView {
               final newValue = value.length == 2 ? value.substring(1) : value;
               controller.text = newValue;
               if (nextNode != null) {
-                FocusScope.of(context).requestFocus(nextNode);
+                // FocusScope.of(this.).requestFocus(nextNode);
               } else {
-                FocusScope.of(context).unfocus();
+                // FocusScope.of(context).unfocus();
               }
             }
           },
@@ -281,34 +279,34 @@ extension LoginViewExtForParticMode on LoginView {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         codeInputBox(
-          viewModel.codeInputNodeList[0],
-          viewModel.codeInputControllerList[0],
-          nextNode: viewModel.codeInputNodeList[1],
+          controller.codeInputNodeList[0],
+          controller.codeInputControllerList[0],
+          nextNode: controller.codeInputNodeList[1],
         ),
         codeInputBox(
-          viewModel.codeInputNodeList[1],
-          viewModel.codeInputControllerList[1],
-          nextNode: viewModel.codeInputNodeList[2],
+          controller.codeInputNodeList[1],
+          controller.codeInputControllerList[1],
+          nextNode: controller.codeInputNodeList[2],
         ),
         codeInputBox(
-          viewModel.codeInputNodeList[2],
-          viewModel.codeInputControllerList[2],
-          nextNode: viewModel.codeInputNodeList[3],
+          controller.codeInputNodeList[2],
+          controller.codeInputControllerList[2],
+          nextNode: controller.codeInputNodeList[3],
         ),
         const SizedBox(width: 8),
         codeInputBox(
-          viewModel.codeInputNodeList[3],
-          viewModel.codeInputControllerList[3],
-          nextNode: viewModel.codeInputNodeList[4],
+          controller.codeInputNodeList[3],
+          controller.codeInputControllerList[3],
+          nextNode: controller.codeInputNodeList[4],
         ),
         codeInputBox(
-          viewModel.codeInputNodeList[4],
-          viewModel.codeInputControllerList[4],
-          nextNode: viewModel.codeInputNodeList[5],
+          controller.codeInputNodeList[4],
+          controller.codeInputControllerList[4],
+          nextNode: controller.codeInputNodeList[5],
         ),
         codeInputBox(
-          viewModel.codeInputNodeList[5],
-          viewModel.codeInputControllerList[5],
+          controller.codeInputNodeList[5],
+          controller.codeInputControllerList[5],
           isLast: true,
         ),
       ],

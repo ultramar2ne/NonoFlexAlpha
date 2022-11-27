@@ -7,6 +7,8 @@ class Resource extends Translations{
   Map<String, Map<String, String>> get keys => {
     'ko_KR': {
       // Common
+      'commonEmptyView' : '알 수 없는 화면이네요.. 더 분발할게요!',
+      'commonErrorView' : '무언가 잘못되었습니다.. 더 분발할게요!',
 
       // API Exception
 

@@ -8,7 +8,7 @@ import 'package:nonoflex_alpha/view/notice/add_notice_viewmodel.dart';
 import 'package:get/get.dart';
 import '../../cmm/base.dart';
 
-class AddNoticeView extends BaseFormatView {
+class AddNoticeView extends BaseGetView<AddNoticeViewModel> {
   AddNoticeViewModel viewmodel = AddNoticeViewModel();
 
   @override

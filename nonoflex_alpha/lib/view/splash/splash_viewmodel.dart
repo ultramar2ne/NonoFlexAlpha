@@ -1,6 +1,6 @@
 import 'package:nonoflex_alpha/cmm/base.dart';
 
-class SplashViewModel extends BaseViewModel {
+class SplashViewModel extends BaseController {
 
   SplashViewModel() {
     _init();
@@ -23,7 +23,7 @@ class SplashViewModel extends BaseViewModel {
 
     } else {
       // 로그인 정보가 존재하지 않을 경우
-      navigator.goLoginPage();
+      baseNavigator.goLoginPage();
     }
   }
 }
