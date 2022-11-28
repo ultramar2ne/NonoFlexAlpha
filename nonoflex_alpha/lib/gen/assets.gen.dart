@@ -36,6 +36,22 @@ class $AssetsIconsGen {
   AssetGenImage get icFlashOn =>
       const AssetGenImage('assets/icons/ic_flash_on.png');
 
+  /// File path: assets/icons/ic_navi_documents.png
+  AssetGenImage get icNaviDocuments =>
+      const AssetGenImage('assets/icons/ic_navi_documents.png');
+
+  /// File path: assets/icons/ic_navi_home.png
+  AssetGenImage get icNaviHome =>
+      const AssetGenImage('assets/icons/ic_navi_home.png');
+
+  /// File path: assets/icons/ic_navi_products.png
+  AssetGenImage get icNaviProducts =>
+      const AssetGenImage('assets/icons/ic_navi_products.png');
+
+  /// File path: assets/icons/ic_navi_setting.png
+  AssetGenImage get icNaviSetting =>
+      const AssetGenImage('assets/icons/ic_navi_setting.png');
+
   /// File path: assets/icons/ic_print.png
   AssetGenImage get icPrint => const AssetGenImage('assets/icons/ic_print.png');
 
@@ -55,6 +71,10 @@ class $AssetsIconsGen {
         icDelete,
         icFlashOff,
         icFlashOn,
+        icNaviDocuments,
+        icNaviHome,
+        icNaviProducts,
+        icNaviSetting,
         icPrint,
         icRefresh,
         icSearch
