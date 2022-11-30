@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
+import 'package:nonoflex_alpha/conf/exception/api_excetion.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
 import 'package:nonoflex_alpha/model/repository/auth/auth_repository.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -55,50 +56,40 @@ class LoginViewModel extends BaseController {
 
   // QR 코드 스캔으로 로그인
   void scanUserCode() async {
-    final result = await this.baseNavigator.goScannerPage();
+    final result = await baseNavigator.goAdminMainPage();
     if (result.runtimeType == Barcode) {
       final code = int.tryParse((result as Barcode).code ?? '');
-      if (code == null || code
-          .toString()
-          .length != 6) {
+      if (code == null || code.toString().length != 6) {
         Fluttertoast.showToast(msg: '정보가 올바르지 않습니다.\n다시 확인해주세요.');
-      } else {
-
-      }
+      } else {}
     }
   }
 }
 
-extension LoginViewModelForPartic on LoginViewModel{
+extension LoginViewModelForPartic on LoginViewModel {
   // 인증코드를 활용한 참여자 로그인
-  void loginWidthCode() {
-
-  }
+  void loginWidthCode() {}
 }
 
-extension LoginViewModelForAdmin on LoginViewModel{
-  void onChangedUserEmail(String value) {
+extension LoginViewModelForAdmin on LoginViewModel {
+  void onChangedUserEmail(String value) {}
 
-  }
-
-  void onChangedUserPassword(String value) {
-
-  }
+  void onChangedUserPassword(String value) {}
 
   // 아이디, 비밀번호를 활용한 관리자 로그인
   void loginWidthId() async {
-
     changeViewState(TaskState.doing);
-    try {;
+    try {
       final loginCode = await _authRepository.getAdminLoginCode(
           email: emailEditingController.value.text, password: passwordEditingController.value.text);
-      final token = await _authRepository.getAuthToken(loginCode: loginCode);
-      final kk = token.accessToken;
+      await _authRepository.getAuthToken(loginCode: loginCode);
 
-      // baseNavigator.goScannerPage()
       changeViewState(TaskState.success);
-    } catch (e) {
-      changeViewState(TaskState.success, errorMessage: e.toString());
+      baseNavigator.goAdminMainPage();
+    } on APIException catch (e) {
+      changeViewState(TaskState.success);
+    } catch (e){
+      changeViewState(TaskState.success);
     }
   }
 }

@@ -1,7 +1,7 @@
 import 'package:nonoflex_alpha/cmm/base.dart';
 
-class SettingViewModel extends BaseController {
-  SettingViewModel() {
+class AdminHomeViewModel extends BaseController {
+  AdminHomeViewModel() {
     completeInitialize();
   }
 }

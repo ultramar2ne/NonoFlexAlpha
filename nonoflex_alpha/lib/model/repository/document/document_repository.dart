@@ -38,7 +38,8 @@ abstract class DocumentRepository {
 }
 
 
-class DocumentMockRepository extends DocumentRepository {
+class DocumentRepositoryImpl extends DocumentRepository {
+
   @override
   Future<void> addDocument(Document document) {
     // TODO: implement addDocument

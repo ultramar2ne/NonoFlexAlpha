@@ -1,10 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
 import 'package:nonoflex_alpha/model/data/notice.dart';
 import 'package:nonoflex_alpha/view/notice/notice_list_viewmodel.dart';
-
-import 'package:intl/intl.dart';
 
 import '../../cmm/base.dart';
 

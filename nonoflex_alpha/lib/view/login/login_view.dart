@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
-import 'package:nonoflex_alpha/gen/fonts.gen.dart';
 import 'package:nonoflex_alpha/view/login/login_viewmodel.dart';
 
 import 'package:get/get.dart';

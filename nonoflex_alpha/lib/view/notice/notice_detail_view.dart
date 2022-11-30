@@ -4,8 +4,6 @@ import 'package:nonoflex_alpha/gen/colors.gen.dart';
 import 'package:nonoflex_alpha/model/data/notice.dart';
 import 'package:nonoflex_alpha/view/notice/notice_detail_viewmodel.dart';
 
-import 'package:intl/intl.dart';
-
 import '../../cmm/base.dart';
 
 class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
