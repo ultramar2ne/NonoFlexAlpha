@@ -13,7 +13,7 @@ import 'package:nonoflex_alpha/model/data/user.dart';
 import 'package:nonoflex_alpha/model/repository/notice/notice_repository.dart';
 
 class RemoteDataSource {
-  Configs _config;
+  final Configs _config;
 
   static const String serverAddr = Configs.serverAddress;
   static const String portNum = Configs.portNum;
