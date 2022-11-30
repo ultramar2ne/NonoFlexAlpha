@@ -12,6 +12,10 @@ import 'package:flutter/widgets.dart';
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/ic_app_logo.png
+  AssetGenImage get icAppLogo =>
+      const AssetGenImage('assets/icons/ic_app_logo.png');
+
   /// File path: assets/icons/ic_calendar.png
   AssetGenImage get icCalendar =>
       const AssetGenImage('assets/icons/ic_calendar.png');
@@ -63,8 +67,13 @@ class $AssetsIconsGen {
   AssetGenImage get icSearch =>
       const AssetGenImage('assets/icons/ic_search.png');
 
+  /// File path: assets/icons/ic_snc_logo.png
+  AssetGenImage get icSncLogo =>
+      const AssetGenImage('assets/icons/ic_snc_logo.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
+        icAppLogo,
         icCalendar,
         icCameraFlip,
         icCancel,
@@ -77,7 +86,8 @@ class $AssetsIconsGen {
         icNaviSetting,
         icPrint,
         icRefresh,
-        icSearch
+        icSearch,
+        icSncLogo
       ];
 }
 
