@@ -10,7 +10,7 @@ class Company {
   final CompanyType companyType;
 
   // 거래처 추가 정보 : category
-  final String description;
+  final String? description;
 
   // 거래처 활성 여부 : active
   final bool isActive;
@@ -19,7 +19,7 @@ class Company {
       {required this.companyId,
       required this.name,
       required this.companyType,
-      required this.description,
+      this.description,
       this.isActive = false});
 
   factory Company.fromJson(Map<String, dynamic> data) {
@@ -32,23 +32,28 @@ class Company {
   }
 }
 
-enum CompanyType { input, output }
+enum CompanyType {
+  input,
+  output,
+
+
+}
 
 /// 거래처 목록
 class CompanyList {
   // 현재 페이지 : page
   final int page;
 
-  //
+  // : count
   final int count;
 
-  //
+  // : totalPages
   final int totalPages;
 
-  //
+  // : totalCount
   final int totalCount;
 
-  //
+  // : lastPage
   final bool isLastPage;
 
   // 거래처 목록 : companyList
@@ -71,4 +76,11 @@ class CompanyList {
         isLastPage: data['isLastPage'],
         items: data['companyItems'].map((element) => Company.fromJson(element)).toList());
   }
+}
+
+enum CompanyListSortType {
+  id,
+  name,
+  type,
+  category, // 이게 맞아..?
 }

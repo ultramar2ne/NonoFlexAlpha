@@ -1,58 +1,119 @@
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:nonoflex_alpha/model/source/hive/hive_adapter.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:logger/logger.dart';
+import 'package:nonoflex_alpha/conf/locator.dart';
 import 'package:nonoflex_alpha/model/data/server.dart';
+import 'package:nonoflex_alpha/model/source/hive/hive_adapter.dart';
 import 'package:nonoflex_alpha/model/data/user.dart';
 
 abstract class LocalDataSource {
-
   /// 로컬 저장소를 초기화 한다.
-  Future<void> init();
+  // Future<void> init();
 
+  /// ==== User ====
   /// 로컬 저장소에 유저정보를 추가한다.
-  Future<User> addUserInfo();
+  Future<void> addUserInfo(User userInfo);
+
+  /// 로그인 된 유저가 존재할 경우 유저정보를 반환한다.
+  Future<User?> getUserInfo();
 
   /// 로컬 저장소에 존재하는 유저정보를 수정한다.
-  Future<User> updateUserInfo();
+  Future<void> updateUserInfo(User userInfo);
+
+  // 현재 유저 정보를 초기화한다.
+  Future<void> deleteUserInfo();
+
+  /// ==== Token =====
+  /// 로컬 저장소에 토큰정보를 추가한다.
+  Future<void> addTokenInfo(AuthToken token);
+
+  /// 저장되어있는 토큰 정보가 존재할 경우 반환한다.
+  Future<AuthToken?> getTokenInfo();
 
   /// 로컬 저장소에 토큰 정보를 업데이트한다.
-  Future<AuthToken> updateTokenInfo(AuthToken token);
+  Future<void> updateTokenInfo(AuthToken token);
 
-  /// 로컬 저장소에 유저 정보를 삭제한다.
-  Future<void> deleteTokenInfo(String userCode);
+  /// 로컬 저장소에 존재하는 토큰정보를 초기화한다.
+  Future<void> deleteTokenInfo();
 }
 
 class LocalDataSourceImpl extends LocalDataSource {
+  final systemBoxName = 'system';
 
-  Future<void> init() async {
+  final Logger _logger;
+
+  LocalDataSourceImpl({Logger? logger}) : _logger = logger ?? locator.get<Logger>();
+
+  static Future<void> init() async {
     await Hive.initFlutter();
     Hive.registerAdapter(UserAdapter());
+    Hive.registerAdapter(AuthTokenAdapter());
+  }
 
-    // 'system'
+  Future<Box<User>> get userBox async => await Hive.openBox<User>('userInfo');
+  Future<Box<AuthToken>> get authTokenBox async => await Hive.openBox<AuthToken>('tokenInfo');
+
+  @override
+  Future<void> addUserInfo(User user) async {
+    var box = await userBox;
+    await box.clear();
+    await box.put('userInfo', user);
+    _logger.i('User Info added - ${user.id}');
   }
 
   @override
-  Future<User> addUserInfo() {
-    // TODO: implement addUserInfo
-    throw UnimplementedError();
+  Future<User?> getUserInfo() async {
+    try {
+      var box = await userBox;
+      return box.get('userInfo', defaultValue: null);
+    } catch (e) {
+      return null;
+    }
   }
 
   @override
-  Future<void> deleteTokenInfo(String userCode) {
-    // TODO: implement deleteTokenInfo
-    throw UnimplementedError();
+  Future<void> updateUserInfo(User user) async {
+    var box = await userBox;
+    box.put('userInfo', user);
+    _logger.i('User Info updated - ${user.id}');
   }
 
   @override
-  Future<AuthToken> updateTokenInfo(AuthToken token) {
-    // TODO: implement updateTokenInfo
-    throw UnimplementedError();
+  Future<void> deleteUserInfo() async {
+    var box = await userBox;
+    await box.clear();
+    _logger.i('User Info delet complete');
   }
 
   @override
-  Future<User> updateUserInfo() {
-    // TODO: implement updateUserInfo
-    throw UnimplementedError();
+  Future<void> addTokenInfo(AuthToken token) async {
+    var box = await authTokenBox;
+    await box.clear();
+    await box.put('tokenInfo', token);
+    _logger.i('AuthToken added - expired At ${token.accessExpiredAt}');
+  }
+
+  @override
+  Future<AuthToken?> getTokenInfo() async {
+    try {
+      var box = await authTokenBox;
+      return box.get('tokenInfo', defaultValue: null);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<void> updateTokenInfo(AuthToken token) async {
+    var box = await authTokenBox;
+    box.put('tokenInfo', token);
+    _logger.i('Token Info updated - expired At ${token.accessExpiredAt}');
+  }
+
+  @override
+  Future<void> deleteTokenInfo() async {
+    var box = await authTokenBox;
+    await box.clear();
+    _logger.i('Token Info Data deleted');
   }
 }

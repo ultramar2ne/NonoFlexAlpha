@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:nonoflex_alpha/conf/navigator.dart';
 import 'package:nonoflex_alpha/conf/ui/resource.dart';
-import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
+import 'package:nonoflex_alpha/model/repository/auth/auth_repository.dart';
+import 'package:nonoflex_alpha/model/source/local_data_source.dart';
 import 'package:nonoflex_alpha/view/splash/splash_view.dart';
 import 'package:nonoflex_alpha/view/splash/splash_viewmodel.dart';
 
 import 'conf/locator.dart';
 
-void main() {
-  setUpLocator();
+import 'package:get/get.dart';
 
-  Get.put(SplashViewModel());
+void main() async {
+  await LocalDataSourceImpl.init();
+  setUpLocator();
 
   // status Bar 색상 설정
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -23,64 +23,65 @@ void main() {
 
   runApp(GetMaterialApp(
     home: SplashView(),
+    initialBinding: BindingsBuilder(() => Get.lazyPut(() => SplashViewModel())),
     translations: Resource(),
     locale: Get.deviceLocale,
     debugShowCheckedModeBanner: false,
   ));
 }
 
-class TestHome extends StatelessWidget {
-  final TestHomeController viewmodel = TestHomeController();
-
-  @override
-  Widget build(BuildContext context) {
-    // status Bar 색상 설정
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: ColorName.base,
-        statusBarBrightness: Brightness.dark,
-        statusBarIconBrightness: Brightness.dark));
-
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: ColorName.base,
-        body: Center(
-            child: Column(
-          children: [
-            BNColoredButton(
-              child: const Text('노티스 목록 테스트'),
-              onPressed: () => viewmodel.navigator.goNoticeListPage(),
-            ),
-            BNTextButton(
-              '텍스트버튼 테슽트',
-              // child: const Text('노티스 목록 테스트'),
-              onPressed: () => viewmodel.navigator.goNoticeListPage(),
-            ),
-            BNOutlinedButton(
-              child: const Text('노티스 목록 테스트'),
-              onPressed: () => viewmodel.navigator.goNoticeListPage(),
-            ),
-          ],
-        )),
-      ),
-    );
-  }
-}
-
-class TestHomeController extends GetxController {
-  final navigator = NonoNavigatorManager();
-}
-
-class NonoFlexApp extends StatelessWidget {
-  const NonoFlexApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      // home:
-    );
-  }
-}
+// class TestHome extends StatelessWidget {
+//   final TestHomeController viewmodel = TestHomeController();
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     // status Bar 색상 설정
+//     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+//         statusBarColor: ColorName.base,
+//         statusBarBrightness: Brightness.dark,
+//         statusBarIconBrightness: Brightness.dark));
+//
+//     return SafeArea(
+//       child: Scaffold(
+//         backgroundColor: ColorName.base,
+//         body: Center(
+//             child: Column(
+//           children: [
+//             BNColoredButton(
+//               child: const Text('노티스 목록 테스트'),
+//               onPressed: () => viewmodel.navigator.goNoticeListPage(),
+//             ),
+//             BNTextButton(
+//               '텍스트버튼 테슽트',
+//               // child: const Text('노티스 목록 테스트'),
+//               onPressed: () => viewmodel.navigator.goNoticeListPage(),
+//             ),
+//             BNOutlinedButton(
+//               child: const Text('노티스 목록 테스트'),
+//               onPressed: () => viewmodel.navigator.goNoticeListPage(),
+//             ),
+//           ],
+//         )),
+//       ),
+//     );
+//   }
+// }
+//
+// class TestHomeController extends GetxController {
+//   final navigator = NonoNavigatorManager();
+// }
+//
+// class NonoFlexApp extends StatelessWidget {
+//   const NonoFlexApp({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       // home:
+//     );
+//   }
+// }
 
 // class GetTestHome extends StatelessWidget {
 //   final Controller c = Get.put(Controller());

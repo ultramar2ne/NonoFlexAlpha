@@ -17,16 +17,12 @@ class User {
   // 사용자 활성 여부
   final bool isActive;
 
-  // 토큰 정보
-  final AuthToken? token;
-
   User({
     required this.userCode,
     required this.id,
     required this.userName,
     required this.userType,
     this.isActive = false,
-    this.token,
   });
 
   User copyWith({
@@ -41,45 +37,26 @@ class User {
       userName: userName ?? this.userName,
       userType: userType ?? this.userType,
       isActive: isActive ?? this.isActive,
-      token: token ?? this.token,
     );
   }
 
-  factory User.fromJson(Map<String, dynamic> data) {
-    AuthToken? token;
-    if (data['token'] != null) {
-      token = AuthToken.fromJson(data['token']);
-    }
-
+  factory User.fromJson(Map<dynamic, dynamic> data) {
     return User(
-      userCode: int.tryParse(data['userCode']) ?? -1,
-      id: data['id'] ?? '',
+      userCode: data['userCode'] ?? -1,
+      id: data['email'] ?? '',
       userName: data['userName'] ?? '',
       userType: UserTypeExt.fromData(data['userType'] ?? ''),
-      isActive: data['isActive'] ?? false,
-      token: token,
+      isActive: data['active'] ?? false,
     );
   }
 
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> data = {
-      'userCode': userCode,
-      'id': id,
-      'userName': userName,
-      'userType': userType.toString(),
-      'isActive': isActive,
-    };
-
-    if (token != null) {
-      data['token'] = token!.toMap();
-    }
-
     return {
       'userCode': userCode,
-      'id': id,
+      'email': id,
       'userName': userName,
-      'userType': userType.toString(),
-      'isActive': isActive,
+      'userType': UserTypeExt.toData(userType),
+      'active': isActive,
     };
   }
 }
@@ -88,12 +65,36 @@ enum UserType { admin, participant }
 
 extension UserTypeExt on UserType {
   static UserType fromData(String type) {
-    if (type == UserType.admin.toString()) {
+    if (type == 'ROLE_ADMIN') {
       return UserType.admin;
+    } else if (type == 'ROLE_PARTICIPANT') {
+      return UserType.participant;
     } else {
       return UserType.participant;
     }
   }
+
+  static String toData(UserType type) {
+    switch (type) {
+      case UserType.admin:
+        return 'ROLE_ADMIN';
+      case UserType.participant:
+        return 'ROLE_PARTICIPANT';
+    }
+  }
 }
 
-class UserList {}
+class UserList {
+
+
+  factory UserList.fromJson(Map<dynamic, dynamic> data) {
+    throw('일해라 최진욱..');
+    // return User(
+    //   userCode: data['userCode'] ?? -1,
+    //   id: data['email'] ?? '',
+    //   userName: data['userName'] ?? '',
+    //   userType: UserTypeExt.fromData(data['userType'] ?? ''),
+    //   isActive: data['active'] ?? false,
+    // );
+  }
+}

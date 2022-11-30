@@ -8,7 +8,9 @@ import 'package:nonoflex_alpha/gen/colors.gen.dart';
 
 abstract class BaseGetView<T> extends StatelessWidget {
   final theme = locator.get<BNTheme>();
-  final logger = locator.get<BNTheme>();
+  final logger = locator.get<Logger>();
+
+  late final BuildContext currentContext;
 
   BaseGetView({Key? key}) : super(key: key);
 
@@ -18,8 +20,8 @@ abstract class BaseGetView<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // this.context = context;
     if (controller is! BaseController) return _defaultErrorView('');
-
     BaseController _controller = controller as BaseController;
     return _controller.obx(
       (state) => Stack(
@@ -83,13 +85,21 @@ extension BaseGetViewDefaultWidget on BaseGetView {
 }
 
 abstract class BaseController extends GetxController with StateMixin {
-  final logger = Logger();
-  final NonoNavigatorManager baseNavigator = NonoNavigatorManager();
+  final NonoNavigatorManager baseNavigator;
+  final logger = locator.get<Logger>();
 
   /// task status
   bool isInited = false;
   var isLoading = false.obs;
 
+  BaseController({NonoNavigatorManager? navigatorManager, bool loadingComplete = true})
+      : baseNavigator = navigatorManager ?? NonoNavigatorManager() {
+    /// isLoading이 true일 경우 반드시 초기 로딩이 끝난 뒤 [completeInitialize]를 호출하여 로딩 화면을 종료해야한다.
+    if (loadingComplete) completeInitialize();
+  }
+
+  // 초기화 과정을 종료한다.
+  // 최초 초기화 과정을 의미하며, 로딩중일경우 전체 페이지에 로딩화면이 나타난다.
   void completeInitialize({String? errorMessage}) {
     if (errorMessage != null) {
       change(null, status: RxStatus.error(errorMessage));
@@ -97,8 +107,10 @@ abstract class BaseController extends GetxController with StateMixin {
     change(null, status: RxStatus.success());
   }
 
+  // view에 로딩인디케이터 표시 여부를 업데이트.
   updateLoadingState(bool state) => isLoading.value = state;
 
+  // view의 동작 상태를 변경한다.
   void changeViewState(TaskState taskState,
       {bool wholeScreen = false, String? errorMessage, String? toastMessage}) {
     // if(toastMessage!= null)
@@ -117,7 +129,7 @@ abstract class BaseController extends GetxController with StateMixin {
         change(null, status: RxStatus.empty());
         break;
       case TaskState.error:
-        Get.dialog(AlertDialog())
+        // Get.dialog(AlertDialog())
         if (wholeScreen) {
           change(null, status: RxStatus.error(errorMessage));
         }

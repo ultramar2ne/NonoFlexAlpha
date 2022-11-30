@@ -15,7 +15,7 @@ class Product {
   final String? description;
 
   // 분류 : category
-  final String? category;
+  final String category;
 
   // 제조사 : maker
   final String maker;
@@ -33,53 +33,81 @@ class Product {
   final int stock;
 
   // 기준 가격 : price
-  final int price;
+  final int? price;
 
   // 마진율 : marign
-  final int marginPrice;
+  final int? marginPrice;
 
   // 물품 활성 여부 : active
   final bool isActive;
 
-  Product({
-    required this.prdId,
-    required this.prdCode,
-    required this.prdName,
-    required this.fileUri,
-    required this.description,
-    required this.category,
-    required this.maker,
-    required this.unit,
-    required this.storageType,
-    required this.barcode,
-    required this.stock,
-    required this.price,
-    required this.marginPrice,
-    required this.isActive});
+  Product(
+      {required this.prdId,
+      required this.prdCode,
+      required this.prdName,
+      required this.fileUri,
+      required this.description,
+      required this.category,
+      required this.maker,
+      required this.unit,
+      required this.storageType,
+      required this.barcode,
+      required this.stock,
+      required this.price,
+      required this.marginPrice,
+      required this.isActive});
 
-  factory Product.fromJson(Map<String, dynamic> data){
+  factory Product.fromJson(Map<String, dynamic> data) {
+    final prdId = data['productId'];
+    final prdCode = data['productCode'];
+    final prdName = data['name'];
+    final category = data['category'];
+    final maker = data['maker'];
+    final unit = data['unit'];
+    final stock = data['stock']; // int
+    final storageType = StorageType.getByServer(data['storageType']); // enum
+    final isActive = data['active']; // bool
+
+    // nullable
+    final description = data['description'];
+    final barcode = data['barcode'];
+    final price = data['price'];
+    final marginPrice = data['margin'];
+    final fileUri = data['image'];
+
     return Product(
-        prdId: data['page'],
-        prdCode: data['page'],
-        prdName: data['page'],
-        fileUri: data['page'],
-        description: data['page'],
-        category: data['page'],
-        maker: data['page'],
-        unit: data['page'],
-        storageType: data['page'],
-        barcode: data['page'],
-        stock: data['page'],
-        price: data['page'],
-        marginPrice: data['page'],
-        isActive: data['page']);
+      prdId: prdId,
+      prdCode: prdCode,
+      prdName: prdName,
+      category: category,
+      maker: maker,
+      unit: unit,
+      stock: stock,
+      storageType: storageType,
+      isActive: isActive,
+      description: description,
+      barcode: barcode,
+      price: price,
+      marginPrice: marginPrice,
+      fileUri: fileUri,
+    );
   }
 }
 
 enum StorageType {
-  ICE,
-  COLD,
-  ROOM,
+  ice('ice', 'ICE'),
+  cold('cold', 'COLD'),
+  room('room', 'ROOM');
+
+  const StorageType(this.code, this.serverValue);
+
+  final String code;
+  final String serverValue;
+
+  factory StorageType.getByServer(String serverValue) {
+    return StorageType.values
+        .firstWhere((value) => value.serverValue == serverValue, orElse: () => StorageType.room);
+  }
 }
 
 // class ProductDetail extends Product {
@@ -105,3 +133,17 @@ class ProductList {
         items: data['productList'].map((element) => Product.fromJson(element)).toList());
   }
 }
+
+enum ProductListSortType {
+  prdCode,
+  name,
+  category,
+  maker,
+  storageType,
+  stock,
+  price,
+  margin,
+  active,
+}
+
+

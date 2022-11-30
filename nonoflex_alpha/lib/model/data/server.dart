@@ -25,7 +25,7 @@ class AuthToken {
       required this.refreshToken,
       required this.refreshExpiredAt});
 
-  factory AuthToken.fromJson(Map<String, dynamic> data) {
+  factory AuthToken.fromJson(Map<dynamic, dynamic> data) {
     return AuthToken(
       accessToken: data['access_token'],
       accessExpiredAt: DateTime.fromMicrosecondsSinceEpoch(data['expires_in']),
@@ -37,9 +37,9 @@ class AuthToken {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> data = {
       'access_token': accessToken,
-      'expires_in': accessExpiredAt,
+      'expires_in': accessExpiredAt.microsecondsSinceEpoch,
       'refresh_token': refreshToken,
-      'refresh_token_expires_in': refreshExpiredAt,
+      'refresh_token_expires_in': refreshExpiredAt.microsecondsSinceEpoch,
     };
     return data;
   }

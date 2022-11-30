@@ -1,9 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:nonoflex_alpha/conf/config.dart';
+import 'package:nonoflex_alpha/conf/manager/auth_manager.dart';
 import 'package:nonoflex_alpha/conf/ui/theme.dart';
 import 'package:nonoflex_alpha/model/repository/auth/auth_repository.dart';
 import 'package:nonoflex_alpha/model/repository/company/company_repository.dart';
-import 'package:nonoflex_alpha/model/repository/document/document_mock_repository.dart';
 import 'package:nonoflex_alpha/model/repository/document/document_repository.dart';
 import 'package:nonoflex_alpha/model/repository/notice/notice_repository.dart';
 import 'package:nonoflex_alpha/model/repository/product/product_repository.dart';
@@ -18,6 +19,7 @@ final GetIt locator = GetIt.instance;
 void setUpLocator() {
   // etc
   locator.registerSingleton<Logger>(Logger());
+  locator.registerSingleton<Configs>(Configs());
 
   // config
   locator.registerSingleton<BNTheme>(LightTheme());
@@ -33,4 +35,7 @@ void setUpLocator() {
   locator.registerSingleton<NoticeRepository>(NoticeRepositoryImpl());
   locator.registerSingleton<ProductRepository>(ProductRepositoryImpl());
   locator.registerSingleton<UserRepository>(UserRepositoryImpl());
+
+  // manager
+  locator.registerSingleton<AuthManager>(AuthManager());
 }

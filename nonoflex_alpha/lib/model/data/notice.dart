@@ -70,7 +70,7 @@ class NoticeList {
   // : lastPage
   final bool isLastPage;
 
-  // 거래처 목록 : companyList
+  // 공지사항 목록 : companyList
   final List<Notice> items;
 
   NoticeList(
