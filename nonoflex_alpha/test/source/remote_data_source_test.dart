@@ -66,7 +66,7 @@ void main() {
       /// 로그인 코드로 토큰 발급
       /// 로그인 코드는 1회 발급되면 다시 사용할 수 없도 재발급 받아야한다.
       /// 준비
-      var requestType = TokenRequestType.authorization;
+      var requestType = TokenType.authorization;
       // const loginCode = '732387';
       final loginCode = await remoteDataSource.getLoginCode(
         id: 'jinsrobot@naver.com',
@@ -85,7 +85,7 @@ void main() {
       /// refresh_token으로 토큰 발급
       /// 최초 로그인 이후에는 발급받은 refresh_token을 활용해 auth_token을 갱신한다
       /// 준비
-      requestType = TokenRequestType.refresh;
+      requestType = TokenType.refresh;
       final refreshToken = resultWithLoginCode.refreshToken;
 
       /// 실행
