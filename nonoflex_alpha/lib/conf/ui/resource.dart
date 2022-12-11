@@ -11,6 +11,9 @@ class Resource extends Translations {
           // Common
           'commonEmptyView': '알 수 없는 화면이네요.. 더 분발할게요!',
           'commonErrorView': '무언가 잘못되었습니다.. 더 분발할게요!',
+          'commonEmptyListView' : '항목이 존재하지 않습니다.',
+          'commonSortOption' : '정렬 기준',
+          'commonSortType' : '정렬 방향',
 
           // API Exception
 
@@ -49,14 +52,32 @@ class Resource extends Translations {
 
           // Main - product list
           'ProductListViewTitle': '물품 관리',
+          'ProductListViewLabelProductList' : '물품 목록',
 
           // Main - document list
           'DocumentListViewTitle': '문서 관리',
 
           // Main - setting
           'SettingViewTitle': '설정',
+          'SettingViewButtonLogout' : '로그아웃',
+          'SettingViewLabelUserSetting' : '사용자 관리',
+          'SettingViewButtonManagePartic' : '참여자 정보 관리',
+          'SettingViewButtonManageAdmin' : '관리자 정보 관리',
+          'SettingViewLabelProductSetting' : '물품 관련 추가 기능',
+          'SettingViewLabelProductSetting' : '새 물품 추가',
+          'SettingViewButtonManageBarcode' : '바코드 설정',
+          'SettingViewLabelDocumentSetting' : '문서 관련 추가 기능',
+          'SettingViewButtonPrintDocument' : '문서 출력',
+          'SettingViewButtonManageCompany' : '거래처 관리',
+          'SettingViewLabelEtc' : '기타',
+          'SettingViewButtonAskToDeveloper' : '개발자에게 문의하기',
+          'SettingViewButtonPowerUp' : '힘내라 얍얍',
 
           // Main - partic
+
+          // NoticeList
+          'NoticeListViewTitle' : '공지사항',
+          'NoticeListViewLabelNoticeList' : '공지사항 목록',
         },
         // 'en_US': {
         //   'hello': 'Hallo Welt',

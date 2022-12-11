@@ -199,17 +199,17 @@ class LightTheme extends BNTheme {
   @override
   TextStyle get label => TextStyle(
         fontFamily: FontFamily.notoSansKR,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.bold,
         color: textHint,
-        fontSize: 12,
+        fontSize: 14,
       );
 
   @override
   TextStyle get listTitle => TextStyle(
         fontFamily: FontFamily.notoSansKR,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.w500,
         color: textDark,
-        fontSize: 14,
+        fontSize: 16,
       );
 
   @override
