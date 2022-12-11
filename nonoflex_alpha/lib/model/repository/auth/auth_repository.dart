@@ -61,7 +61,7 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<AuthToken> getAuthToken({required String loginCode}) async {
     final authToken = await _remoteDataSource.getAuthToken(
-        requestType: TokenRequestType.authorization, loginCode: loginCode);
+        requestType: TokenType.authorization, loginCode: loginCode);
 
     try {
       final payload = Utils.parseJwt(authToken.accessToken);
@@ -84,7 +84,7 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<AuthToken> refreshAuthToken({required String refreshToken}) async {
     final authToken = await _remoteDataSource.getAuthToken(
-        requestType: TokenRequestType.refresh, refreshToken: refreshToken);
+        requestType: TokenType.refresh, refreshToken: refreshToken);
     await _localDataSource.updateTokenInfo(authToken);
     return authToken;
   }

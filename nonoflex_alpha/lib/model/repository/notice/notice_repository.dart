@@ -2,7 +2,6 @@ import 'package:nonoflex_alpha/conf/locator.dart';
 import 'package:nonoflex_alpha/model/data/notice.dart';
 import 'package:nonoflex_alpha/model/source/remote_data_source.dart';
 
-
 enum NoticeListSortType {
   id,
   title,
@@ -36,7 +35,6 @@ abstract class NoticeRepository {
   Future<void> deleteNotice(int noticeId);
 }
 
-
 class NoticeRepositoryImpl extends NoticeRepository {
   final RemoteDataSource _remoteDataSource;
 
@@ -68,7 +66,15 @@ class NoticeRepositoryImpl extends NoticeRepository {
       int? page,
       bool? onlyFocusedItem,
       bool? onlyTitle}) async {
-    return await _remoteDataSource.getNoticeList();
+    return await _remoteDataSource.getNoticeList(
+      searchValue: searchValue,
+      sortType: sortType,
+      orderType: orderType,
+      size: size,
+      page: page,
+      onlyFocusedItem: onlyFocusedItem,
+      onlyTitle: onlyTitle,
+    );
   }
 
   @override

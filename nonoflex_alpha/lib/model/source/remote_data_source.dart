@@ -1,4 +1,5 @@
 import 'dart:convert' as convert;
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:nonoflex_alpha/conf/config.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
@@ -86,7 +87,7 @@ class RemoteDataSource {
 
   /// 토큰 발급 및 갱신
   Future<AuthToken> getAuthToken(
-      {required TokenRequestType requestType, String? loginCode, String? refreshToken}) async {
+      {required TokenType requestType, String? loginCode, String? refreshToken}) async {
     /// Post - api/v1/auth/token
     const path = '/api/$version/auth/token';
 
@@ -96,7 +97,7 @@ class RemoteDataSource {
       Map<String, String> body = {};
       body.addAll({
         'grant_type':
-            requestType == TokenRequestType.authorization ? 'authorization_code' : 'refresh_token'
+            requestType == TokenType.authorization ? 'authorization_code' : 'refresh_token'
       });
       if (loginCode != null) body.addAll({'code': loginCode});
       if (refreshToken != null) body.addAll({'refresh_token': refreshToken});
@@ -149,7 +150,8 @@ class RemoteDataSource {
         body: convert.jsonEncode(getBody()),
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return Notice.fromJson(data);
       } else {
         /// error
@@ -176,7 +178,7 @@ class RemoteDataSource {
     Map<String, String> getParams() {
       Map<String, String> params = {};
       if (searchValue != null) params.addAll({'query': searchValue});
-      if (sortType != null) params.addAll({'column': sortType.toString()}); // 고민
+      if (sortType != null) params.addAll({'column': sortType.name}); // 고민
       if (orderType != null) params.addAll({'order': orderType});
       if (size != null) params.addAll({'size': size.toString()});
       if (page != null) params.addAll({'page': page.toString()});
@@ -192,10 +194,13 @@ class RemoteDataSource {
         headers: header,
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return NoticeList.fromJson(data);
       } else {
         /// error
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         throw (response.body);
       }
     } catch (e) {
@@ -211,7 +216,8 @@ class RemoteDataSource {
     try {
       var response = await client.get(requestUrl(path), headers: header);
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return Notice.fromJson(data);
       } else {
         /// error
@@ -245,7 +251,8 @@ class RemoteDataSource {
         body: convert.jsonEncode(getBody()),
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return Notice.fromJson(data);
       } else {
         /// error
@@ -311,7 +318,7 @@ class RemoteDataSource {
       if (product.barcode != null) body['barcode'] = product.barcode!;
       if (product.price != null) body['price'] = '${product.price!}';
       if (product.marginPrice != null) body['margin'] = '${product.marginPrice!}';
-      if (product.fileUri != null) body['image'] = product.fileUri!;
+      // if (product.fileUri != null) body['image'] = product.fileUri!;
 
       return body;
     }
@@ -323,7 +330,8 @@ class RemoteDataSource {
         body: convert.jsonEncode(getBody()),
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return Product.fromJson(data);
       } else {
         /// error
@@ -367,7 +375,8 @@ class RemoteDataSource {
         headers: header,
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return ProductList.fromJson(data);
       } else {
         /// error
@@ -389,7 +398,8 @@ class RemoteDataSource {
     try {
       var response = await client.get(requestUrl(path), headers: header);
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return Product.fromJson(data);
       } else {
         /// error
@@ -411,7 +421,8 @@ class RemoteDataSource {
     try {
       var response = await client.get(requestUrl(path), headers: header);
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return Product.fromJson(data);
       } else {
         /// error
@@ -448,7 +459,8 @@ class RemoteDataSource {
         headers: header,
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         // return NoticeList.fromJson(data);
         throw ('이거 추가해라 인간');
       } else {
@@ -486,7 +498,7 @@ class RemoteDataSource {
       if (product.barcode != null) body['barcode'] = product.barcode!;
       if (product.price != null) body['price'] = '${product.price!}';
       if (product.marginPrice != null) body['margin'] = '${product.marginPrice!}';
-      if (product.fileUri != null) body['image'] = product.fileUri!;
+      // if (product.imageData != null) body['image'] = P!;
 
       return body;
     }
@@ -498,7 +510,8 @@ class RemoteDataSource {
         body: convert.jsonEncode(getBody()),
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return Product.fromJson(data);
       } else {
         /// error
@@ -525,7 +538,8 @@ class RemoteDataSource {
         headers: header,
       );
       if (response.statusCode == 200) {
-        final data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final data = convert.jsonDecode(body);
         if (data['result'] != true) {
           throw (data['message']);
         } else {
@@ -572,7 +586,8 @@ class RemoteDataSource {
         body: convert.jsonEncode(getBody()),
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return Company.fromJson(data);
       } else {
         /// error
@@ -615,7 +630,8 @@ class RemoteDataSource {
         headers: header,
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return CompanyList.fromJson(data);
       } else {
         /// error
@@ -637,7 +653,8 @@ class RemoteDataSource {
     try {
       var response = await client.get(requestUrl(path), headers: header);
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return Company.fromJson(data);
       } else {
         /// error
@@ -682,7 +699,8 @@ class RemoteDataSource {
         body: convert.jsonEncode(getBody()),
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return Company.fromJson(data);
       } else {
         /// error
@@ -715,7 +733,8 @@ class RemoteDataSource {
         body: convert.jsonEncode(getBody()),
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return CompanyList.fromJson(data);
       } else {
         /// error
@@ -742,7 +761,8 @@ class RemoteDataSource {
         headers: header,
       );
       if (response.statusCode == 200) {
-        final data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final data = convert.jsonDecode(body);
         if (data['result'] != true) {
           throw (data['message']);
         } else {
@@ -801,7 +821,8 @@ class RemoteDataSource {
         body: convert.jsonEncode(getBody()),
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return User.fromJson(data);
       } else {
         /// error
@@ -833,7 +854,8 @@ class RemoteDataSource {
         headers: header,
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return UserList.fromJson(data);
       } else {
         /// error
@@ -852,7 +874,8 @@ class RemoteDataSource {
     try {
       var response = await client.get(requestUrl(path), headers: header);
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return User.fromJson(data);
       } else {
         /// error
@@ -888,7 +911,8 @@ class RemoteDataSource {
         body: convert.jsonEncode(getBody()),
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
         return User.fromJson(data);
       } else {
         /// error
@@ -913,7 +937,8 @@ class RemoteDataSource {
         headers: header,
       );
       if (response.statusCode == 200) {
-        final data = convert.jsonDecode(response.body);
+        final body = utf8.decode(response.bodyBytes);
+        final data = convert.jsonDecode(body);
         if (data['result'] != true) {
           throw (data['message']);
         } else {
