@@ -12,9 +12,32 @@ import 'package:flutter/widgets.dart';
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/ic_add.png
+  AssetGenImage get icAdd => const AssetGenImage('assets/icons/ic_add.png');
+
+  /// File path: assets/icons/ic_add_circle.png
+  AssetGenImage get icAddCircle =>
+      const AssetGenImage('assets/icons/ic_add_circle.png');
+
   /// File path: assets/icons/ic_app_logo.png
   AssetGenImage get icAppLogo =>
       const AssetGenImage('assets/icons/ic_app_logo.png');
+
+  /// File path: assets/icons/ic_arrow_back.png
+  AssetGenImage get icArrowBack =>
+      const AssetGenImage('assets/icons/ic_arrow_back.png');
+
+  /// File path: assets/icons/ic_arrow_down.png
+  AssetGenImage get icArrowDown =>
+      const AssetGenImage('assets/icons/ic_arrow_down.png');
+
+  /// File path: assets/icons/ic_arrow_forward.png
+  AssetGenImage get icArrowForward =>
+      const AssetGenImage('assets/icons/ic_arrow_forward.png');
+
+  /// File path: assets/icons/ic_arrow_up.png
+  AssetGenImage get icArrowUp =>
+      const AssetGenImage('assets/icons/ic_arrow_up.png');
 
   /// File path: assets/icons/ic_calendar.png
   AssetGenImage get icCalendar =>
@@ -32,6 +55,22 @@ class $AssetsIconsGen {
   AssetGenImage get icDelete =>
       const AssetGenImage('assets/icons/ic_delete.png');
 
+  /// File path: assets/icons/ic_expand_off.png
+  AssetGenImage get icExpandOff =>
+      const AssetGenImage('assets/icons/ic_expand_off.png');
+
+  /// File path: assets/icons/ic_expand_on.png
+  AssetGenImage get icExpandOn =>
+      const AssetGenImage('assets/icons/ic_expand_on.png');
+
+  /// File path: assets/icons/ic_eye_off.png
+  AssetGenImage get icEyeOff =>
+      const AssetGenImage('assets/icons/ic_eye_off.png');
+
+  /// File path: assets/icons/ic_eye_on.png
+  AssetGenImage get icEyeOn =>
+      const AssetGenImage('assets/icons/ic_eye_on.png');
+
   /// File path: assets/icons/ic_flash_off.png
   AssetGenImage get icFlashOff =>
       const AssetGenImage('assets/icons/ic_flash_off.png');
@@ -39,6 +78,20 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_flash_on.png
   AssetGenImage get icFlashOn =>
       const AssetGenImage('assets/icons/ic_flash_on.png');
+
+  /// File path: assets/icons/ic_info.png
+  AssetGenImage get icInfo => const AssetGenImage('assets/icons/ic_info.png');
+
+  /// File path: assets/icons/ic_list_menu.png
+  AssetGenImage get icListMenu =>
+      const AssetGenImage('assets/icons/ic_list_menu.png');
+
+  /// File path: assets/icons/ic_minus.png
+  AssetGenImage get icMinus => const AssetGenImage('assets/icons/ic_minus.png');
+
+  /// File path: assets/icons/ic_minus_circle.png
+  AssetGenImage get icMinusCircle =>
+      const AssetGenImage('assets/icons/ic_minus_circle.png');
 
   /// File path: assets/icons/ic_navi_documents.png
   AssetGenImage get icNaviDocuments =>
@@ -73,13 +126,27 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        icAdd,
+        icAddCircle,
         icAppLogo,
+        icArrowBack,
+        icArrowDown,
+        icArrowForward,
+        icArrowUp,
         icCalendar,
         icCameraFlip,
         icCancel,
         icDelete,
+        icExpandOff,
+        icExpandOn,
+        icEyeOff,
+        icEyeOn,
         icFlashOff,
         icFlashOn,
+        icInfo,
+        icListMenu,
+        icMinus,
+        icMinusCircle,
         icNaviDocuments,
         icNaviHome,
         icNaviProducts,
