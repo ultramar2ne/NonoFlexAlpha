@@ -11,7 +11,6 @@ class SplashViewModel extends BaseController {
 
   SplashViewModel({AuthManager? authManager})
       : _authManager = authManager ?? locator.get<AuthManager>() {
-    // completeInitialize();
     _init();
   }
 
