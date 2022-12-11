@@ -1,22 +1,18 @@
-// 서버 기본 정보
+/// 서버 기본 정보
 class ServerConfig {}
 
-/// 토큰 발급 또는 갱신 타입
-/// 로그인 코드를 통한 토큰 발급 시 [authorization_code] ,
-/// refresh token을 통한 갱신 시 [refresh_token] 을 토큰 발급 요청 시
-/// parameter로 포함시켜야 한다.
-enum TokenRequestType {
-  authorization,
-  refresh,
-}
-
+/// 인증 토큰
 class AuthToken {
+  // 인증 토큰 : access_token
   final String accessToken;
 
+  // 인증 토큰 만료 시간 : expires_in
   final DateTime accessExpiredAt;
 
+  // refresh 토큰 : refresh_token
   final String refreshToken;
 
+  // refresh 토큰 만료 시간 : refresh_token_expires_in
   final DateTime refreshExpiredAt;
 
   AuthToken(
@@ -24,6 +20,20 @@ class AuthToken {
       required this.accessExpiredAt,
       required this.refreshToken,
       required this.refreshExpiredAt});
+
+  AuthToken copyWith({
+    String? accessToken,
+    DateTime? accessExpiredAt,
+    String? refreshToken,
+    DateTime? refreshExpiredAt,
+  }) {
+    return AuthToken(
+      accessToken: accessToken ?? this.accessToken,
+      accessExpiredAt: accessExpiredAt ?? this.accessExpiredAt,
+      refreshToken: refreshToken ?? this.refreshToken,
+      refreshExpiredAt: refreshExpiredAt ?? this.refreshExpiredAt,
+    );
+  }
 
   factory AuthToken.fromJson(Map<dynamic, dynamic> data) {
     return AuthToken(
@@ -45,10 +55,21 @@ class AuthToken {
   }
 }
 
-// {
-// "token_type": "bearer",
-// "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJST0xFIjoiUk9MRV9BRE1JTiIsImlzcyI6ImJ1ZGR5IiwiZXhwIjoxNjY0MTIzMzMzLCJpYXQiOjE2NjQxMTYxMzMsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLstIjsoIjsoJXqt4Dsl7zrkaXsnbTsnqXtg5ztmZgifQ.EE2FalkL7eSlZPTwC6UM0yY8U61Nva6BAL3gW0E5368",
-// "expires_in": 1664123333000,
-// "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJST0xFIjoiUk9MRV9BRE1JTiIsImlzcyI6ImJ1ZGR5IiwiZXhwIjoxNjk1NjUyMTMzLCJpYXQiOjE2NjQxMTYxMzMsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLstIjsoIjsoJXqt4Dsl7zrkaXsnbTsnqXtg5ztmZgifQ.u_fUHQuVw45BsEuBdq8NxWKSy8qrtMGLIOg9w_b9NuE",
-// "refresh_token_expires_in": 1695652133000
-// }
+/// 토큰 발급 또는 갱신 타입
+/// 로그인 코드를 통한 토큰 발급 시 [authorization_code] ,
+/// refresh token을 통한 갱신 시 [refresh_token] 을 토큰 발급 요청 시
+/// parameter로 포함시켜야 한다.
+enum TokenType {
+  authorization('auth', 'authorization_code'),
+  refresh('refresh', 'refresh_token');
+
+  const TokenType(this.code, this.serverValue);
+
+  final String code;
+  final String serverValue;
+
+  factory TokenType.fromServer(String serverValue) {
+    return TokenType.values.firstWhere((value) => value.serverValue == serverValue,
+        orElse: () => TokenType.authorization);
+  }
+}

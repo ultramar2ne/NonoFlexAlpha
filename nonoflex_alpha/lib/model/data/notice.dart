@@ -1,3 +1,8 @@
+
+import 'package:flutter/cupertino.dart';
+
+/// 공지사항
+@immutable
 class Notice {
 // 공지사항 id : noticeid
   final int noticeId;
@@ -52,8 +57,21 @@ class Notice {
       isFocused: data['focus'],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'noticeId': noticeId,
+      'title': title,
+      'content': content,
+      'writer': writer,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      'focus': isFocused
+    };
+  }
 }
 
+/// 공지사항 목록
 class NoticeList {
   // 현재 페이지 : page
   final int page;
@@ -84,8 +102,6 @@ class NoticeList {
   factory NoticeList.fromJson(Map<String, dynamic> data) {
     final metaData = data['meta'];
     final items = data['noticeList'];
-
-    // final List<Notice> kk = ;
 
     return NoticeList(
         page: metaData['page'],

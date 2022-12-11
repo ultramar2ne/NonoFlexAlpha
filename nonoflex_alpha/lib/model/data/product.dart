@@ -8,8 +8,8 @@ class Product {
   // 상품 이름 : name
   final String prdName;
 
-  // 상품 이미지 파일 주소 : fileUri
-  final String? fileUri;
+  // 상품 이미지 : image
+  final ProductImage? imageData;
 
   // 상품 상세 설명 : description
   final String? description;
@@ -45,7 +45,7 @@ class Product {
       {required this.prdId,
       required this.prdCode,
       required this.prdName,
-      required this.fileUri,
+      required this.imageData,
       required this.description,
       required this.category,
       required this.maker,
@@ -73,7 +73,7 @@ class Product {
     final barcode = data['barcode'];
     final price = data['price'];
     final marginPrice = data['margin'];
-    final fileUri = data['image'];
+    final imageData = data['image'] != null ? ProductImage.fromJson(data['image']) : null;
 
     return Product(
       prdId: prdId,
@@ -89,7 +89,36 @@ class Product {
       barcode: barcode,
       price: price,
       marginPrice: marginPrice,
-      fileUri: fileUri,
+      imageData: imageData,
+    );
+  }
+}
+
+class ProductImage {
+  // file id : fileId
+  final int fileId;
+
+  // 원본 이미지 url : originalUrl
+  final String imageUrl;
+
+  // 용량이 적은 thumbnail 이미지 : thumbnailUrl
+  final String thumbnailImageUrl;
+
+  ProductImage({
+    required this.fileId,
+    required this.imageUrl,
+    required this.thumbnailImageUrl,
+  });
+
+  factory ProductImage.fromJson(Map<String, dynamic> data) {
+    final fileId = data['fileId'];
+    final imageUrl = data['originalUrl'];
+    final thumbnailImageUrl = data['thumbnailUrl'];
+
+    return ProductImage(
+      fileId: fileId,
+      imageUrl: imageUrl,
+      thumbnailImageUrl: thumbnailImageUrl,
     );
   }
 }
@@ -121,16 +150,37 @@ class ProductList {
   // : count
   final int count;
 
+  // : totalPages
+  final int totalPages;
+
+  // : totalCount
+  final int totalCount;
+
+  // : lastPage
+  final bool isLastPage;
+
   // 거래처 목록 : companyList
   final List<Product> items;
 
-  ProductList({required this.page, required this.count, required this.items});
+  ProductList(
+      {required this.page,
+      required this.count,
+      required this.totalPages,
+      required this.totalCount,
+      required this.isLastPage,
+      required this.items});
 
   factory ProductList.fromJson(Map<String, dynamic> data) {
+    final metaData = data['meta'];
+    final items = data['productList'];
+
     return ProductList(
-        page: data['page'],
-        count: data['count'],
-        items: data['productList'].map((element) => Product.fromJson(element)).toList());
+        page: metaData['page'],
+        count: metaData['count'],
+        totalPages: metaData['totalPages'],
+        totalCount: metaData['totalCount'],
+        isLastPage: metaData['lastPage'],
+        items: items.map<Product>((el) => Product.fromJson(el)).toList());
   }
 }
 
@@ -145,5 +195,3 @@ enum ProductListSortType {
   margin,
   active,
 }
-
-

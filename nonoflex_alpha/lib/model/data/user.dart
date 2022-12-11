@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:nonoflex_alpha/model/data/server.dart';
 
 /// 사용자 계정 정보
+@immutable
 class User {
   // 사용자 코드 : userCode
   final int userCode;
@@ -45,7 +47,7 @@ class User {
       userCode: data['userCode'] ?? -1,
       id: data['email'] ?? '',
       userName: data['userName'] ?? '',
-      userType: UserTypeExt.fromData(data['userType'] ?? ''),
+      userType: UserType.fromServer(data['userType'] ?? ''),
       isActive: data['active'] ?? false,
     );
   }
@@ -55,46 +57,76 @@ class User {
       'userCode': userCode,
       'email': id,
       'userName': userName,
-      'userType': UserTypeExt.toData(userType),
+      'userType': userType.serverValue,
       'active': isActive,
     };
   }
 }
 
-enum UserType { admin, participant }
+/// 사용자 권한 정보
+enum UserType {
+  none('none', ''),
+  admin('admin', 'ROLE_ADMIN'),
+  participant('admin', 'ROLE_PARTIC');
 
-extension UserTypeExt on UserType {
-  static UserType fromData(String type) {
-    if (type == 'ROLE_ADMIN') {
-      return UserType.admin;
-    } else if (type == 'ROLE_PARTICIPANT') {
-      return UserType.participant;
-    } else {
-      return UserType.participant;
-    }
-  }
+  const UserType(this.code, this.serverValue);
 
-  static String toData(UserType type) {
-    switch (type) {
-      case UserType.admin:
-        return 'ROLE_ADMIN';
-      case UserType.participant:
-        return 'ROLE_PARTICIPANT';
-    }
+  final String code;
+  final String serverValue;
+
+  factory UserType.fromServer(String serverValue) {
+    return UserType.values
+        .firstWhere((value) => value.serverValue == serverValue, orElse: () => UserType.none);
   }
 }
 
+/// 사용자 목록
+@immutable
 class UserList {
+  // 현재 페이지 : page
+  final int page;
 
+  // ?? : count
+  final int count;
+
+  // 전체 페이지 개수 : totalPages
+  final int totalPages;
+
+  // 전체 목록 개수 : totalCount
+  final int totalCount;
+
+  // 마지막 페이지 여부 : lastPage
+  final bool isLastPage;
+
+  // 사용자 목록 : UserList
+  final List<User> items;
+
+  UserList({
+    required this.page,
+    required this.count,
+    required this.totalPages,
+    required this.totalCount,
+    required this.isLastPage,
+    required this.items,
+  });
 
   factory UserList.fromJson(Map<dynamic, dynamic> data) {
-    throw('일해라 최진욱..');
-    // return User(
-    //   userCode: data['userCode'] ?? -1,
-    //   id: data['email'] ?? '',
-    //   userName: data['userName'] ?? '',
-    //   userType: UserTypeExt.fromData(data['userType'] ?? ''),
-    //   isActive: data['active'] ?? false,
-    // );
+    return UserList(
+        page: data['page'],
+        count: data['count'],
+        totalPages: data['totalPages'],
+        totalCount: data['totalCount'],
+        isLastPage: data['isLastPage'],
+        items: data['userItems'].map((element) => User.fromJson(element)).toList());
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'page': page,
+      'count': count,
+      'totalPages': totalPages,
+      'islastPage': isLastPage,
+      'userItems': items.map((e) => e.toMap())
+    };
   }
 }
