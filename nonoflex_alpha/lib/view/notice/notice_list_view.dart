@@ -1,96 +1,177 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:nonoflex_alpha/gen/colors.gen.dart';
+import 'package:nonoflex_alpha/conf/ui/widgets.dart';
+import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/model/data/notice.dart';
 import 'package:nonoflex_alpha/view/notice/notice_list_viewmodel.dart';
 
 import '../../cmm/base.dart';
 
 class NoticeListView extends BaseGetView<NoticeListViewModel> {
-  NoticeListViewModel viewModel = NoticeListViewModel();
+  @override
+  Widget drawHeader() => drawSubPageTitle('NoticeListViewTitle'.tr);
 
   @override
-  Widget build(BuildContext context) {
-    // Get.put()을 사용하여 클래스를 인스턴스화하여 모든 child 에서 사용 가능 ...?
-
-    return Obx(() => Scaffold(
-      // count가 변경될 때 마다 Obx(()=> 를 사용하여 Text()에 없데이트함
-      appBar: AppBar(
-        title: Center(child: Text(viewModel.title)),
-        backgroundColor: ColorName.base,
-        foregroundColor: ColorName.primary,
-        actions: [
-          IconButton(onPressed: () => viewModel.baseNavigator.goAddNoticePage(), icon: Icon(Icons.add)),
-        ],
-        elevation: 0,
-      ),
-
-      // 8줄의 navigator.push를 간단한 Get.to()로 변경함. context는 필요 없음
-      body: Column(
+  Widget drawBody() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _drawHeader(),
-          Expanded(child: _drawBody()),
-          _drawFooter(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'NoticeListViewLabelNoticeList'.tr,
+                style: theme.label,
+              ),
+              // BNIconButton(
+              //   onPressed: () {},
+              //   icon: Assets.icons.icListMenu.image(width: 24, height: 24),
+              // ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Expanded(
+            child: Obx(
+              () => drawNoticeList(controller.noticeItems),
+            ),
+          ),
         ],
       ),
-    ));
+    );
   }
+}
 
-
-
-  Widget _drawHeader() {
-    return SizedBox.shrink();
+extension SubPageCommonwidget on NoticeListView {
+  /// 서브 페이지 타이틀 및 헤더 영역, 앱바 대체 여부 확인 필요
+  Widget drawSubPageTitle(String title, {bool showBackButton = false}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      height: 82,
+      width: Get.width,
+      child: Row(
+        children: [
+          BNIconButton(
+            onPressed: () => Get.back(),
+            icon: Assets.icons.icArrowBack.image(width: 24, height: 24),
+          ),
+          const SizedBox(width: 4),
+          Expanded(
+            child: Center(
+              child: Text(
+                title,
+                style: theme.title.copyWith(
+                  color: theme.textDark,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 4),
+          BNIconButton(
+            onPressed: () => controller.onClickedAddNotice(),
+            icon: Assets.icons.icAdd.image(width: 24, height: 24),
+          ),
+        ],
+      ),
+    );
   }
+}
 
-  Widget _drawBody() {
-    final items = viewModel.noticeList;
+extension NoticeListViewItems on NoticeListView {
+  /// 공지사항 목록 위젯
+  Widget drawNoticeList(List<Notice>? items) {
+    if (items == null) {
+      return Center(
+        child: Text(
+          'commonEmptyListView'.tr,
+          style: theme.title,
+        ),
+      );
+    }
 
-    // Obx(() => Text("Clicks: ${c.count}"))
-    final length = items.length;
-
-    if (items.isEmpty) return const SizedBox.shrink();
-
+    final list = items;
+    final count = items.length;
     return ListView.builder(
-      itemCount: length,
+      physics: const BouncingScrollPhysics(),
+      itemCount: count,
       itemBuilder: (BuildContext context, int index) {
-        return _drawListItem(items[index]);
+        return _drawNoticeListItemNormal(list[index]);
       },
     );
   }
 
-  Widget _drawFooter() {
-    return SizedBox.shrink();
-  }
-
-  Widget _drawListItem(Notice item) {
+  /// 공지사항 목록 항목 위젯
+  Widget _drawNoticeListItemNormal(Notice item) {
     final title = item.title;
+    // TODO:  수정됨 표시 여부 확인 필요
     final timeInfo = item.createdAt != item.updatedAt
         ? DateFormat('yyyy-MM-dd').format(item.createdAt).toString()
-        : '(수정됨)' + DateFormat('yyyy-MM-dd').format(item.updatedAt).toString();
+        : '${DateFormat('yyyy-MM-dd').format(item.updatedAt)}';
 
-    return ListTile(
-      title: Text(title),
-      trailing: Text(timeInfo),
-      onTap: () => viewModel.goNoticeDetail(item.noticeId),
+    final listItemStyle = ButtonStyle(
+      padding: MaterialStateProperty.all<EdgeInsets>(
+        const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      ),
+      shape: MaterialStateProperty.all<OutlinedBorder>(
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      elevation: MaterialStateProperty.all<double>(0),
+      overlayColor: MaterialStateProperty.all<Color>(theme.secondary),
+      backgroundColor: MaterialStateProperty.all<Color>(theme.base),
     );
-  }
 
-  @override
-  AppBar defaultAppBar() {
-    // TODO: implement defaultAppBar
-    throw UnimplementedError();
-  }
-
-  @override
-  Widget drawBody() {
-    // TODO: implement drawBody
-    throw UnimplementedError();
-  }
-
-  @override
-  Widget drawFooter() {
-    // TODO: implement drawFooter
-    throw UnimplementedError();
+    return TextButton(
+      onPressed: () => controller.onClickedNoticeItem(item),
+      style: listItemStyle,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.visible,
+                        style: theme.listTitle,
+                      ),
+                    ),
+                    Visibility(
+                      visible: item.isFocused,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: theme.primary,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(50.0),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Text(
+                  timeInfo,
+                  maxLines: 1,
+                  overflow: TextOverflow.visible,
+                  style: theme.listBody.copyWith(
+                    color: theme.nonoOrange,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

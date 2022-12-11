@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
+import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/model/data/notice.dart';
 import 'package:nonoflex_alpha/view/main/main_admin_home_viewmodel.dart';
@@ -29,6 +30,7 @@ class AdminHomeView extends BaseGetView<AdminHomeViewModel> {
 extension MainPageWidget on AdminHomeView {
   // 최근 공지사항
   Widget drawRecentNoticeItem(Notice? notice) {
+    // 최근 공지사항에 나타날 정보
     late final item;
     if (notice != null && notice.content != null) {
       item = Column(
@@ -50,30 +52,39 @@ extension MainPageWidget on AdminHomeView {
       );
     } else {
       item = Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'AdminHomeViewMessageAddNotice'.tr,
-              style: theme.subTitle.copyWith(color: theme.textHint),
-            ),
-            /// 버튼 ...?
-          ],
-        )
-      );
+          child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'AdminHomeViewMessageAddNotice'.tr,
+            style: theme.subTitle.copyWith(color: theme.textHint),
+          ),
+
+          /// 버튼 ...?
+        ],
+      ));
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('AdminHomeViewLabelNoticeArea'.tr, style: theme.label.copyWith(color: theme.primaryDark)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('AdminHomeViewLabelNoticeArea'.tr, style: theme.label),
+            BNIconButton(
+              onPressed: () => controller.goNoticeListPage(),
+              icon: Assets.icons.icListMenu.image(width: 24, height: 24),
+            ),
+          ],
+        ),
         const SizedBox(height: 6),
         Container(
           height: 180,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(color: theme.shadow.withOpacity(0.1)),
+            // border: Border.all(color: theme.shadow.withOpacity(0.1)),
             color: theme.secondary,
           ),
           padding: const EdgeInsets.all(12),
@@ -88,23 +99,23 @@ extension MainPageWidget on AdminHomeView {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('AdminHomeViewLabelTempDocumentArea'.tr, style: theme.label.copyWith(color: theme.primaryDark)),
+        Text('AdminHomeViewLabelTempDocumentArea'.tr, style: theme.label),
         const SizedBox(height: 6),
         Container(
           height: 80,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(color: theme.primary, width: 2),
             color: theme.baseDark,
           ),
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
               Expanded(child: SizedBox()),
-              InkWell(
-                child: Assets.icons.icFlashOn.image(),
-              )
+              BNIconButton(
+                onPressed: () {},
+                icon: Assets.icons.icAdd.image(width: 32, height: 32),
+              ),
             ],
           ),
         )
@@ -117,21 +128,25 @@ extension MainPageWidget on AdminHomeView {
 extension MainPageCommonWidget on AdminHomeView {
   // 메인 타이틀
   Widget drawMainPageTitle(String title) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      height: 82,
-      width: Get.width,
-      child: Row(
-        children: [
-          Text(
-            title,
-            style: theme.title.copyWith(
-              color: theme.textColoredDark,
-              fontWeight: FontWeight.w600,
-              fontSize: 26,
+    return InkWell(
+      // onTap: () => Get.alertDialog('방가방가'),
+      onTap: () => Get.dialog(Text('data')),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        height: 82,
+        width: Get.width,
+        child: Row(
+          children: [
+            Text(
+              title,
+              style: theme.title.copyWith(
+                color: theme.textDark,
+                fontWeight: FontWeight.w600,
+                fontSize: 26,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
