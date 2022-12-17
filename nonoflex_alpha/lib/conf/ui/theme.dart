@@ -161,7 +161,7 @@ class LightTheme extends BNTheme {
         fontFamily: FontFamily.notoSansKR,
         fontWeight: FontWeight.normal,
         color: textDark,
-        fontSize: 14,
+        fontSize: 16,
       );
 
   @override

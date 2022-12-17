@@ -15,6 +15,12 @@ class Resource extends Translations {
           'commonSortOption' : '정렬 기준',
           'commonSortType' : '정렬 방향',
 
+          // Data model
+          // == product ==
+          'productStorageTypeIce' : '냉동',
+          'productStorageTypeCold' : '냉장',
+          'productStorageTypeRoom' : '실온',
+
           // API Exception
 
           // ViewController Exception
@@ -78,6 +84,38 @@ class Resource extends Translations {
           // NoticeList
           'NoticeListViewTitle' : '공지사항',
           'NoticeListViewLabelNoticeList' : '공지사항 목록',
+
+          // Add/Edit Notice
+          'AddNoticeViewHintTitleField' : '공지사항 제목을 입력해주세요.',
+          'AddNoticeViewHintContentsField' : '전달할 내용을 입력해주세요.',
+          'AddNoticeViewLabelImportantNotice' : '주요 공지사항',
+          'AddNoticeViewButtonAddNotice' : '공지사항 추가',
+
+          // Notice Detail
+          'NoticeDetailViewLabelTitle' : '공지사항 제목',
+          'NoticeDetailViewLabelContents' : '공지사항 내용',
+          'NoticeDetailViewMessageEmptyContents' : '공지사항 내용이 존재하지 않습니다.',
+          'NoticeDetailViewPlaceHolderUnknownUser' : '(알 수 없는 사용자)',
+          'NoticeDetailViewButtonDelete' : '삭제',
+          'NoticeDetailViewButtonEdit' : '수정하기',
+
+
+          // Product Detail
+          'ProductDetailViewTitle' : '상세 정보',
+          'ProductDetailViewLabelInfo' : '물품 정보',
+          'ProductDetailViewLabelPrdName' : '상품명',
+          'ProductDetailViewLabelBarcode' : '바코드',
+          'ProductDetailViewLabelPrdCode' : '물품 코드',
+          'ProductDetailViewLabelCategory' : '물품 분류',
+          'ProductDetailViewLabelStorageMethod' : '보관 방법',
+          'ProductDetailViewLabelStandard' : '규격',
+          'ProductDetailViewLabelInputPrice' : '입고 가격',
+          'ProductDetailViewLabelOutputPrice' : '출고 가격',
+          'ProductDetailViewLabelRate' : '마진률',
+
+          'ProductDetailViewLabelRecords' : '입/출고 기록',
+
+          // Product Add/Edit
         },
         // 'en_US': {
         //   'hello': 'Hallo Welt',
