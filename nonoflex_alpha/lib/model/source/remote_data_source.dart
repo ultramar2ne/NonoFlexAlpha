@@ -183,7 +183,7 @@ class RemoteDataSource {
       if (size != null) params.addAll({'size': size.toString()});
       if (page != null) params.addAll({'page': page.toString()});
       if (onlyFocusedItem != null) params.addAll({'onlyFocusedItem': onlyFocusedItem.toString()});
-      if (onlyTitle != null) params.addAll({'onlyTitle': onlyTitle.toString()});
+      if (onlyTitle != null) params.addAll({'content': onlyTitle.toString()});
 
       return params;
     }
@@ -437,7 +437,7 @@ class RemoteDataSource {
   /// TODO: Test
   /// 요청한 해당 년, 월 물품의 레코드를 조회합니다.
   /// 요청 성공 시 해당하는 물품의 정보와 레코드를 받습니다.
-  Future<RecordList> getProductRecords({
+  Future<List<RecordOfProduct>> getProductRecords({
     required int productId, // 기준 물품서버코드
     int? year, // 검색 연도 - YYYY (default -> 현재 년도)
     int? month, // 검색 월 - 1 ~ 12 (default -> all)
@@ -461,8 +461,9 @@ class RemoteDataSource {
       if (response.statusCode == 200) {
         final body = utf8.decode(response.bodyBytes);
         final Map<String, dynamic> data = convert.jsonDecode(body);
-        // return NoticeList.fromJson(data);
-        throw ('이거 추가해라 인간');
+        return data['recordList']
+            .map<RecordOfProduct>((el) => RecordOfProduct.fromJson(el as Map<String, dynamic>))
+            .toList();
       } else {
         /// error
         throw (response.body);
@@ -776,6 +777,7 @@ class RemoteDataSource {
       rethrow;
     }
   }
+
   ///
   /// region temp document
 

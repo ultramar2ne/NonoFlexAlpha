@@ -47,9 +47,8 @@ class NoticeRepositoryImpl extends NoticeRepository {
   }
 
   @override
-  Future<void> deleteNotice(int noticeId) {
-    // TODO: implement deleteNotice
-    throw UnimplementedError();
+  Future<void> deleteNotice(int noticeId) async {
+    await _remoteDataSource.deleteNotice(noticeId: noticeId);
   }
 
   @override

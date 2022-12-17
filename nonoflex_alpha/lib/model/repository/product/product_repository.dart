@@ -21,7 +21,7 @@ abstract class ProductRepository {
   Future<Product?> getProductDetailInfo({int? productId, String? barcode});
 
   // 물품 레코드 조회
-  Future<RecordList> getRecordByProduct();
+  Future<List<RecordOfProduct>> getRecordByProduct();
 
   // 물품 정보 수정
   Future<void> updateProductInfo(Product product);
@@ -68,7 +68,7 @@ class ProductRepositoryImpl extends ProductRepository {
   }
 
   @override
-  Future<RecordList> getRecordByProduct() {
+  Future<List<RecordOfProduct>> getRecordByProduct() {
     // TODO: implement getRecordByProduct
     throw UnimplementedError();
   }
