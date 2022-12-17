@@ -12,7 +12,7 @@ class SplashView extends BaseGetView<SplashViewModel> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(child: Assets.icons.icAppLogo.image(width: 120, height: 120)),
+          Expanded(child: Assets.icons.icSncLogo.image(width: 120, height: 120)),
           Text(
             'team ${'teamName'.tr}',
             style: theme.subTitle
