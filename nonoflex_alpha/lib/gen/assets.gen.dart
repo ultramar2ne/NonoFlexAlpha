@@ -55,6 +55,9 @@ class $AssetsIconsGen {
   AssetGenImage get icDelete =>
       const AssetGenImage('assets/icons/ic_delete.png');
 
+  /// File path: assets/icons/ic_edit.png
+  AssetGenImage get icEdit => const AssetGenImage('assets/icons/ic_edit.png');
+
   /// File path: assets/icons/ic_expand_off.png
   AssetGenImage get icExpandOff =>
       const AssetGenImage('assets/icons/ic_expand_off.png');
@@ -137,6 +140,7 @@ class $AssetsIconsGen {
         icCameraFlip,
         icCancel,
         icDelete,
+        icEdit,
         icExpandOff,
         icExpandOn,
         icEyeOff,
