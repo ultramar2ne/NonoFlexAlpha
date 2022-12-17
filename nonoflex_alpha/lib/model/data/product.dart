@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 class Product {
   // 서버에서 관리되는 물품 고유 id : productId;
   final int prdId;
@@ -58,8 +60,8 @@ class Product {
       required this.isActive});
 
   factory Product.fromJson(Map<String, dynamic> data) {
-    final prdId = data['productId'];
-    final prdCode = data['productCode'];
+    final productId = data['productId'];
+    final productCode = data['productCode'];
     final prdName = data['name'];
     final category = data['category'];
     final maker = data['maker'];
@@ -73,11 +75,13 @@ class Product {
     final barcode = data['barcode'];
     final price = data['price'];
     final marginPrice = data['margin'];
-    final imageData = data['image'] != null ? ProductImage.fromJson(data['image']) : null;
+    final imageData = data['image'] != null && data['image']['fileId'] != null
+        ? ProductImage.fromJson(data['image'])
+        : null;
 
     return Product(
-      prdId: prdId,
-      prdCode: prdCode,
+      prdId: productId,
+      prdCode: productCode,
       prdName: prdName,
       category: category,
       maker: maker,
@@ -91,6 +95,30 @@ class Product {
       marginPrice: marginPrice,
       imageData: imageData,
     );
+  }
+
+  Map<String, dynamic> toMap({bool forServer = true}) {
+    Map<String, dynamic> data = {};
+
+    data.addAll({
+      'productId': prdId,
+      'productCode': prdCode,
+      'name': stock,
+      'category': price,
+      'maker': maker,
+      'unit': unit,
+      'stock': stock,
+      'storageType': storageType.serverValue,
+      'active': isActive,
+    });
+
+    data.addIf(description != null, 'description', description);
+    data.addIf(barcode != null, 'barcode', barcode);
+    data.addIf(price != null, 'price', price);
+    data.addIf(marginPrice != null, 'margin', marginPrice);
+    data.addIf(imageData != null, 'image', imageData!.toMap());
+
+    return data;
   }
 }
 
@@ -121,6 +149,18 @@ class ProductImage {
       thumbnailImageUrl: thumbnailImageUrl,
     );
   }
+
+  Map<String, dynamic> toMap({bool forServer = true}) {
+    Map<String, dynamic> data = {};
+
+    data.addAll({
+      'fileId': fileId,
+      'originalUrl': imageUrl,
+      'thumbnailUrl' : thumbnailImageUrl,
+    });
+
+    return data;
+  }
 }
 
 enum StorageType {
@@ -136,6 +176,19 @@ enum StorageType {
   factory StorageType.getByServer(String serverValue) {
     return StorageType.values
         .firstWhere((value) => value.serverValue == serverValue, orElse: () => StorageType.room);
+  }
+}
+
+extension StorageTypeExt on StorageType {
+  String get displayName {
+    switch (this) {
+      case StorageType.ice:
+        return 'productStorageTypeIce'.tr;
+      case StorageType.cold:
+        return 'productStorageTypeCold'.tr;
+      case StorageType.room:
+        return 'productStorageTypeRoom'.tr;
+    }
   }
 }
 

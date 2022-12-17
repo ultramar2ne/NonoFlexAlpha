@@ -61,8 +61,9 @@ class ProductRepositoryImpl extends ProductRepository {
   @override
   Future<Product?> getProductDetailInfo({int? productId, String? barcode}) async {
     if (productId == null && barcode == null) throw ('잘못된 요청');
-    if (productId != null)
+    if (productId != null) {
       return await _remoteDataSource.getProductDetailInfoByProductId(productId);
+    }
     if (barcode != null) return await _remoteDataSource.getProductDetailInfoByBarcode(barcode);
     return null;
   }
