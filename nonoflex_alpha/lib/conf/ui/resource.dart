@@ -112,10 +112,13 @@ class Resource extends Translations {
           'ProductDetailViewLabelInputPrice' : '입고 가격',
           'ProductDetailViewLabelOutputPrice' : '출고 가격',
           'ProductDetailViewLabelRate' : '마진률',
+          'ProductDetailViewPlaceHolderEmptyRecords' : '기록이 존재하지 않습니다.',
 
           'ProductDetailViewLabelRecords' : '입/출고 기록',
 
           // Product Add/Edit
+          'AddProductViewTitleAdd' : '새 물품 추가',
+          'AddProductViewTitleEdit' : '물품 정보 수정',
         },
         // 'en_US': {
         //   'hello': 'Hallo Welt',

@@ -168,7 +168,7 @@ class NonoNavigatorManager {
       routeName: path,
       arguments: {'noticeId': noticeItem.noticeId.toString()},
         transition: Transition.downToUp,
-      binding: BindingsBuilder(() => Get.lazyPut(() => NoticeDetailViewModel(noticeItem: noticeItem))),
+      binding: BindingsBuilder(() => Get.lazyPut(() => NoticeDetailViewModel(noticeId: noticeItem.noticeId))),
       // id: rootNavigatorKey,
     );
   }
@@ -181,20 +181,20 @@ class NonoNavigatorManager {
       ProductDetailView(),
       routeName: path,
       transition: Transition.downToUp,
-      arguments: {'productId': product.prdId.toString()},
+      arguments: {'productId': product.productId.toString()},
       binding:
-          BindingsBuilder(() => Get.lazyPut(() => ProductDetailViewModel(productItem: product))),
+          BindingsBuilder(() => Get.lazyPut(() => ProductDetailViewModel(productId: product.productId))),
       // id: rootNavigatorKey,
     );
   }
 
-  Future<dynamic> goAddProductPage() async {
+  Future<dynamic> goAddProductPage({Product? productForEdit}) async {
     const path = '/product/add';
 
     return await Get.to(
       AddProductView(),
       routeName: path,
-      // transition: Transition.downToUp,
+      transition: Transition.downToUp,
       binding: BindingsBuilder(() => Get.lazyPut(() => AddProductViewModel())),
       // id: rootNavigatorKey,
     );

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
+import 'package:nonoflex_alpha/cmm/utils.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 
@@ -77,11 +78,11 @@ extension BaseWidget on BaseGetView {
 
   /// 액션 페이지에서 공통적으로 나타나는 타이틀 위젯
   Widget drawActionPageTitle(String title, {Widget? titleItem}) {
-    final item = titleItem ?? Text(title);
+    final item = titleItem ?? Text(title, style: theme.title.copyWith(fontSize: 26),);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      height: 100,
+      height: 80,
       width: Get.width,
       child: Row(
         children: [
@@ -98,14 +99,14 @@ extension BaseWidget on BaseGetView {
   }
 
   // 요소의 라벨을 나타내는 위젯
-  Widget drawBaseLabel(String title, {BNIconButton? button1, BNIconButton? button2}) {
+  Widget drawBaseLabel(String title, {Widget? item1, Widget? item2}) {
     return Row(
       children: [
-        Text('AdminHomeViewLabelNoticeArea'.tr, style: theme.label),
+        Text(title, style: theme.label),
         const Spacer(),
-        button1 ?? const SizedBox.shrink(),
-        if (button2 != null) const SizedBox(width: 4),
-        button2 ?? const SizedBox.shrink(),
+        item1 ?? const SizedBox.shrink(),
+        if (item2 != null) const SizedBox(width: 4),
+        item2 ?? const SizedBox.shrink(),
       ],
     );
   }
@@ -177,19 +178,68 @@ extension BaseWidget on BaseGetView {
     );
   }
 
-  Widget drawRecordOfProductListItem(RecordOfProduct item) {
+  // 물품에 대한 입출고 기록
+  Widget drawRecordOfProductListItem(RecordOfProduct item, {VoidCallback? onClicked}) {
+    return TextButton(
+      onPressed: onClicked,
+      style: listItemStyle,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // product name, more info ..?
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  formatDateMD(item.date),
+                  maxLines: 1,
+                  overflow: TextOverflow.visible,
+                  style: theme.listTitle,
+                ),
+                Text(
+                  '${item.documentId}(${item.writer})}',
+                  maxLines: 1,
+                  overflow: TextOverflow.visible,
+                  style: theme.listBody.copyWith(
+                    color: theme.nonoOrange,
+                  ),
+                )
+              ],
+            ),
+          ),
+          Text(
+            item.docType == DocumentType.input ? '+ ${item.quantity}' : '- ${item.quantity}',
+            maxLines: 1,
+            overflow: TextOverflow.visible,
+            style: theme.normal.copyWith(
+              color: item.docType == DocumentType.input ? theme.nonoBlue : theme.error,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            '${item.stock}',
+            maxLines: 1,
+            overflow: TextOverflow.visible,
+            style: theme.normal.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget drawDocumentListItem(Document item, {VoidCallback? onClicked}) {
     return SizedBox.shrink();
   }
 
-  Widget drawDocumentListItem(Document item) {
+  Widget drawRecordOfDocumentListItem(RecordOfDocument item, {VoidCallback? onClicked}) {
     return SizedBox.shrink();
   }
 
-  Widget drawRecordOfDocumentListItem(RecordOfDocument item) {
-    return SizedBox.shrink();
-  }
-
-  Widget drawUserListItem(User item) {
+  Widget drawUserListItem(User item, {VoidCallback? onClicked}) {
     return SizedBox.shrink();
   }
 

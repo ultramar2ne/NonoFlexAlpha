@@ -20,7 +20,6 @@ class ScannerView extends BaseGetView<ScannerViewModel> {
   @override
   Widget drawBody() {
     return const QRScanner();
-    // return const QRScanner();
   }
 }
 

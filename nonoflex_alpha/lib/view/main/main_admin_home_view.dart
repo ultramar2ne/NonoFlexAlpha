@@ -70,7 +70,7 @@ extension MainPageWidget on AdminHomeView {
       children: [
         drawBaseLabel(
           'AdminHomeViewLabelNoticeArea'.tr,
-          button1: BNIconButton(
+          item1: BNIconButton(
             onPressed: () => controller.goNoticeListPage(),
             icon: Assets.icons.icListMenu.image(width: 24, height: 24),
           ),

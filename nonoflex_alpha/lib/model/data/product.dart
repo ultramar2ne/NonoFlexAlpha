@@ -2,10 +2,10 @@ import 'package:get/get.dart';
 
 class Product {
   // 서버에서 관리되는 물품 고유 id : productId;
-  final int prdId;
+  final int productId;
 
   // 기관에서 관리하는 물품 고유 코드 : prdCode;
-  final String prdCode;
+  final String productCode;
 
   // 상품 이름 : name
   final String prdName;
@@ -44,8 +44,8 @@ class Product {
   final bool isActive;
 
   Product(
-      {required this.prdId,
-      required this.prdCode,
+      {required this.productId,
+      required this.productCode,
       required this.prdName,
       required this.imageData,
       required this.description,
@@ -80,8 +80,8 @@ class Product {
         : null;
 
     return Product(
-      prdId: productId,
-      prdCode: productCode,
+      productId: productId,
+      productCode: productCode,
       prdName: prdName,
       category: category,
       maker: maker,
@@ -101,8 +101,8 @@ class Product {
     Map<String, dynamic> data = {};
 
     data.addAll({
-      'productId': prdId,
-      'productCode': prdCode,
+      'productId': productId,
+      'productCode': productCode,
       'name': stock,
       'category': price,
       'maker': maker,

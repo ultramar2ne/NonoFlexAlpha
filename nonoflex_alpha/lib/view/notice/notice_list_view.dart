@@ -29,7 +29,7 @@ class NoticeListView extends BaseGetView<NoticeListViewModel> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: drawBaseLabel(
             'NoticeListViewLabelNoticeList'.tr,
-            button1: BNIconButton(
+            item1: BNIconButton(
               onPressed: () {},
               icon: Assets.icons.icListMenu.image(width: 24, height: 24),
             ),

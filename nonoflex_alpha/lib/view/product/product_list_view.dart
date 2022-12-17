@@ -79,6 +79,10 @@ extension ProductListViewItems on ProductListView {
       physics: const BouncingScrollPhysics(),
       itemCount: count,
       itemBuilder: (BuildContext context, int index) {
+        if(index == count-1 && !controller.isLastPage){
+          controller.getProductList();
+        }
+
         final item = list[index];
         return drawProductListItem(item, onClicked: () => controller.onClcikedProductItem(item));
       },

@@ -21,7 +21,7 @@ abstract class ProductRepository {
   Future<Product?> getProductDetailInfo({int? productId, String? barcode});
 
   // 물품 레코드 조회
-  Future<List<RecordOfProduct>> getRecordByProduct();
+  Future<List<RecordOfProduct>> getRecordByProduct(int productId, {int? year, int? month});
 
   // 물품 정보 수정
   Future<void> updateProductInfo(Product product);
@@ -69,9 +69,9 @@ class ProductRepositoryImpl extends ProductRepository {
   }
 
   @override
-  Future<List<RecordOfProduct>> getRecordByProduct() {
-    // TODO: implement getRecordByProduct
-    throw UnimplementedError();
+  Future<List<RecordOfProduct>> getRecordByProduct(int productId, {int? year, int? month}) async {
+    return await _remoteDataSource.getProductRecords(
+        productId: productId, year: year, month: month);
   }
 
   @override
@@ -81,6 +81,6 @@ class ProductRepositoryImpl extends ProductRepository {
 
   @override
   Future<void> deleteProductData(Product product) async {
-    await _remoteDataSource.deleteProduct(product.prdId);
+    await _remoteDataSource.deleteProduct(product.productId);
   }
 }

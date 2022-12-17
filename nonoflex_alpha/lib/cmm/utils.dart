@@ -45,4 +45,7 @@ extension BaseViewUtils on BaseGetView {
 
   String formatDateYMDHM(DateTime date) =>
       DateFormat("yyyy-MM-dd HH:MM").format(date);
+
+  String formatDateMD(DateTime date) =>
+      DateFormat("MM월 dd일 (E)").format(date);
 }

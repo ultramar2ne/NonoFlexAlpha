@@ -304,7 +304,7 @@ class RemoteDataSource {
     Map<String, String> getBody() {
       Map<String, String> body = {};
       body.addAll({
-        'productCode': product.prdCode,
+        'productCode': product.productCode,
         'name': product.prdName,
         'category': product.category,
         'maker': product.maker,
@@ -359,7 +359,7 @@ class RemoteDataSource {
 
     Map<String, String> getParams() {
       Map<String, String> params = {};
-      if (searchValue != null) params.addAll({'query': searchValue});
+      if (searchValue != null && searchValue != '') params.addAll({'query': searchValue});
       if (sortType != null) params.addAll({'column': sortType.toString()}); // 고민
       if (orderType != null) params.addAll({'order': orderType});
       if (size != null) params.addAll({'size': size.toString()});
@@ -447,7 +447,7 @@ class RemoteDataSource {
 
     Map<String, String> getParams() {
       Map<String, String> params = {};
-      if (year != null && year > 2020 && year <= 2050) params.addAll({'year': '$year'});
+      params.addAll({'year': '${year ?? DateTime.now().year}'});
       if (month != null && month > 0 && month <= 12) params.addAll({'month': '$month'});
 
       return params;
@@ -461,7 +461,8 @@ class RemoteDataSource {
       if (response.statusCode == 200) {
         final body = utf8.decode(response.bodyBytes);
         final Map<String, dynamic> data = convert.jsonDecode(body);
-        return data['recordList']
+        final recordList = data['recordList'];
+        return recordList
             .map<RecordOfProduct>((el) => RecordOfProduct.fromJson(el as Map<String, dynamic>))
             .toList();
       } else {
@@ -479,12 +480,12 @@ class RemoteDataSource {
   /// MANAGER 이상의 권한이 필요합니다.
   Future<dynamic> updateProduct({required Product product}) async {
     // Put - api/v1/product/[productId]
-    final path = 'api/$version/product/${product.prdId}';
+    final path = 'api/$version/product/${product.productId}';
 
     Map<String, String> getBody() {
       Map<String, String> body = {};
       body.addAll({
-        'productCode': product.prdCode,
+        'productCode': product.productCode,
         'name': product.prdName,
         'category': product.category,
         'maker': product.maker,
