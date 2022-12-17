@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:nonoflex_alpha/model/data/notice.dart';
+import 'package:nonoflex_alpha/model/data/product.dart';
 import 'package:nonoflex_alpha/view/document/document_list_view.dart';
 import 'package:nonoflex_alpha/view/document/document_list_viewmodel.dart';
 import 'package:nonoflex_alpha/view/login/login_view.dart';
@@ -17,6 +19,10 @@ import 'package:nonoflex_alpha/view/notice/notice_detail_view.dart';
 import 'package:nonoflex_alpha/view/notice/notice_detail_viewmodel.dart';
 import 'package:nonoflex_alpha/view/notice/notice_list_view.dart';
 import 'package:nonoflex_alpha/view/notice/notice_list_viewmodel.dart';
+import 'package:nonoflex_alpha/view/product/add_product_view.dart';
+import 'package:nonoflex_alpha/view/product/add_product_viewmodel.dart';
+import 'package:nonoflex_alpha/view/product/product_detail_view.dart';
+import 'package:nonoflex_alpha/view/product/product_detail_viewmodel.dart';
 import 'package:nonoflex_alpha/view/product/product_list_view.dart';
 import 'package:nonoflex_alpha/view/product/product_list_viewmodel.dart';
 import 'package:nonoflex_alpha/view/splash/splash_view.dart';
@@ -25,7 +31,6 @@ import 'package:nonoflex_alpha/view/util/scanner_view.dart';
 import 'package:nonoflex_alpha/view/util/scanner_viewModel.dart';
 
 class NonoNavigatorManager {
-
   bool get isTabletView => Get.size.shortestSide <= 600;
 
   // static const rootNavigatorKey = 0;
@@ -137,7 +142,7 @@ class NonoNavigatorManager {
     return await Get.to(
       NoticeListView(),
       routeName: path,
-      transition: Transition.rightToLeft,
+      transition: Transition.downToUp,
       binding: BindingsBuilder(() => Get.lazyPut(() => NoticeListViewModel())),
       // id: rootNavigatorKey,
     );
@@ -155,14 +160,42 @@ class NonoNavigatorManager {
     );
   }
 
-  Future<dynamic> goNoticeDetailPage(int noticeId) async {
+  Future<dynamic> goNoticeDetailPage(Notice noticeItem) async {
     const path = '/notice/detail';
 
     return await Get.to(
       NoticeDetailView(),
       routeName: path,
-      arguments: {'noticeId': noticeId.toString()},
-      binding: BindingsBuilder(() => Get.lazyPut(() => NoticeDetailViewModel())),
+      arguments: {'noticeId': noticeItem.noticeId.toString()},
+        transition: Transition.downToUp,
+      binding: BindingsBuilder(() => Get.lazyPut(() => NoticeDetailViewModel(noticeItem: noticeItem))),
+      // id: rootNavigatorKey,
+    );
+  }
+
+  // ==== Product ====
+  Future<dynamic> goProductDetailPage(Product product) async {
+    const path = '/product/detail';
+
+    return await Get.to(
+      ProductDetailView(),
+      routeName: path,
+      transition: Transition.downToUp,
+      arguments: {'productId': product.prdId.toString()},
+      binding:
+          BindingsBuilder(() => Get.lazyPut(() => ProductDetailViewModel(productItem: product))),
+      // id: rootNavigatorKey,
+    );
+  }
+
+  Future<dynamic> goAddProductPage() async {
+    const path = '/product/add';
+
+    return await Get.to(
+      AddProductView(),
+      routeName: path,
+      // transition: Transition.downToUp,
+      binding: BindingsBuilder(() => Get.lazyPut(() => AddProductViewModel())),
       // id: rootNavigatorKey,
     );
   }

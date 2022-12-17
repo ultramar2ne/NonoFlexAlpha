@@ -14,37 +14,34 @@ class ProductListView extends BaseGetView<ProductListViewModel> {
 
   @override
   Widget drawBody() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Container(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'ProductListViewLabelProductList'.tr,
-                  style: theme.label,
-                ),
-                BNIconButton(
-                  onPressed: () => showProductListSortMenu(),
-                  icon: Assets.icons.icListMenu.image(width: 24, height: 24),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Expanded(
-              child: Obx(
-                () => drawProductList(controller.productItems),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'ProductListViewLabelProductList'.tr,
+                style: theme.label,
               ),
-            ),
-            // drawProductListItem(null),
-            // drawTempDocumentInfoItem()
-          ],
+              BNIconButton(
+                onPressed: () => showProductListSortMenu(),
+                icon: Assets.icons.icListMenu.image(width: 24, height: 24),
+              ),
+            ],
+          ),
         ),
-      ),
+        const SizedBox(height: 12),
+        Expanded(
+          child: Obx(
+            () => drawProductList(controller.productItems),
+          ),
+        ),
+        // drawProductListItem(null),
+        // drawTempDocumentInfoItem()
+      ],
     );
   }
 
@@ -74,7 +71,7 @@ extension MainPageCommonWidget on ProductListView {
             ),
           ),
           BNIconButton(
-            onPressed: () {},
+            onPressed: () => controller.onClickedAddButton(),
             icon: Assets.icons.icAdd.image(width: 24, height: 24),
           ),
           const SizedBox(width: 4),

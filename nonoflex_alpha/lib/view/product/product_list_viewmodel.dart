@@ -39,13 +39,15 @@ extension ProductListExt on ProductListViewModel {
   }
 
   // 물품 추가 버튼 선택 시
-  void onClickedAddButton(){
+  void onClickedAddButton() async {
     // go add product page
+    await baseNavigator.goAddProductPage();
   }
 
   // 물품 목록 선택 시 동작
-  void onClcikedProductItem(Product item) {
+  void onClcikedProductItem(Product item) async {
     // go product detail page
+    await baseNavigator.goProductDetailPage(item);
   }
 
   // 물품 검색 시 동작
