@@ -1,62 +1,146 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:nonoflex_alpha/gen/colors.gen.dart';
-import 'package:nonoflex_alpha/model/data/notice.dart';
+import 'package:nonoflex_alpha/cmm/ui/dialog.dart';
+import 'package:nonoflex_alpha/conf/ui/widgets.dart';
+import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/view/notice/notice_detail_viewmodel.dart';
 
 import '../../cmm/base.dart';
 
 class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
-  NoticeDetailViewModel viewModel = NoticeDetailViewModel();
-
   @override
-  Widget build(BuildContext context) {
-    // Get.put()을 사용하여 클래스를 인스턴스화하여 모든 child 에서 사용 가능 ...?
-
-    return Obx(() => Scaffold(
-      // count가 변경될 때 마다 Obx(()=> 를 사용하여 Text()에 없데이트함
-      appBar: AppBar(
-        title: Center(child: Text('상세 보기')),
-        backgroundColor: ColorName.base,
-        foregroundColor: ColorName.primary,
-        actions: [
-          IconButton(onPressed: () => viewModel.baseNavigator.goAddNoticePage(), icon: Icon(Icons.add)),
-        ],
-        elevation: 0,
-      ),
-
-      // 8줄의 navigator.push를 간단한 Get.to()로 변경함. context는 필요 없음
-      body: Column(
+  Widget drawHeader() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      height: 100,
+      width: Get.width,
+      child: Row(
         children: [
-          _drawHeader(),
-          Expanded(child: _drawBody()),
-          _drawFooter(),
-        ],
-      ),
-    ));
-  }
-
-  Widget _drawHeader() {
-    return SizedBox.shrink();
-  }
-
-  Widget _drawBody() {
-    final notice = viewModel.notice;
-
-    if (notice == null) return const SizedBox.shrink();
-
-    return Center(
-      child: Column(
-        children: [
-          Text(notice.value?.title ?? ''),
-          Text(notice.value?.content ?? ''),
-          Text(notice.value?.writer ?? ''),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('NoticeDetailViewLabelTitle'.tr, style: theme.label.copyWith(fontSize: 12)),
+                const SizedBox(height: 4),
+                Text(
+                  controller.noticeItem.title ?? '',
+                  style: theme.title.copyWith(
+                    color: theme.textDark,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
+                  // decoration: noticeTitleInputDecoration,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          BNIconButton(
+            onPressed: () => Get.back(),
+            icon: Assets.icons.icCancel.image(width: 32, height: 32, color: theme.primary),
+          ),
         ],
       ),
     );
   }
 
-  Widget _drawFooter() {
-    return SizedBox.shrink();
+  @override
+  Widget drawBody() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      width: Get.width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('NoticeDetailViewLabelContents'.tr, style: theme.label.copyWith(fontSize: 12)),
+              if (controller.noticeItem.isFocused)
+                Container(
+                  width: 8,
+                  height: 8,
+                  margin: const EdgeInsets.only(right: 16),
+                  decoration: BoxDecoration(
+                    color: theme.primary,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(50.0),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          if (controller.noticeItem.content != null) ...{
+            Expanded(
+              child: Text(
+                controller.noticeItem.content!,
+                style: theme.normal,
+                softWrap: true,
+              ),
+            ),
+          } else
+            ...{
+              Expanded(
+                child: Center(
+                  child: Text(
+                    'NoticeDetailViewMessageEmptyContents'.tr,
+                    style: theme.label,
+                  ),
+                ),
+              )
+            },
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              controller.noticeItem.writer ?? 'NoticeDetailViewPlaceHolderUnknownUser'.tr,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              controller.noticeItem.updatedAt.toString() ??
+                  'NoticeDetailViewPlaceHolderUnknownUser'.tr,
+              style: theme.hint,
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget drawFooter() {
+    return Container(
+      height: 82,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            flex: 1,
+            child: BNTextButton(
+              'NoticeDetailViewButtonDelete'.tr,
+              onPressed: () => controller.deleteNotice(),
+            ),
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            flex: 2,
+            child: BNColoredButton(
+              child: Text('NoticeDetailViewButtonEdit'.tr),
+              onPressed: () async {
+                final kk = await Get.alert('안녕');
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

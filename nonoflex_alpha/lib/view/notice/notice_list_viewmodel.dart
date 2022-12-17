@@ -12,7 +12,7 @@ class NoticeListViewModel extends BaseController {
   /// start notie List 관련 설정
   String searchValue = ''; // 검색어
   NoticeListSortType sortType = NoticeListSortType.updatedAt; // 정렬 기준
-  bool isDesc = false; // 정렬 방향
+  bool isDesc = true; // 정렬 방향
   int pageNum = 1; // 현재 페이지
   final int pageSize = 30; // 페이지 호출 개수
   bool isLastPage = false; // 마지막 페이지 여부
@@ -28,9 +28,9 @@ class NoticeListViewModel extends BaseController {
     getNoticeList();
   }
 
-  Future<void> goNoticeDetail(int noticeId) async {
-    this.baseNavigator.goNoticeDetailPage(noticeId);
-  }
+  // Future<void> goNoticeDetail(int noticeId) async {
+  //   this.baseNavigator.goNoticeDetailPage(noticeId);
+  // }
 
   void onClickedAddNotice() async {
     await baseNavigator.goAddNoticePage();
@@ -41,7 +41,7 @@ class NoticeListViewModel extends BaseController {
   }
 
   void onClickedNoticeItem(Notice notice) async {
-    await baseNavigator.goNoticeDetailPage(notice.noticeId);
+    await baseNavigator.goNoticeDetailPage(notice);
     for (int i = 1; i <= pageNum; i++) {
       await getNoticeList(pageNo: i);
     }
@@ -59,7 +59,7 @@ class NoticeListViewModel extends BaseController {
         orderType: isDesc ? 'desc' : 'asc',
         page: pageNo ?? 1,
         onlyFocusedItem: onlyFocusedItem,
-        // onlyTitle: ,
+        onlyTitle: true,
       );
 
       if (items.page == 1) {

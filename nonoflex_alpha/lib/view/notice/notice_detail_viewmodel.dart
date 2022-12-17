@@ -6,19 +6,41 @@ import 'package:nonoflex_alpha/model/repository/notice/notice_repository.dart';
 
 
 class NoticeDetailViewModel extends BaseController {
-  NoticeRepository _noticeRepository;
+  final NoticeRepository _noticeRepository;
 
-  // final noticeId = Get.arguments['noticeId'];
+  // 공지사항 정보
+  final Notice noticeItem;
 
-  Rx<Notice?> notice = (null as Notice?).obs;
-
-  NoticeDetailViewModel({NoticeRepository? noticeRepository})
-      : _noticeRepository = noticeRepository ?? locator.get<NoticeRepository>() {
+  NoticeDetailViewModel({
+    NoticeRepository? noticeRepository,
+    required this.noticeItem,
+  }) : _noticeRepository = noticeRepository ?? locator.get<NoticeRepository>() {
     init();
   }
 
-  void init() async {
-    final notice222 = await _noticeRepository.getNoticeDetailInfo(70);
-    notice.value = notice222;
+  void init() {
+    getNoticeDetailInfo();
+  }
+
+  void getNoticeDetailInfo() async {
+    try{
+      // final notice = await _noticeRepository.getNoticeDetailInfo(noticeId);
+      // noticeItem.value = notice;
+      // noticeItem.refresh();
+    } catch(e){
+      logger.e(e.toString());
+    }
+  }
+
+  void deleteNotice() async {
+    // 정말 삭제하시겠습니까?
+
+    try {
+      await _noticeRepository.deleteNotice(noticeItem.noticeId);
+      Get.back();
+    } catch(e) {
+      logger.e(e.toString());
+    }
+
   }
 }

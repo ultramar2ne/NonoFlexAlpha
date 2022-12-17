@@ -14,12 +14,13 @@ class NoticeListView extends BaseGetView<NoticeListViewModel> {
 
   @override
   Widget drawBody() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 12),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
@@ -32,14 +33,12 @@ class NoticeListView extends BaseGetView<NoticeListViewModel> {
               // ),
             ],
           ),
-          const SizedBox(height: 12),
-          Expanded(
-            child: Obx(
-              () => drawNoticeList(controller.noticeItems),
-            ),
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 12),
+        Expanded(
+          child: Obx(() => drawNoticeList(controller.noticeItems)),
+        ),
+      ],
     );
   }
 }
@@ -48,14 +47,14 @@ extension SubPageCommonwidget on NoticeListView {
   /// 서브 페이지 타이틀 및 헤더 영역, 앱바 대체 여부 확인 필요
   Widget drawSubPageTitle(String title, {bool showBackButton = false}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      height: 82,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      height: 60,
       width: Get.width,
       child: Row(
         children: [
           BNIconButton(
             onPressed: () => Get.back(),
-            icon: Assets.icons.icArrowBack.image(width: 24, height: 24),
+            icon: Assets.icons.icArrowBack.image(width: 20, height: 20),
           ),
           const SizedBox(width: 4),
           Expanded(
@@ -65,7 +64,7 @@ extension SubPageCommonwidget on NoticeListView {
                 style: theme.title.copyWith(
                   color: theme.textDark,
                   fontWeight: FontWeight.w500,
-                  fontSize: 24,
+                  fontSize: 22,
                 ),
               ),
             ),
@@ -149,6 +148,7 @@ extension NoticeListViewItems on NoticeListView {
                       child: Container(
                         width: 8,
                         height: 8,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
                         decoration: BoxDecoration(
                           color: theme.primary,
                           borderRadius: const BorderRadius.all(
@@ -164,7 +164,7 @@ extension NoticeListViewItems on NoticeListView {
                   maxLines: 1,
                   overflow: TextOverflow.visible,
                   style: theme.listBody.copyWith(
-                    color: theme.nonoOrange,
+                    color: theme.nonoYellow,
                   ),
                 )
               ],
