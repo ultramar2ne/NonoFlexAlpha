@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:nonoflex_alpha/conf/ui/base_widgets.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/view/notice/add_notice_viewmodel.dart';
@@ -10,34 +11,19 @@ import '../../cmm/base.dart';
 
 class AddNoticeView extends BaseGetView<AddNoticeViewModel> {
   @override
-  Widget drawHeader() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      height: 100,
-      width: Get.width,
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: controller.titleEditingController,
-              onChanged: (value) {},
-              style: theme.title.copyWith(
-                color: theme.textDark,
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-              ),
-              decoration: noticeTitleInputDecoration,
-            ),
+  Widget drawHeader() => drawActionPageTitle(
+        '',
+        titleItem: TextField(
+          controller: controller.titleEditingController,
+          onChanged: (value) {},
+          style: theme.title.copyWith(
+            color: theme.textDark,
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
           ),
-          const SizedBox(width: 12),
-          BNIconButton(
-            onPressed: () => Get.back(),
-            icon: Assets.icons.icCancel.image(width: 32, height: 32, color: theme.primary),
-          ),
-        ],
-      ),
-    );
-  }
+          decoration: noticeTitleInputDecoration,
+        ),
+      );
 
   @override
   Widget drawBody() {

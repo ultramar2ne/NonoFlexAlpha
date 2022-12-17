@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:nonoflex_alpha/cmm/ui/dialog.dart';
+import 'package:nonoflex_alpha/cmm/utils.dart';
+import 'package:nonoflex_alpha/conf/ui/base_widgets.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/view/notice/notice_detail_viewmodel.dart';
@@ -9,41 +11,26 @@ import '../../cmm/base.dart';
 
 class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
   @override
-  Widget drawHeader() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      height: 100,
-      width: Get.width,
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('NoticeDetailViewLabelTitle'.tr, style: theme.label.copyWith(fontSize: 12)),
-                const SizedBox(height: 4),
-                Text(
-                  controller.noticeItem.title ?? '',
-                  style: theme.title.copyWith(
-                    color: theme.textDark,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                  ),
-                  // decoration: noticeTitleInputDecoration,
-                ),
-              ],
+  Widget drawHeader() => drawActionPageTitle(
+        '',
+        titleItem: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('NoticeDetailViewLabelTitle'.tr, style: theme.label.copyWith(fontSize: 12)),
+            const SizedBox(height: 4),
+            Text(
+              controller.noticeItem.title ?? '',
+              style: theme.title.copyWith(
+                color: theme.textDark,
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
+              // decoration: noticeTitleInputDecoration,
             ),
-          ),
-          const SizedBox(width: 12),
-          BNIconButton(
-            onPressed: () => Get.back(),
-            icon: Assets.icons.icCancel.image(width: 32, height: 32, color: theme.primary),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 
   @override
   Widget drawBody() {
@@ -80,17 +67,16 @@ class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
                 softWrap: true,
               ),
             ),
-          } else
-            ...{
-              Expanded(
-                child: Center(
-                  child: Text(
-                    'NoticeDetailViewMessageEmptyContents'.tr,
-                    style: theme.label,
-                  ),
+          } else ...{
+            Expanded(
+              child: Center(
+                child: Text(
+                  'NoticeDetailViewMessageEmptyContents'.tr,
+                  style: theme.label,
                 ),
-              )
-            },
+              ),
+            )
+          },
           const SizedBox(height: 8),
           Align(
             alignment: Alignment.centerRight,
@@ -102,7 +88,7 @@ class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
           Align(
             alignment: Alignment.centerRight,
             child: Text(
-              controller.noticeItem.updatedAt.toString() ??
+              formatDateYMDHM(controller.noticeItem.updatedAt) ??
                   'NoticeDetailViewPlaceHolderUnknownUser'.tr,
               style: theme.hint,
             ),

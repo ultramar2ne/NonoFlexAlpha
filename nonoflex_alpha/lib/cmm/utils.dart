@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+import 'package:nonoflex_alpha/cmm/base.dart';
+
 class Utils {
   /// Decode JWT 토큰
   static Map<String, dynamic> parseJwt(String token) {
@@ -35,4 +38,11 @@ class Utils {
 
     return payloadMap;
   }
+}
+
+extension BaseViewUtils on BaseGetView {
+  String formatDateYMD(DateTime date) => DateFormat("yyyy-MM-dd").format(date);
+
+  String formatDateYMDHM(DateTime date) =>
+      DateFormat("yyyy-MM-dd HH:MM").format(date);
 }

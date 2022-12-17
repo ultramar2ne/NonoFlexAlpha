@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nonoflex_alpha/conf/ui/base_widgets.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/model/data/notice.dart';
@@ -10,7 +11,13 @@ import '../../cmm/base.dart';
 
 class NoticeListView extends BaseGetView<NoticeListViewModel> {
   @override
-  Widget drawHeader() => drawSubPageTitle('NoticeListViewTitle'.tr);
+  Widget drawHeader() => drawSubPageTitle(
+        'NoticeListViewTitle'.tr,
+        button1: BNIconButton(
+          onPressed: () => controller.onClickedAddNotice(),
+          icon: Assets.icons.icAdd.image(width: 24, height: 24),
+        ),
+      );
 
   @override
   Widget drawBody() {
@@ -19,70 +26,25 @@ class NoticeListView extends BaseGetView<NoticeListViewModel> {
       children: [
         const SizedBox(height: 12),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'NoticeListViewLabelNoticeList'.tr,
-                style: theme.label,
-              ),
-              // BNIconButton(
-              //   onPressed: () {},
-              //   icon: Assets.icons.icListMenu.image(width: 24, height: 24),
-              // ),
-            ],
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: drawBaseLabel(
+            'NoticeListViewLabelNoticeList'.tr,
+            button1: BNIconButton(
+              onPressed: () {},
+              icon: Assets.icons.icListMenu.image(width: 24, height: 24),
+            ),
           ),
         ),
         const SizedBox(height: 12),
         Expanded(
-          child: Obx(() => drawNoticeList(controller.noticeItems)),
+          child: Obx(() => _drawNoticeList(controller.noticeItems)),
         ),
       ],
     );
   }
-}
 
-extension SubPageCommonwidget on NoticeListView {
-  /// 서브 페이지 타이틀 및 헤더 영역, 앱바 대체 여부 확인 필요
-  Widget drawSubPageTitle(String title, {bool showBackButton = false}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      height: 60,
-      width: Get.width,
-      child: Row(
-        children: [
-          BNIconButton(
-            onPressed: () => Get.back(),
-            icon: Assets.icons.icArrowBack.image(width: 20, height: 20),
-          ),
-          const SizedBox(width: 4),
-          Expanded(
-            child: Center(
-              child: Text(
-                title,
-                style: theme.title.copyWith(
-                  color: theme.textDark,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 22,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 4),
-          BNIconButton(
-            onPressed: () => controller.onClickedAddNotice(),
-            icon: Assets.icons.icAdd.image(width: 24, height: 24),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-extension NoticeListViewItems on NoticeListView {
   /// 공지사항 목록 위젯
-  Widget drawNoticeList(List<Notice>? items) {
+  Widget _drawNoticeList(List<Notice>? items) {
     if (items == null) {
       return Center(
         child: Text(

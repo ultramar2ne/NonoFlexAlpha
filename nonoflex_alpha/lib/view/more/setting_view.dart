@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
+import 'package:nonoflex_alpha/conf/ui/base_widgets.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/model/data/user.dart';
@@ -14,7 +15,7 @@ class SettingView extends BaseGetView<SettingViewModel> {
   @override
   Widget drawBody() {
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Column(
         children: [
@@ -36,28 +37,6 @@ class SettingView extends BaseGetView<SettingViewModel> {
           const SizedBox(height: 12),
           Container(height: 0.5, color: theme.baseDark),
           const SizedBox(height: 12),
-        ],
-      ),
-    );
-  }
-}
-
-extension MainPageCommonWidget on SettingView {
-  Widget drawMainPageTitle(String title) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      height: 82,
-      width: Get.width,
-      child: Row(
-        children: [
-          Text(
-            title,
-            style: theme.title.copyWith(
-              color: theme.textDark,
-              fontWeight: FontWeight.w600,
-              fontSize: 26,
-            ),
-          ),
         ],
       ),
     );

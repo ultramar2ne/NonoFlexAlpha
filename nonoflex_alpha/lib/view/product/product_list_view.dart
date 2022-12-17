@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
+import 'package:nonoflex_alpha/conf/ui/base_widgets.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/model/data/product.dart';
@@ -10,7 +10,17 @@ import 'package:get/get.dart';
 
 class ProductListView extends BaseGetView<ProductListViewModel> {
   @override
-  Widget drawHeader() => drawMainPageTitle('ProductListViewTitle'.tr);
+  Widget drawHeader() => drawMainPageTitle(
+        'ProductListViewTitle'.tr,
+        button1: BNIconButton(
+          onPressed: () => controller.onClickedAddButton(),
+          icon: Assets.icons.icAdd.image(width: 24, height: 24),
+        ),
+        button2: BNIconButton(
+          onPressed: () {},
+          icon: Assets.icons.icSearch.image(width: 24, height: 24),
+        ),
+      );
 
   @override
   Widget drawBody() {
@@ -51,40 +61,6 @@ class ProductListView extends BaseGetView<ProductListViewModel> {
 
 }
 
-extension MainPageCommonWidget on ProductListView {
-  /// 메인 화면 타이틀
-  Widget drawMainPageTitle(String title) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      height: 82,
-      width: Get.width,
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: theme.title.copyWith(
-                color: theme.textDark,
-                fontWeight: FontWeight.w600,
-                fontSize: 26,
-              ),
-            ),
-          ),
-          BNIconButton(
-            onPressed: () => controller.onClickedAddButton(),
-            icon: Assets.icons.icAdd.image(width: 24, height: 24),
-          ),
-          const SizedBox(width: 4),
-          BNIconButton(
-            onPressed: () {},
-            icon: Assets.icons.icSearch.image(width: 24, height: 24),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 extension ProductListViewItems on ProductListView {
   /// 물품 목록 위젯
   Widget drawProductList(List<Product>? items) {
@@ -103,78 +79,9 @@ extension ProductListViewItems on ProductListView {
       physics: const BouncingScrollPhysics(),
       itemCount: count,
       itemBuilder: (BuildContext context, int index) {
-        return _drawProductListItemNormal(list[index]);
+        final item = list[index];
+        return drawProductListItem(item, onClicked: () => controller.onClcikedProductItem(item));
       },
-    );
-  }
-
-  /// 물품 목록 항목 위젯
-  Widget _drawProductListItemNormal(Product item) {
-    final emptyImageBackground = Container(
-      width: 50,
-      height: 50,
-      color: theme.baseDark,
-    );
-
-    final listItemStyle = ButtonStyle(
-      padding: MaterialStateProperty.all<EdgeInsets>(
-        const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      ),
-      shape: MaterialStateProperty.all<OutlinedBorder>(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-      elevation: MaterialStateProperty.all<double>(0),
-      overlayColor: MaterialStateProperty.all<Color>(theme.secondary),
-      backgroundColor: MaterialStateProperty.all<Color>(theme.base),
-    );
-
-    return TextButton(
-      onPressed: () => controller.onClcikedProductItem(item),
-      style: listItemStyle,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // image
-          ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-            child: CachedNetworkImage(
-              width: 50,
-              height: 50,
-              imageUrl: item.imageData?.thumbnailImageUrl ?? '',
-              fit: BoxFit.fill,
-              errorWidget: (BuildContext context, String url, dynamic error) {
-                return emptyImageBackground;
-              },
-              placeholder: (BuildContext context, String url) {
-                return emptyImageBackground;
-              },
-            ),
-          ),
-          const SizedBox(width: 12),
-          // product name, more info ..?
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.prdName,
-                  maxLines: 1,
-                  overflow: TextOverflow.visible,
-                  style: theme.listTitle,
-                ),
-                Text(
-                  '${item.stock} ${item.unit}',
-                  maxLines: 1,
-                  overflow: TextOverflow.visible,
-                  style: theme.listBody.copyWith(
-                    color: theme.nonoOrange,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 

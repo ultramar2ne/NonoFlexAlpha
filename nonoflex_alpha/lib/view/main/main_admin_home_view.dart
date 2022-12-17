@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
+import 'package:nonoflex_alpha/conf/ui/base_widgets.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/model/data/notice.dart';
@@ -66,17 +67,13 @@ extension MainPageWidget on AdminHomeView {
     }
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('AdminHomeViewLabelNoticeArea'.tr, style: theme.label),
-            BNIconButton(
-              onPressed: () => controller.goNoticeListPage(),
-              icon: Assets.icons.icListMenu.image(width: 24, height: 24),
-            ),
-          ],
+        drawBaseLabel(
+          'AdminHomeViewLabelNoticeArea'.tr,
+          button1: BNIconButton(
+            onPressed: () => controller.goNoticeListPage(),
+            icon: Assets.icons.icListMenu.image(width: 24, height: 24),
+          ),
         ),
         const SizedBox(height: 6),
         Container(
@@ -99,7 +96,7 @@ extension MainPageWidget on AdminHomeView {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('AdminHomeViewLabelTempDocumentArea'.tr, style: theme.label),
+        drawBaseLabel('AdminHomeViewLabelTempDocumentArea'.tr),
         const SizedBox(height: 6),
         Container(
           height: 80,
@@ -120,34 +117,6 @@ extension MainPageWidget on AdminHomeView {
           ),
         )
       ],
-    );
-  }
-}
-
-/// 메인 페이지에서 공통적으로 나타나는 위젯
-extension MainPageCommonWidget on AdminHomeView {
-  // 메인 타이틀
-  Widget drawMainPageTitle(String title) {
-    return InkWell(
-      // onTap: () => Get.alertDialog('방가방가'),
-      onTap: () => Get.dialog(Text('data')),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        height: 82,
-        width: Get.width,
-        child: Row(
-          children: [
-            Text(
-              title,
-              style: theme.title.copyWith(
-                color: theme.textDark,
-                fontWeight: FontWeight.w600,
-                fontSize: 26,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
