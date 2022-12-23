@@ -33,7 +33,7 @@ class Document {
     final documentId = data['documentId'];
     final date = DateTime.parse(data['date']);
     final docType = DocumentType.getByServer(data['type']);
-    final companyName = data['company'];
+    final companyName = data['companyName'];
     final createdAt = DateTime.parse(data['createdAt']);
     final updatedAt = DateTime.parse(data['updatedAt']);
 
@@ -152,19 +152,40 @@ class DocumentList {
   // : count
   final int count;
 
-  // 문서 목록 : documentList
-  final List<Document> items;
+  // : totalPages
+  final int totalPages;
 
-  DocumentList({required this.page, required this.count, required this.items});
+  // : totalCount
+  final int totalCount;
+
+  // : lastPage
+  final bool isLastPage;
+
+  // 문서 목록 : documentList
+  // final List<Document> items;
+  final List<DocumentDetail> items;
+
+  DocumentList(
+      {required this.page,
+      required this.count,
+      required this.totalPages,
+      required this.totalCount,
+      required this.isLastPage,
+      required this.items});
 
   factory DocumentList.fromJson(Map<String, dynamic> data) {
     final metaData = data['meta'];
-    final items = data['noticeList'];
+    final items = data['documentList'];
 
     return DocumentList(
         page: metaData['page'],
         count: metaData['count'],
-        items: items.map<Document>((el) => Document.fromJson(el as Map<String, dynamic>)).toList());
+        totalPages: metaData['totalPages'],
+        totalCount: metaData['totalCount'],
+        isLastPage: metaData['lastPage'],
+        items: items
+            .map<DocumentDetail>((el) => DocumentDetail.fromJson(el as Map<String, dynamic>))
+            .toList());
   }
 }
 
@@ -201,4 +222,11 @@ extension DocumentTypeExt on DocumentType {
         return '출고서';
     }
   }
+}
+
+enum DocumentListSortType {
+  type,
+  company,
+  createdAt,
+  date,
 }

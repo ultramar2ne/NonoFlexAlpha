@@ -718,7 +718,7 @@ class RemoteDataSource {
   /// 거래처의 활성 상태 정보를 일괄적으로 수정합니다.
   /// 전달되지 않은 거래처에 대해서는 데이터가 변경되지 않습니다.
   /// ADMIN 이상의 권한이 필요합니다.
-  Future<dynamic> updateComapnyActivation() async {
+  Future<dynamic> updateCompanyActivation() async {
     // Put - api/v1/company/active
     const path = 'api/$version/company/active';
 
@@ -783,6 +783,8 @@ class RemoteDataSource {
   /// region temp document
 
   // 임시 문서 생성
+  Future<dynamic> addTempDocument(Product product) async {}
+
   // 임시 문서 목록 조회
   // 임시 문서 상세 정보 조회
   // 임시 문서 정보 수정
@@ -792,11 +794,210 @@ class RemoteDataSource {
   ///
   /// region document
 
-  // 문서 생성
-  // 문서 목록 조회
-  // 문서 상세 정보 조회
-  // 문서 정보 수정
-  // 문서 삭제
+  /// 문서 생성
+  /// 문서 정보를 추가합니다.
+  /// 요청 성공시 생성된 문서의 고유 ID를 포함한 정보를 반환받습니다.
+  Future<dynamic> addDocument({
+    required DateTime date,
+    required DocumentType type,
+    required int companyId,
+    required List<Record> recordList,
+  }) async {
+    // Post - api/v1/document
+    const path = '/api/$version/document';
+
+    Map<String, String> getBody() {
+      Map<String, String> body = {};
+      body.addAll({
+        'date': date.toString(),
+        'type': type.serverValue,
+        'companyId': companyId.toString(),
+      });
+
+      List<Map<String, String>> recordItems = [];
+      recordList.forEach((el) {
+        final Map<String, String> record = {};
+        record.addAll({
+          'productId': el.productId.toString(),
+          'quantity': el.quantity.toString(),
+          'price': el.recordPrice.toString(),
+        });
+
+        recordItems.add(record);
+      });
+
+      body.addAll({'recordList':recordItems.toString()});
+
+      return body;
+    }
+
+    try {
+      var response = await client.post(
+        requestUrl(path),
+        headers: header,
+        body: convert.jsonEncode(getBody()),
+      );
+      if (response.statusCode == 200) {
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
+        return Document.fromJson(data);
+      } else {
+        /// error
+        throw (response.body);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// 문서 목록 조회
+  /// 요청 성공시 해당하는 문서의 리스트를 받습니다.
+  Future<DocumentList> getDocumentList({
+    String? searchValue, // 검색 키워드 (제목 기반)
+    DocumentListSortType? sortType, // 정렬 기준 (default ->  date)
+    String? orderType, // 정렬 순서 (default -> desc)
+    int? size, // 한 요청에서 가져올 데이터 수 (default -> 10)
+    int? page, // 페이지 번호
+    int? year, // 검색 연도 형식 YYYY (default -> 현재 연도)
+    int? month, // 검색 월 1~12 (default ->  all)
+  }) async {
+    // Get - api/v1/document?[query]
+    const path = '/api/$version/document';
+
+    Map<String, String> getParams() {
+      Map<String, String> params = {};
+      if (searchValue != null && searchValue != '') params.addAll({'query': searchValue});
+      if (sortType != null) params.addAll({'column': sortType.toString()}); // 고민
+      if (orderType != null) params.addAll({'order': orderType});
+      if (size != null) params.addAll({'size': size.toString()});
+      if (page != null) params.addAll({'page': page.toString()});
+      if (year != null) params.addAll({'year': year.toString()});
+      if (month != null) params.addAll({'month': month.toString()});
+
+      return params;
+    }
+
+    try {
+      var response = await client.get(
+        requestUrl(path, params: getParams()),
+        headers: header,
+      );
+      if (response.statusCode == 200) {
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
+        return DocumentList.fromJson(data);
+      } else {
+        /// error
+        throw (response.body);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// 문서 상세 정보 조회
+  /// 요청 성공시 해당하는 문서의 상세정보를 받습니다.
+  Future<DocumentDetail> getDocumentDetailInfoByDocumentId(int documentId) async {
+    /// Get - api/v1/product/[productId]
+    final path = '/api/$version/product/$documentId';
+
+    try {
+      var response = await client.get(requestUrl(path), headers: header);
+      if (response.statusCode == 200) {
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
+        return DocumentDetail.fromJson(data);
+      } else {
+        /// error
+        throw (response.body);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
+  /// 문서 정보 수정
+  /// 문서에 해당하는 record의 수정, 유지, 추가, 삭제는 해당 API를 사용합니다.
+  /// 해당 API를 사용하기 위해서는 권한... ?
+  /// 수정 부분은 이야기가 필요해보임
+  Future<dynamic> updateDocument({required DocumentDetail document}) async {
+    // Put - api/v1/document/[documentId]
+    final path = 'api/$version/document/${document.documentId}';
+
+    Map<String, String> getBody() {
+      Map<String, String> body = {};
+      body.addAll({
+        'date': document.date.toString(),
+        'type': document.docType.serverValue,
+        'companyName': document.companyName,
+      });
+
+      List<Map<String, String>> recordItems = [];
+      document.recordList.forEach((el) {
+        final Map<String, String> record = {};
+        record.addAll({
+          'productId': el.productId.toString(),
+          'quantity': el.quantity.toString(),
+          'price': el.recordPrice.toString(),
+        });
+
+        recordItems.add(record);
+      });
+
+      body.addAll({'recordList':recordItems.toString()});
+
+      return body;
+    }
+    try {
+      var response = await client.put(
+        requestUrl(path),
+        headers: header,
+        body: convert.jsonEncode(getBody()),
+      );
+      if (response.statusCode == 200) {
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
+        return DocumentDetail.fromJson(data);
+      } else {
+        /// error
+        throw (response.body);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// 문서 삭제
+  /// 문서 정보를 삭제합니다.
+  /// 문서에 속하는 record 데이터도 모두 영구삭제됩니다.
+  /// 해당 APi를 사용하기 위해서는 MANAGER 이상의 권한이 필요합니다.
+  Future<dynamic> deleteDocument(int documentId) async {
+    /// Delete - api/v1/document/[documentId]
+    final path = '/api/$version/document/$documentId';
+
+    try {
+      var response = await client.delete(
+        requestUrl(path),
+        headers: header,
+      );
+      if (response.statusCode == 200) {
+        final body = utf8.decode(response.bodyBytes);
+        final data = convert.jsonDecode(body);
+        if (data['result'] != true) {
+          throw (data['message']);
+        } else {
+          return data['message'];
+        }
+      } else {
+        /// error
+        throw (response.body);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 
   /// endregion
   ///

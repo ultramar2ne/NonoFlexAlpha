@@ -7,16 +7,24 @@ abstract class Record {
   /// 레코드 고유 ID : recordId
   final int recordId;
 
-  /// 물품 ID
+  /// 물품 ID : productId
   final int productId;
 
-  /// 문서 ID
+  /// 문서 ID : documentId
   final int documentId;
+
+  /// 입/출고 갯수 : quantity
+  final int quantity;
+
+  /// 입/출고 금액 : price
+  final int recordPrice;
 
   Record(
     this.recordId,
     this.productId,
     this.documentId,
+    this.quantity,
+    this.recordPrice,
   );
 }
 
@@ -35,13 +43,14 @@ class RecordOfProduct extends Record {
   final int documentId;
 
   /// 물품 출입고 갯수 : quantity
-  final double quantity;
+  final int quantity;
 
   /// 해당 시점의 재고 : stock
-  final double stock;
+  final int stock;
 
   /// 출입고 가격 : price
-  final double price;
+  @override
+  final int recordPrice;
 
   /// document 입출고 날짜 : date
   final DateTime date;
@@ -58,16 +67,16 @@ class RecordOfProduct extends Record {
     required this.documentId,
     required this.quantity,
     required this.stock,
-    required this.price,
+    required this.recordPrice,
     required this.date,
     required this.docType,
     required this.writer,
-  }) : super(recordId, productId, documentId);
+  }) : super(recordId, productId, documentId, quantity, recordPrice);
 
   RecordOfProduct copyWith({
-    double? quantity,
-    double? stock,
-    double? price,
+    int? quantity,
+    int? stock,
+    int? price,
     DateTime? date,
     DocumentType? docType,
     String? writer,
@@ -78,7 +87,7 @@ class RecordOfProduct extends Record {
       documentId: documentId,
       quantity: quantity ?? this.quantity,
       stock: stock ?? this.stock,
-      price: price ?? this.price,
+      recordPrice: price ?? this.recordPrice,
       date: date ?? this.date,
       docType: docType ?? this.docType,
       writer: writer ?? this.writer,
@@ -102,7 +111,7 @@ class RecordOfProduct extends Record {
       documentId: documentId,
       quantity: quantity,
       stock: stock,
-      price: price,
+      recordPrice: price,
       date: date,
       docType: docType,
       writer: writer,
@@ -116,7 +125,7 @@ class RecordOfProduct extends Record {
       'recordId': recordId,
       'quantity': quantity,
       'stock': stock,
-      'price': price,
+      'price': recordPrice,
       'date': date,
       'type': docType.serverValue,
       'writer': writer,
@@ -145,13 +154,15 @@ class RecordOfDocument extends Record {
   final Product productInfo;
 
   /// 물품 출입고 갯수 : quantity
-  final double quantity;
+  @override
+  final int quantity;
 
   /// 해당 시점의 재고 : stock
-  final double stock;
+  final int stock;
 
   /// 출입고 가격 : price
-  final double price;
+  @override
+  final int recordPrice;
 
   RecordOfDocument({
     required this.recordId,
@@ -160,8 +171,8 @@ class RecordOfDocument extends Record {
     required this.productInfo,
     required this.quantity,
     required this.stock,
-    required this.price,
-  }) : super(recordId, productId, documentId);
+    required this.recordPrice,
+  }) : super(recordId, productId, documentId, quantity, recordPrice);
 
   factory RecordOfDocument.fromJson(Map<String, dynamic> data, int documentId) {
     final recordId = data['recordId'] ?? -1;
@@ -178,7 +189,7 @@ class RecordOfDocument extends Record {
       productInfo: productInfo,
       quantity: quantity,
       stock: stock,
-      price: price,
+      recordPrice: price,
     );
   }
 
@@ -190,7 +201,7 @@ class RecordOfDocument extends Record {
       'quantity': quantity,
       'product': productInfo.toMap(),
       'stock': stock,
-      'price': price,
+      'price': recordPrice,
       'documentId': documentId,
     });
 
