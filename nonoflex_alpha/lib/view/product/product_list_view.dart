@@ -29,18 +29,12 @@ class ProductListView extends BaseGetView<ProductListViewModel> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'ProductListViewLabelProductList'.tr,
-                style: theme.label,
-              ),
-              BNIconButton(
-                onPressed: () => showProductListSortMenu(),
-                icon: Assets.icons.icListMenu.image(width: 24, height: 24),
-              ),
-            ],
+          child: drawBaseLabel(
+            'ProductListViewLabelProductList'.tr,
+            item1: BNIconButton(
+              onPressed: () => showProductListSortMenu(),
+              icon: Assets.icons.icListMenu.image(width: 24, height: 24),
+            ),
           ),
         ),
         const SizedBox(height: 12),
@@ -79,7 +73,7 @@ extension ProductListViewItems on ProductListView {
       physics: const BouncingScrollPhysics(),
       itemCount: count,
       itemBuilder: (BuildContext context, int index) {
-        if(index == count-1 && !controller.isLastPage){
+        if (index == count - 1 && !controller.isLastPage) {
           controller.getProductList();
         }
 

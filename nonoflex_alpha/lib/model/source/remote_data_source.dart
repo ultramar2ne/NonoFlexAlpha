@@ -899,7 +899,7 @@ class RemoteDataSource {
   /// 요청 성공시 해당하는 문서의 상세정보를 받습니다.
   Future<DocumentDetail> getDocumentDetailInfoByDocumentId(int documentId) async {
     /// Get - api/v1/product/[productId]
-    final path = '/api/$version/product/$documentId';
+    final path = '/api/$version/document/$documentId';
 
     try {
       var response = await client.get(requestUrl(path), headers: header);

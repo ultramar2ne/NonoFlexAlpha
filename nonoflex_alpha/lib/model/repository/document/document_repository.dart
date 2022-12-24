@@ -43,7 +43,7 @@ abstract class DocumentRepository {
   void getDocumentByComapny();
 
   /// 문서 상세 정보 조회
-  Future<Document> getDocumentDetailInfo(int documentId);
+  Future<DocumentDetail> getDocumentDetailInfo(int documentId);
 
   /// 문서 정보 수정
   Future<void> updateDocumentInfo(DocumentDetail document);
@@ -129,7 +129,7 @@ class DocumentRepositoryImpl extends DocumentRepository {
   }
 
   @override
-  Future<Document> getDocumentDetailInfo(int documentId) async {
+  Future<DocumentDetail> getDocumentDetailInfo(int documentId) async {
     return await _remoteDataSource.getDocumentDetailInfoByDocumentId(documentId);
   }
 

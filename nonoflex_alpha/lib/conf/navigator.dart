@@ -1,8 +1,15 @@
 import 'package:get/get.dart';
+import 'package:nonoflex_alpha/model/data/company.dart';
 import 'package:nonoflex_alpha/model/data/notice.dart';
 import 'package:nonoflex_alpha/model/data/product.dart';
+import 'package:nonoflex_alpha/view/document/add_document_view.dart';
+import 'package:nonoflex_alpha/view/document/add_document_viewmodel.dart';
+import 'package:nonoflex_alpha/view/document/document_detail_view.dart';
+import 'package:nonoflex_alpha/view/document/document_detail_viewmodel.dart';
 import 'package:nonoflex_alpha/view/document/document_list_view.dart';
 import 'package:nonoflex_alpha/view/document/document_list_viewmodel.dart';
+import 'package:nonoflex_alpha/view/document/edit_document_view.dart';
+import 'package:nonoflex_alpha/view/document/edit_document_viewmodel.dart';
 import 'package:nonoflex_alpha/view/login/login_view.dart';
 import 'package:nonoflex_alpha/view/login/login_viewmodel.dart';
 import 'package:nonoflex_alpha/view/main/main_admin_home_view.dart';
@@ -11,8 +18,16 @@ import 'package:nonoflex_alpha/view/main/main_admin_view.dart';
 import 'package:nonoflex_alpha/view/main/main_admin_viewmodel.dart';
 import 'package:nonoflex_alpha/view/main/main_participant_view.dart';
 import 'package:nonoflex_alpha/view/main/main_participant_viewmodel.dart';
+import 'package:nonoflex_alpha/view/more/add_barcode_view.dart';
+import 'package:nonoflex_alpha/view/more/add_barcode_viewmodel.dart';
+import 'package:nonoflex_alpha/view/more/company_list_view.dart';
+import 'package:nonoflex_alpha/view/more/company_list_viewmodel.dart';
+import 'package:nonoflex_alpha/view/more/participant_list_view.dart';
+import 'package:nonoflex_alpha/view/more/participant_list_viewmodel.dart';
 import 'package:nonoflex_alpha/view/more/setting_view.dart';
 import 'package:nonoflex_alpha/view/more/setting_viewmodel.dart';
+import 'package:nonoflex_alpha/view/more/user_list_view.dart';
+import 'package:nonoflex_alpha/view/more/user_list_viewmodel.dart';
 import 'package:nonoflex_alpha/view/notice/add_notice_view.dart';
 import 'package:nonoflex_alpha/view/notice/add_notice_viewmodel.dart';
 import 'package:nonoflex_alpha/view/notice/notice_detail_view.dart';
@@ -167,8 +182,9 @@ class NonoNavigatorManager {
       NoticeDetailView(),
       routeName: path,
       arguments: {'noticeId': noticeItem.noticeId.toString()},
-        transition: Transition.downToUp,
-      binding: BindingsBuilder(() => Get.lazyPut(() => NoticeDetailViewModel(noticeId: noticeItem.noticeId))),
+      transition: Transition.downToUp,
+      binding: BindingsBuilder(
+          () => Get.lazyPut(() => NoticeDetailViewModel(noticeId: noticeItem.noticeId))),
       // id: rootNavigatorKey,
     );
   }
@@ -182,8 +198,8 @@ class NonoNavigatorManager {
       routeName: path,
       transition: Transition.downToUp,
       arguments: {'productId': product.productId.toString()},
-      binding:
-          BindingsBuilder(() => Get.lazyPut(() => ProductDetailViewModel(productId: product.productId))),
+      binding: BindingsBuilder(
+          () => Get.lazyPut(() => ProductDetailViewModel(productId: product.productId))),
       // id: rootNavigatorKey,
     );
   }
@@ -196,6 +212,110 @@ class NonoNavigatorManager {
       routeName: path,
       transition: Transition.downToUp,
       binding: BindingsBuilder(() => Get.lazyPut(() => AddProductViewModel())),
+      // id: rootNavigatorKey,
+    );
+  }
+
+  Future<dynamic> goProductEditPage({Product? productForEdit}) async {
+    const path = '/product/edit';
+
+    return await Get.to(
+      AddProductView(),
+      routeName: path,
+      transition: Transition.downToUp,
+      binding: BindingsBuilder(() => Get.lazyPut(() => AddProductViewModel())),
+      // id: rootNavigatorKey,
+    );
+  }
+
+  // ==== Document ====
+  Future<dynamic> goDocumentDetailPage(int documentId) async {
+    const path = '/document/detail';
+
+    return await Get.to(
+      DocumentDetailView(),
+      routeName: path,
+      transition: Transition.downToUp,
+      binding:
+          BindingsBuilder(() => Get.lazyPut(() => DocumentDetailViewModel(documentId: documentId))),
+      // id: rootNavigatorKey,
+    );
+  }
+
+  Future<dynamic> goAddDocumentPage(int documentId) async {
+    const path = '/document/add';
+
+    return await Get.to(
+      AddDocumentView(),
+      routeName: path,
+      transition: Transition.downToUp,
+      binding: BindingsBuilder(() => Get.lazyPut(() => AddDocumentViewModel())),
+      // id: rootNavigatorKey,
+    );
+  }
+
+  Future<dynamic> goDocumentEditPage(int documentId) async {
+    const path = '/document/edit';
+
+    return await Get.to(
+      EditDocumentView(),
+      routeName: path,
+      transition: Transition.downToUp,
+      // arguments: {'productId': product.productId.toString()},
+      binding: BindingsBuilder(() => Get.lazyPut(() => EditDocumentViewModel())),
+      // id: rootNavigatorKey,
+    );
+  }
+
+  // ==== Setting ====
+  Future<dynamic> goManageProductBarcodePage() async {
+    const path = '/products/barcode';
+
+    return await Get.to(
+      BarcodeSettingView(),
+      routeName: path,
+      transition: Transition.downToUp,
+      // arguments: {'productId': product.productId.toString()},
+      binding: BindingsBuilder(() => Get.lazyPut(() => BarcodeSettingViewModel())),
+      // id: rootNavigatorKey,
+    );
+  }
+
+  Future<dynamic> goCompanyListPage() async {
+    const path = '/company';
+
+    return await Get.to(
+      CompanyListView(),
+      routeName: path,
+      transition: Transition.downToUp,
+      // arguments: {'productId': product.productId.toString()},
+      binding: BindingsBuilder(() => Get.lazyPut(() => CompanyListViewModel())),
+      // id: rootNavigatorKey,
+    );
+  }
+
+  Future<dynamic> goUserListPage() async {
+    const path = '/user';
+
+    return await Get.to(
+      UserListView(),
+      routeName: path,
+      transition: Transition.downToUp,
+      // arguments: {'productId': product.productId.toString()},
+      binding: BindingsBuilder(() => Get.lazyPut(() => UserListViewModel())),
+      // id: rootNavigatorKey,
+    );
+  }
+
+  Future<dynamic> goParticipantListPage() async {
+    const path = '/user/participant';
+
+    return await Get.to(
+      ParticipantListView(),
+      routeName: path,
+      transition: Transition.downToUp,
+      // arguments: {'productId': product.productId.toString()},
+      binding: BindingsBuilder(() => Get.lazyPut(() => ParticipantListViewModel())),
       // id: rootNavigatorKey,
     );
   }

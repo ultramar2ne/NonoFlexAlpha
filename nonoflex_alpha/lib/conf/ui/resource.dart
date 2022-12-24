@@ -21,6 +21,13 @@ class Resource extends Translations {
           'productStorageTypeCold' : '냉장',
           'productStorageTypeRoom' : '실온',
 
+          // == document ==
+          'documentDocTypeInput' : '입고서',
+          'documentDocTypeInput' : '출고서',
+          'documentDocTypeTempInput' : '입고 예정서',
+          'documentDocTypeTempInput' : '출고 예정서',
+
+
           // API Exception
 
           // ViewController Exception
@@ -62,6 +69,8 @@ class Resource extends Translations {
 
           // Main - document list
           'DocumentListViewTitle': '문서 관리',
+          'DocumentListViewLabelDocumentList': '문서 목록',
+          'DocumentListViewLabelTempDocumentList': '예정서 목록',
 
           // Main - setting
           'SettingViewTitle': '설정',
@@ -119,6 +128,21 @@ class Resource extends Translations {
           // Product Add/Edit
           'AddProductViewTitleAdd' : '새 물품 추가',
           'AddProductViewTitleEdit' : '물품 정보 수정',
+
+          // Document List
+
+          // Document Detail
+          'DocumentDetailViewLabelInfo' : '문서 정보',
+          'DocumentDetailViewLabelDocumentCode' : '문서 번호',
+          'DocumentDetailViewLabelCompanyName' : '거래처',
+          'DocumentDetailViewLabelWriter' : '작성자',
+          'DocumentDetailViewLabelDateInput' : '입고 날짜',
+          'DocumentDetailViewLabelDateOutput' : '출고 날짜',
+          'DocumentDetailViewLabelPrice' : '금액',
+          'DocumentDetailViewLabelInputProduct' : '입고 품목',
+          'DocumentDetailViewLabelOutputProduct' : '출고 품목',
+          'DocumentDetailViewPlaceHolderEmptyRecords' : '거래된 품목이 존재하지 않습니다.',
+
         },
         // 'en_US': {
         //   'hello': 'Hallo Welt',

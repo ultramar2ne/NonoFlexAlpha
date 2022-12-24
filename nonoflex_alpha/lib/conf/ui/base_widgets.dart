@@ -12,7 +12,7 @@ import '../../model/data/record.dart';
 import '../../model/data/user.dart';
 
 extension BaseWidget on BaseGetView {
-  /// start region - 공통 위젯
+  // region - 공통 위젯
   /// - 메인 타이틀 위젯 [drawMainPageTitle]
   /// - 서브 타이틀 위젯 [drawSubPageTitle]
   /// - 액션 타이틀 위젯 [drawActionPageTitle]
@@ -78,7 +78,11 @@ extension BaseWidget on BaseGetView {
 
   /// 액션 페이지에서 공통적으로 나타나는 타이틀 위젯
   Widget drawActionPageTitle(String title, {Widget? titleItem}) {
-    final item = titleItem ?? Text(title, style: theme.title.copyWith(fontSize: 26),);
+    final item = titleItem ??
+        Text(
+          title,
+          style: theme.title.copyWith(fontSize: 26),
+        );
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -111,9 +115,9 @@ extension BaseWidget on BaseGetView {
     );
   }
 
-  /// end region
+  // endregion
 
-  /// start region - 리스트 아이템 항목
+  // region - 리스트 아이템 항목
   /// - 물품 항목 [drawProductListItem]
   /// - 물품 상세 입출고 기록 항목 [drawRecordOfProductListItem]
   /// - 문서 항목 [drawDocumentListItem]
@@ -192,7 +196,7 @@ extension BaseWidget on BaseGetView {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  formatDateMD(item.date),
+                  formatDateMDE(item.date),
                   maxLines: 1,
                   overflow: TextOverflow.visible,
                   style: theme.listTitle,
@@ -231,22 +235,116 @@ extension BaseWidget on BaseGetView {
     );
   }
 
-  Widget drawDocumentListItem(Document item, {VoidCallback? onClicked}) {
-    return SizedBox.shrink();
+  Widget drawDocumentListItem(DocumentDetail item, {VoidCallback? onClicked}) {
+    return TextButton(
+      onPressed: onClicked,
+      style: listItemStyle,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.companyName,
+                  style: theme.listTitle,
+                ),
+                const SizedBox(height: 6),
+                Text('${formatDateMD(item.date)} | ${item.writer}', style: theme.hint),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  item.docType.displayName,
+                  style: theme.listTitle.copyWith(
+                    color: item.docType != DocumentType.input ? theme.textError : theme.nonoBlue,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  '${item.recordCount}개 품목',
+                  style: theme.listSubBody,
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 
+  // 문서에 대한 입출고 기록
   Widget drawRecordOfDocumentListItem(RecordOfDocument item, {VoidCallback? onClicked}) {
-    return SizedBox.shrink();
+    final emptyImageBackground = Container(
+      width: 50,
+      height: 50,
+      color: theme.baseDark,
+    );
+
+    return TextButton(
+      onPressed: onClicked,
+      style: listItemStyle,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // image
+          ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            child: CachedNetworkImage(
+              width: 50,
+              height: 50,
+              imageUrl: item.productInfo.imageData?.thumbnailImageUrl ?? '',
+              fit: BoxFit.fill,
+              errorWidget: (BuildContext context, String url, dynamic error) {
+                return emptyImageBackground;
+              },
+              placeholder: (BuildContext context, String url) {
+                return emptyImageBackground;
+              },
+            ),
+          ),
+          const SizedBox(width: 12),
+          // product name, more info ..?
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.productInfo.prdName,
+                  maxLines: 1,
+                  overflow: TextOverflow.visible,
+                  style: theme.listTitle,
+                ),
+                Text(
+                  '${item.stock} ${item.productInfo.unit}',
+                  maxLines: 1,
+                  overflow: TextOverflow.visible,
+                  style: theme.listBody.copyWith(
+                    color: theme.nonoOrange,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget drawUserListItem(User item, {VoidCallback? onClicked}) {
     return SizedBox.shrink();
   }
 
-  /// end region
+  // endregion
 
-  /// start region - 테마 아이템
+  // region - 테마 아이템
   /// - listItemStyle
+  /// - listItemStyleDark
 
   ButtonStyle get listItemStyle => ButtonStyle(
         padding: MaterialStateProperty.all<EdgeInsets>(
@@ -259,4 +357,18 @@ extension BaseWidget on BaseGetView {
         overlayColor: MaterialStateProperty.all<Color>(theme.secondary),
         backgroundColor: MaterialStateProperty.all<Color>(theme.base),
       );
+
+  ButtonStyle get listItemStyleDark => ButtonStyle(
+    padding: MaterialStateProperty.all<EdgeInsets>(
+      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+    ),
+    shape: MaterialStateProperty.all<OutlinedBorder>(
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    ),
+    elevation: MaterialStateProperty.all<double>(0),
+    overlayColor: MaterialStateProperty.all<Color>(theme.secondary),
+    backgroundColor: MaterialStateProperty.all<Color>(theme.base),
+  );
+
+// endregion
 }
