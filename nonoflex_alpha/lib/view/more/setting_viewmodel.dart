@@ -14,35 +14,38 @@ class SettingViewModel extends BaseController {
     userInfo = _authManager.currentUser;
   }
 
-  void onClickedLogoutButton(){
-
-  }
+  void onClickedLogoutButton() {}
 
   void goUserManagePage(UserType userType) {
-
+    switch (userType) {
+      case UserType.none:
+        return;
+      case UserType.admin:
+        baseNavigator.goUserListPage();
+        break;
+      case UserType.participant:
+        baseNavigator.goParticipantListPage();
+        break;
+    }
   }
 
   void goAddNewProductPage() {
-
+    baseNavigator.goAddProductPage();
   }
 
   void goBarcodeSettingPage() {
-
+    baseNavigator.goManageProductBarcodePage();
   }
 
   void goDocumentPrintPage() {
-
+    //
   }
 
   void goCompanyManagePage() {
-
+    baseNavigator.goCompanyListPage();
   }
 
-  void goAskToDeveloperPage() {
+  void goAskToDeveloperPage() {}
 
-  }
-
-  void goPowerUpPage() {
-
-  }
+  void goPowerUpPage() {}
 }

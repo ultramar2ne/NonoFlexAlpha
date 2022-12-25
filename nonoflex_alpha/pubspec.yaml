@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  #
   cupertino_icons: ^1.0.2
 
   # firebase
@@ -25,8 +26,11 @@ dependencies:
   # http
   http: ^0.13.5
 
-  # QR Code 생성
+  # QR Code 스캔
   qr_code_scanner: ^1.0.1
+
+  # QR Code 생성
+  pretty_qr_code: ^2.0.3
 
   # image
   cached_network_image: ^3.2.3
