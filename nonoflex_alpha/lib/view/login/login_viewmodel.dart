@@ -56,7 +56,7 @@ class LoginViewModel extends BaseController {
 
   // QR 코드 스캔으로 로그인
   void scanUserCode() async {
-    final result = await baseNavigator.goAdminMainPage();
+    final result = await baseNavigator.goScannerPage();
     if (result.runtimeType == Barcode) {
       final code = int.tryParse((result as Barcode).code ?? '');
       if (code == null || code.toString().length != 6) {

@@ -94,15 +94,15 @@ class RecordOfProduct extends Record {
     );
   }
 
-  factory RecordOfProduct.fromJson(Map<String, dynamic> data) {
+  factory RecordOfProduct.fromJson(Map<String, dynamic> data, int productId) {
     final recordId = data['recordId'];
-    final productId = data['productId'];
+    // final productId = productId;
     final documentId = data['documentId'];
     final quantity = data['quantity'];
     final stock = data['stock'];
     final price = data['price'];
     final date = DateTime.parse(data['date']);
-    final docType = DocumentType.getByServer(data['docType']);
+    final docType = DocumentType.getByServer(data['type']);
     final writer = data['writer'];
 
     return RecordOfProduct(

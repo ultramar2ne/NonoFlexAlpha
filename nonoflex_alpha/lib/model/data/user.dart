@@ -111,13 +111,16 @@ class UserList {
   });
 
   factory UserList.fromJson(Map<dynamic, dynamic> data) {
+    final metaData = data['meta'];
+    final items = data['userList'];
+
     return UserList(
-        page: data['page'],
-        count: data['count'],
-        totalPages: data['totalPages'],
-        totalCount: data['totalCount'],
-        isLastPage: data['isLastPage'],
-        items: data['userItems'].map((element) => User.fromJson(element)).toList());
+        page: metaData['page'],
+        count: metaData['count'],
+        totalPages: metaData['totalPages'],
+        totalCount: metaData['totalCount'],
+        isLastPage: metaData['lastPage'],
+        items: items.map<User>((element) => User.fromJson(element)).toList());
   }
 
   Map<String, dynamic> toMap() {

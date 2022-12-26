@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/cmm/utils.dart';
 import 'package:nonoflex_alpha/conf/ui/base_widgets.dart';
+import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/model/data/document.dart';
+import 'package:nonoflex_alpha/model/data/product.dart';
 import 'package:nonoflex_alpha/view/document/document_detail_viewmodel.dart';
 
 class DocumentDetailView extends BaseGetView<DocumentDetailViewModel> {
@@ -120,12 +123,161 @@ extension DocumentDetailViewItems on DocumentDetailView {
                     final item = recordList[index];
                     return drawRecordOfDocumentListItem(
                       item,
-                      onClicked: () => controller.loadProductDetailInfo(item.productInfo),
+                      onClicked: () => showProductSummaryInfo(item.productInfo),
                     );
                   },
                 ),
         )
       ],
+    );
+  }
+
+  // 물품 정보 요약 표시
+  Future<void> showProductSummaryInfo(Product product) {
+    Widget bottomSheetHandle = Container(
+      width: 52,
+      height: 6,
+      decoration: BoxDecoration(
+        color: theme.baseDark,
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+      ),
+    );
+
+    return Get.bottomSheet(
+      Container(
+        decoration: BoxDecoration(
+          color: theme.base,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12.0), topRight: Radius.circular(12.0)),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: bottomSheetHandle,
+                  ),
+                ),
+                drawProductBasicInfo(product),
+                drawProductDetailInfo(product),
+                const SizedBox(height: 8),
+                Container(
+                  height: 60,
+                  width: Get.width,
+                  margin: const EdgeInsets.all(12),
+                  child: BNColoredButton(
+                    child: Text('더보기'),
+                    onPressed: () {
+                      Get.back();
+                      controller.loadProductDetailInfo(product);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+}
+
+extension DocumentDetailViewProductSummary on DocumentDetailView {
+  /// 물품 기본 정보 영역
+  Widget drawProductBasicInfo(Product item) {
+    final emptyImageBackground = Container(
+      width: 60,
+      height: 60,
+      color: theme.baseDark,
+    );
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  item.prdName,
+                  maxLines: 2,
+                  overflow: TextOverflow.visible,
+                  style: theme.large.copyWith(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${item.stock} ${item.unit}',
+                  maxLines: 1,
+                  overflow: TextOverflow.visible,
+                  style: theme.listBody.copyWith(
+                    color: theme.nonoOrange,
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          // image
+          ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            child: CachedNetworkImage(
+              width: 60,
+              height: 60,
+              imageUrl: item.imageData?.thumbnailImageUrl ?? '',
+              fit: BoxFit.fill,
+              errorWidget: (BuildContext context, String url, dynamic error) {
+                return emptyImageBackground;
+              },
+              placeholder: (BuildContext context, String url) {
+                return emptyImageBackground;
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 물품 정보 영역
+  Widget drawProductDetailInfo(Product item) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      child: Column(
+        children: [
+          drawBaseLabel('ProductDetailViewLabelInfo'.tr),
+          const SizedBox(height: 6),
+          Container(
+            width: Get.width,
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: theme.baseDark,
+            ),
+            child: Column(
+              children: [
+                _drawDetailInfoItem('ProductDetailViewLabelPrdName'.tr, item.prdName),
+                _drawDetailInfoItem('ProductDetailViewLabelBarcode'.tr, item.barcode ?? ''),
+                _drawDetailInfoItem('ProductDetailViewLabelPrdCode'.tr, item.productCode),
+                _drawDetailInfoItem('ProductDetailViewLabelCategory'.tr, item.category.displayName),
+                _drawDetailInfoItem(
+                    'ProductDetailViewLabelStorageMethod'.tr, item.storageType.displayName),
+                _drawDetailInfoItem('ProductDetailViewLabelStandard'.tr, item.unit),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

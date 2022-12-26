@@ -119,6 +119,9 @@ class $AssetsIconsGen {
   AssetGenImage get icRefresh =>
       const AssetGenImage('assets/icons/ic_refresh.png');
 
+  /// File path: assets/icons/ic_scan.png
+  AssetGenImage get icScan => const AssetGenImage('assets/icons/ic_scan.png');
+
   /// File path: assets/icons/ic_search.png
   AssetGenImage get icSearch =>
       const AssetGenImage('assets/icons/ic_search.png');
@@ -157,6 +160,7 @@ class $AssetsIconsGen {
         icNaviSetting,
         icPrint,
         icRefresh,
+        icScan,
         icSearch,
         icSncLogo
       ];

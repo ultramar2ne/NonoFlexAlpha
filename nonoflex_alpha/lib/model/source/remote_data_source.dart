@@ -306,7 +306,7 @@ class RemoteDataSource {
       body.addAll({
         'productCode': product.productCode,
         'name': product.prdName,
-        'category': product.category,
+        'category': product.category.serverValue,
         'maker': product.maker,
         'unit': product.unit,
         'stock': '${product.stock}',
@@ -463,7 +463,7 @@ class RemoteDataSource {
         final Map<String, dynamic> data = convert.jsonDecode(body);
         final recordList = data['recordList'];
         return recordList
-            .map<RecordOfProduct>((el) => RecordOfProduct.fromJson(el as Map<String, dynamic>))
+            .map<RecordOfProduct>((el) => RecordOfProduct.fromJson(el as Map<String, dynamic>, productId))
             .toList();
       } else {
         /// error
@@ -487,7 +487,7 @@ class RemoteDataSource {
       body.addAll({
         'productCode': product.productCode,
         'name': product.prdName,
-        'category': product.category,
+        'category': product.category.serverValue,
         'maker': product.maker,
         'unit': product.unit,
         'stock': '${product.stock}',

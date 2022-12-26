@@ -1,12 +1,15 @@
 import 'package:get/get.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
+import 'package:nonoflex_alpha/model/data/document.dart';
 import 'package:nonoflex_alpha/model/data/product.dart';
 import 'package:nonoflex_alpha/model/data/record.dart';
+import 'package:nonoflex_alpha/model/repository/document/document_repository.dart';
 import 'package:nonoflex_alpha/model/repository/product/product_repository.dart';
 
 class ProductDetailViewModel extends BaseController {
   final ProductRepository _productRepository;
+  final DocumentRepository _documentRepository;
 
   // 물품 id
   final int productId;
@@ -32,8 +35,10 @@ class ProductDetailViewModel extends BaseController {
 
   ProductDetailViewModel({
     ProductRepository? productRepository,
+    DocumentRepository? documentRepository,
     required this.productId
-  }) : _productRepository = productRepository ?? locator.get<ProductRepository>() {
+  }) : _productRepository = productRepository ?? locator.get<ProductRepository>(),
+        _documentRepository = documentRepository ?? locator.get<DocumentRepository>(){
     init();
   }
 
@@ -63,11 +68,26 @@ class ProductDetailViewModel extends BaseController {
 
   // 물품 정보 수정화면으로 이동
   void goEditProductInfo() async {
-    await baseNavigator.goAddProductPage();
+    await baseNavigator.goProductEditPage(productId);
+    init();
   }
 
   // 물품 정보 불러오기
 
+  // 문서 정보 불러오기
+  Future<DocumentDetail?> getDocumentDetailInfo(int  documentId) async {
+    try {
+      return await _documentRepository.getDocumentDetailInfo(documentId);
+    } catch (e) {
+      logger.e(e);
+      return null;
+    }
+  }
+
+  // 문서 상세 페이지로 이동
+  Future<void> goDocumentDetailPage(int documentId)async {
+    await baseNavigator.goDocumentDetailPage(documentId);
+  }
 }
 
 extension MonthChanger on ProductDetailViewModel{
@@ -81,5 +101,6 @@ extension MonthChanger on ProductDetailViewModel{
       if (currentMonth.value == 1) return;
       currentMonth.value -= 1;
     }
+    update();
   }
 }

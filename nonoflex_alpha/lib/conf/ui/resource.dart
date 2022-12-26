@@ -14,9 +14,17 @@ class Resource extends Translations {
           'commonEmptyListView' : '항목이 존재하지 않습니다.',
           'commonSortOption' : '정렬 기준',
           'commonSortType' : '정렬 방향',
+          'commonButtonSave' : '저장하기',
+          'commonButtonEdit' : '수정하기',
+          'commonButtonOk' : '확인',
+          'commonButtonCancel' : '취소',
+          'commonPlaceHolderSelect' : '선택',
 
           // Data model
           // == product ==
+          'productCategoryOperation' : '운영물품',
+          'productCategoryFood' : '식재료',
+          'productCategoryEtc' : '기타',
           'productStorageTypeIce' : '냉동',
           'productStorageTypeCold' : '냉장',
           'productStorageTypeRoom' : '실온',
@@ -128,6 +136,26 @@ class Resource extends Translations {
           // Product Add/Edit
           'AddProductViewTitleAdd' : '새 물품 추가',
           'AddProductViewTitleEdit' : '물품 정보 수정',
+          'AddProductViewLabelImage' : '물품 사진',
+          'AddProductViewLabelName' : '물품 이름',
+          'AddProductViewLabelDescription' : '물품 설명',
+          'AddProductViewLabelCode' : '물품 코드',
+          'AddProductViewLabelBarcode' : '바코드',
+          'AddProductViewLabelCategory' : '물품 분류',
+          'AddProductViewLabelStorageMethod' : '보관 방법',
+          'AddProductViewLabelStandard' : '규격',
+          'AddProductViewLabelMaker' : '제조사',
+          'AddProductViewLabelStock' : '재고',
+          'AddProductViewLabelInputPrice' : '입고 금액',
+          'AddProductViewLabelOutputPrice' : '출고 금액',
+          'AddProductViewPlaceHolderName' : '물품 이름을 입력 해 주세요!',
+          'AddProductViewPlaceHolderDescription' : '물품에 대한 추가 설명이 필요한 경우, 여기에 입력 해 주세요!',
+          'AddProductViewPlaceHolderCode' : '물품 코드를 입력 해 주세요!',
+          'AddProductViewPlaceHolderBarcode' : '바코드를 촬영 해 주세요!',
+          'AddProductViewPlaceHolderStock' : '현재 재고를 입력 해 주세요.',
+          'AddProductViewPlaceHolderStandard' : '물품의 기준 규격을 입력 해 주세요!',
+          'AddProductViewPlaceHolderMaker' : '제조사 정보를 입력 해 주세요!',
+
 
           // Document List
 
@@ -143,6 +171,14 @@ class Resource extends Translations {
           'DocumentDetailViewLabelOutputProduct' : '출고 품목',
           'DocumentDetailViewPlaceHolderEmptyRecords' : '거래된 품목이 존재하지 않습니다.',
 
+          // Participant List
+          'ParticListViewTitle' : '참여자 정보 관리',
+
+          // User List
+          'UserListViewTitle' : '관리자 정보 관리',
+
+          // Company List
+          'CompanyListViewTitle' : '거래처 관리',
         },
         // 'en_US': {
         //   'hello': 'Hallo Welt',

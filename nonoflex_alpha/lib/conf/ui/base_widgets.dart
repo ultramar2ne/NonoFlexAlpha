@@ -5,6 +5,7 @@ import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/cmm/utils.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
+import 'package:nonoflex_alpha/model/data/company.dart';
 
 import '../../model/data/document.dart';
 import '../../model/data/product.dart';
@@ -90,8 +91,7 @@ extension BaseWidget on BaseGetView {
       width: Get.width,
       child: Row(
         children: [
-          item,
-          const Spacer(),
+          Expanded(child: item),
           const SizedBox(width: 12),
           BNIconButton(
             onPressed: () => Get.back(),
@@ -102,7 +102,7 @@ extension BaseWidget on BaseGetView {
     );
   }
 
-  // 요소의 라벨을 나타내는 위젯
+  /// 요소의 라벨을 나타내는 위젯
   Widget drawBaseLabel(String title, {Widget? item1, Widget? item2}) {
     return Row(
       children: [
@@ -111,6 +111,28 @@ extension BaseWidget on BaseGetView {
         item1 ?? const SizedBox.shrink(),
         if (item2 != null) const SizedBox(width: 4),
         item2 ?? const SizedBox.shrink(),
+      ],
+    );
+  }
+
+  /// 상품 추가 등 상세 정보를 입력할 때 설명 라벨을 나타내는 위젯
+  Widget drawBaseActionLabel(String title, {bool isRequired = false}) {
+    final dot = Container(
+      width: 10,
+      height: 10,
+      margin: const EdgeInsets.only(left: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(50),
+        color: theme.nonoOrange,
+      ),
+    );
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(title, style: theme.label.copyWith(color: theme.textDark)),
+        if (isRequired) dot,
+        const Spacer(),
       ],
     );
   }
@@ -202,11 +224,11 @@ extension BaseWidget on BaseGetView {
                   style: theme.listTitle,
                 ),
                 Text(
-                  '${item.documentId}(${item.writer})}',
+                  '${item.writer}(${item.documentId})',
                   maxLines: 1,
                   overflow: TextOverflow.visible,
                   style: theme.listBody.copyWith(
-                    color: theme.nonoOrange,
+                    color: theme.secondaryDark,
                   ),
                 )
               ],
@@ -336,8 +358,92 @@ extension BaseWidget on BaseGetView {
     );
   }
 
-  Widget drawUserListItem(User item, {VoidCallback? onClicked}) {
-    return SizedBox.shrink();
+  Widget drawUserListItem(User item, {VoidCallback? onClicked, VoidCallback? onMenuClicked}) {
+    final isAdmin = item.userType == UserType.admin;
+
+    return TextButton(
+      onPressed: onClicked,
+      style: listItemStyle,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.userName,
+                  style: theme.listTitle,
+                ),
+                if (isAdmin) ...[
+                  const SizedBox(height: 6),
+                  Text(item.id, style: theme.hint),
+                ],
+              ],
+            ),
+            if (onMenuClicked != null)
+              BNIconButton(
+                onPressed: onMenuClicked,
+                icon: Assets.icons.icInfo.image(width: 24),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget drawCompanyListItem(Company item, {VoidCallback? onClicked, VoidCallback? onMenuClicked}) {
+    // final isAdmin = item.userType == UserType.admin;
+    final badge = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      decoration: BoxDecoration(
+        color: item.companyType == CompanyType.input ? theme.nonoBlue : theme.error,
+        borderRadius: BorderRadius.circular(50),
+      ),
+      child: Center(
+        child: Text(
+          item.companyType.displayName,
+          style: theme.small.copyWith(color: theme.base, fontSize: 10, fontWeight: FontWeight.w600),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+
+    return TextButton(
+      onPressed: onClicked,
+      style: listItemStyle,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                badge,
+                const SizedBox(height: 4),
+                Text(
+                  item.name,
+                  style: theme.listTitle,
+                ),
+                // if (isAdmin) ...[
+                //   const SizedBox(height: 6),
+                //   Text(item.id, style: theme.hint),
+                // ],
+              ],
+            ),
+            if (onMenuClicked != null)
+              BNIconButton(
+                onPressed: onMenuClicked,
+                icon: Assets.icons.icInfo.image(width: 24),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 
   // endregion
@@ -359,16 +465,16 @@ extension BaseWidget on BaseGetView {
       );
 
   ButtonStyle get listItemStyleDark => ButtonStyle(
-    padding: MaterialStateProperty.all<EdgeInsets>(
-      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-    ),
-    shape: MaterialStateProperty.all<OutlinedBorder>(
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-    ),
-    elevation: MaterialStateProperty.all<double>(0),
-    overlayColor: MaterialStateProperty.all<Color>(theme.secondary),
-    backgroundColor: MaterialStateProperty.all<Color>(theme.base),
-  );
+        padding: MaterialStateProperty.all<EdgeInsets>(
+          const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        ),
+        shape: MaterialStateProperty.all<OutlinedBorder>(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        elevation: MaterialStateProperty.all<double>(0),
+        overlayColor: MaterialStateProperty.all<Color>(theme.secondary),
+        backgroundColor: MaterialStateProperty.all<Color>(theme.base),
+      );
 
 // endregion
 }

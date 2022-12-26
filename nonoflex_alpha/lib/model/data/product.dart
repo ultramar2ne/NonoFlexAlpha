@@ -17,7 +17,7 @@ class Product {
   final String? description;
 
   // 분류 : category
-  final String category;
+  final ProductCategory category;
 
   // 제조사 : maker
   final String maker;
@@ -59,11 +59,44 @@ class Product {
       required this.marginPrice,
       required this.isActive});
 
+  Product copyWith({
+    String? productCode,
+    String? prdName,
+    ProductImage? imageData,
+    String? description,
+    ProductCategory? category,
+    String? maker,
+    String? unit,
+    StorageType? storageType,
+    String? barcode,
+    int? stock,
+    int? price,
+    int? marginPrice,
+    bool? isActive,
+  }) {
+    return Product(
+      productId: productId,
+      productCode: productCode ?? this.productCode,
+      prdName: prdName ?? this.prdName,
+      imageData: imageData ?? this.imageData,
+      description: description ?? this.description,
+      category: category ?? this.category,
+      maker: maker ?? this.maker,
+      unit: unit ?? this.unit,
+      storageType: storageType ?? this.storageType,
+      barcode: barcode ?? this.barcode,
+      stock: stock ?? this.stock,
+      price: price ?? this.price,
+      marginPrice: marginPrice ?? this.marginPrice,
+      isActive: isActive ?? this.isActive,
+    );
+  }
+
   factory Product.fromJson(Map<String, dynamic> data) {
     final productId = data['productId'];
     final productCode = data['productCode'];
     final prdName = data['name'];
-    final category = data['category'];
+    final category = ProductCategory.getByServer(data['category']);
     final maker = data['maker'];
     final unit = data['unit'];
     final stock = data['stock']; // int
@@ -156,14 +189,47 @@ class ProductImage {
     data.addAll({
       'fileId': fileId,
       'originalUrl': imageUrl,
-      'thumbnailUrl' : thumbnailImageUrl,
+      'thumbnailUrl': thumbnailImageUrl,
     });
 
     return data;
   }
 }
 
+enum ProductCategory {
+  none('', ''),
+  operation('operation', '운영물품'),
+  food('food', '식재료'),
+  etc('etc', '기타');
+
+  const ProductCategory(this.code, this.serverValue);
+
+  final String code;
+  final String serverValue;
+
+  factory ProductCategory.getByServer(String serverValue) {
+    return ProductCategory.values.firstWhere((value) => value.serverValue == serverValue,
+        orElse: () => ProductCategory.none);
+  }
+}
+
+extension ProductCategoryExt on ProductCategory {
+  String get displayName {
+    switch (this) {
+      case ProductCategory.none:
+        return 'commonPlaceHolderSelect'.tr;
+      case ProductCategory.operation:
+        return 'productCategoryOperation'.tr;
+      case ProductCategory.food:
+        return 'productCategoryFood'.tr;
+      case ProductCategory.etc:
+        return 'productCategoryEtc'.tr;
+    }
+  }
+}
+
 enum StorageType {
+  none('', ''),
   ice('ice', 'ICE'),
   cold('cold', 'COLD'),
   room('room', 'ROOM');
@@ -188,6 +254,8 @@ extension StorageTypeExt on StorageType {
         return 'productStorageTypeCold'.tr;
       case StorageType.room:
         return 'productStorageTypeRoom'.tr;
+      case StorageType.none:
+        return 'commonPlaceHolderSelect'.tr;
     }
   }
 }

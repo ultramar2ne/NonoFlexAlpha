@@ -216,14 +216,14 @@ class NonoNavigatorManager {
     );
   }
 
-  Future<dynamic> goProductEditPage({Product? productForEdit}) async {
+  Future<dynamic> goProductEditPage(int productId) async {
     const path = '/product/edit';
 
     return await Get.to(
       AddProductView(),
       routeName: path,
       transition: Transition.downToUp,
-      binding: BindingsBuilder(() => Get.lazyPut(() => AddProductViewModel())),
+      binding: BindingsBuilder(() => Get.lazyPut(() => AddProductViewModel(productId: productId))),
       // id: rootNavigatorKey,
     );
   }

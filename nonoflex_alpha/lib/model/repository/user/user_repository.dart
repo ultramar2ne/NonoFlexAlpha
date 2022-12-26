@@ -5,7 +5,7 @@ import 'package:nonoflex_alpha/model/source/remote_data_source.dart';
 
 abstract class UserRepository {
   /// 참여자 등록
-  Future<User> registerParticipant({required String name});
+  Future<void> registerParticipant({required String name});
 
   /// 사용자 목록 조회
   Future<UserList> getUserList({String? searchValue});
@@ -17,7 +17,7 @@ abstract class UserRepository {
   Future<void> updateUserInfo(User user);
 
   /// 사용자 정보 삭제
-  Future<void> deleteUserData(String userCode);
+  Future<void> deleteUserData(int userCode);
 }
 
 class UserRepositoryImpl extends UserRepository {
@@ -29,9 +29,13 @@ class UserRepositoryImpl extends UserRepository {
         _localDataSource = localDataSource ?? locator.get<LocalDataSource>();
 
   @override
-  Future<void> deleteUserData(String userCode) {
-    // TODO: implement deleteUserData
-    throw UnimplementedError();
+  Future<void> registerParticipant({required String name}) {
+    return _remoteDataSource.addParticipant(name);
+  }
+
+  @override
+  Future<UserList> getUserList({String? searchValue}) {
+    return _remoteDataSource.getUserList(searchValue: searchValue);
   }
 
   @override
@@ -42,20 +46,12 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<UserList> getUserList({String? searchValue}) {
-    // TODO: implement getUserList
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<User> registerParticipant({required String name}) {
-    // TODO: implement registerParticipant
-    throw UnimplementedError();
-  }
-
-  @override
   Future<void> updateUserInfo(User user) {
-    // TODO: implement updateUserInfo
-    throw UnimplementedError();
+    return _remoteDataSource.updateUser(user: user);
+  }
+
+  @override
+  Future<void> deleteUserData(int userCode) {
+    return _remoteDataSource.deleteUser(userCode: userCode);
   }
 }

@@ -1,6 +1,6 @@
+import 'package:nonoflex_alpha/conf/locator.dart';
 import 'package:nonoflex_alpha/model/data/company.dart';
-
-enum CompanyListSortType { id, name, type, category }
+import 'package:nonoflex_alpha/model/source/remote_data_source.dart';
 
 abstract class CompanyRepository {
   /// 거래처 추가
@@ -30,6 +30,11 @@ abstract class CompanyRepository {
 }
 
 class CompanyRepositoryImpl extends CompanyRepository {
+  final RemoteDataSource _remoteDataSource;
+
+  CompanyRepositoryImpl({RemoteDataSource? remoteDataSource})
+      : _remoteDataSource = remoteDataSource ?? locator.get<RemoteDataSource>();
+
   @override
   Future<void> addCompany(
       {required String name, required CompanyType type, required, String? description}) {
@@ -57,8 +62,14 @@ class CompanyRepositoryImpl extends CompanyRepository {
       int? size,
       int? page,
       bool? onlyActive}) {
-    // TODO: implement getCompanyList
-    throw UnimplementedError();
+    return _remoteDataSource.getCompanyList(
+      searchValue: searchValue,
+      sortType: sortType,
+      orderType: orderType,
+      size: size,
+      page: page,
+      onlyActiveItem: onlyActive,
+    );
   }
 
   @override

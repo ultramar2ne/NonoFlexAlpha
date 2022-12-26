@@ -1,3 +1,4 @@
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
@@ -6,7 +7,7 @@ import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/model/data/user.dart';
 import 'package:nonoflex_alpha/view/more/participant_list_viewmodel.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
+// import 'package:qr_flutter/qr_flutter.dart';
 
 class ParticipantListView extends BaseGetView<ParticipantListViewModel> {
   @override
@@ -168,11 +169,9 @@ extension UserSummary on ParticipantListView {
         width: Get.width,
         padding: EdgeInsets.symmetric(vertical: 12),
         margin: EdgeInsets.all(12),
-        child: PrettyQr(
+        child: BarcodeWidget(
           data: controller.userLoginCode.value,
-          // image: Assets.icons.icSncLogo.image().image,
-          size: Get.width,
-          roundEdges: true,
+          barcode: Barcode.qrCode(),
         ),
       ),
     );

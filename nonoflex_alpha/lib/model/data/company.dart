@@ -45,7 +45,7 @@ class Company {
     return Company(
         companyId: data['companyId'],
         name: data['name'],
-        companyType: CompanyType.fromServer(data['companyType']),
+        companyType: CompanyType.fromServer(data['type']),
         description: data['category'],
         isActive: data['active']);
   }
@@ -78,6 +78,19 @@ enum CompanyType {
   }
 }
 
+extension CompanyTypeExt on CompanyType{
+  String get displayName {
+    switch (this) {
+      case CompanyType.input:
+        return '입고처';
+      case CompanyType.output:
+        return '출고처';
+      default:
+        return '';
+    }
+  }
+}
+
 /// 거래처 목록
 class CompanyList {
   // 현재 페이지 : page
@@ -107,13 +120,16 @@ class CompanyList {
       required this.items});
 
   factory CompanyList.fromJson(Map<String, dynamic> data) {
+    final metaData = data['meta'];
+    final items = data['companyList'];
+
     return CompanyList(
-        page: data['page'],
-        count: data['count'],
-        totalPages: data['totalPages'],
-        totalCount: data['totalCount'],
-        isLastPage: data['isLastPage'],
-        items: data['companyItems'].map((element) => Company.fromJson(element)).toList());
+        page: metaData['page'],
+        count: metaData['count'],
+        totalPages: metaData['totalPages'],
+        totalCount: metaData['totalCount'],
+        isLastPage: metaData['lastPage'],
+        items: items.map<Company>((element) => Company.fromJson(element)).toList());
   }
 }
 
