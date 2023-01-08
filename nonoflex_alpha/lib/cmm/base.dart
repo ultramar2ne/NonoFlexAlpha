@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
+import 'package:nonoflex_alpha/conf/manager/auth_manager.dart';
 import 'package:nonoflex_alpha/conf/navigator.dart';
 import 'package:nonoflex_alpha/conf/ui/theme.dart';
 import 'package:nonoflex_alpha/gen/colors.gen.dart';
@@ -10,7 +11,7 @@ abstract class BaseGetView<T> extends StatelessWidget {
   final theme = locator.get<BNTheme>();
   final logger = locator.get<Logger>();
 
-  late final BuildContext currentContext;
+  BuildContext? currentContext;
 
   BaseGetView({Key? key}) : super(key: key);
 
@@ -20,37 +21,46 @@ abstract class BaseGetView<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // this.context = context;
+    currentContext ??= context;
+    // currentContext = context;
     if (controller is! BaseController) return _defaultErrorView('');
     BaseController _controller = controller as BaseController;
-    return _controller.obx(
-      (state) => Stack(
-        children: [
-          Scaffold(
-            backgroundColor: theme.base,
-            appBar: defaultAppBar(),
-            body: SafeArea(
-              child: Column(
-                children: [
-                  drawHeader(),
-                  Expanded(child: drawBody()),
-                  drawFooter(),
-                ],
+    return WillPopScope(
+      onWillPop: () async {
+        final result = await willPopCallback();
+        return result ?? true;
+      },
+      child: _controller.obx(
+        (state) => Stack(
+          children: [
+            Scaffold(
+              backgroundColor: theme.base,
+              appBar: defaultAppBar(),
+              body: SafeArea(
+                child: Column(
+                  children: [
+                    drawHeader(),
+                    Expanded(child: drawBody()),
+                    drawFooter(),
+                  ],
+                ),
               ),
+              bottomNavigationBar: bottomNavigationBar(),
             ),
-            bottomNavigationBar: bottomNavigationBar(),
-          ),
 
-          /// api 요청 등, 로직 중 포함된 로딩 인디케이터
-          Obx(() =>
-              Visibility(visible: _controller.isLoading.value, child: _defaultLoadingIndicator()))
-        ],
+            /// api 요청 등, 로직 중 포함된 로딩 인디케이터
+            Obx(() =>
+                Visibility(visible: _controller.isLoading.value, child: _defaultLoadingIndicator()))
+          ],
+        ),
+        onLoading: _defaultLoadingIndicator(),
+        onEmpty: _defaultEmptyView(),
+        onError: (errorMessage) => _defaultErrorView(errorMessage),
       ),
-      onLoading: _defaultLoadingIndicator(),
-      onEmpty: _defaultEmptyView(),
-      onError: (errorMessage) => _defaultErrorView(errorMessage),
     );
   }
+
+  Future<bool>? willPopCallback() => null;
 
   AppBar? defaultAppBar() => null;
 

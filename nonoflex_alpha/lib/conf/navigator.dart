@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:nonoflex_alpha/model/data/company.dart';
+import 'package:nonoflex_alpha/model/data/document.dart';
 import 'package:nonoflex_alpha/model/data/notice.dart';
 import 'package:nonoflex_alpha/model/data/product.dart';
 import 'package:nonoflex_alpha/view/document/add_document_view.dart';
@@ -22,6 +23,8 @@ import 'package:nonoflex_alpha/view/more/add_barcode_view.dart';
 import 'package:nonoflex_alpha/view/more/add_barcode_viewmodel.dart';
 import 'package:nonoflex_alpha/view/more/company_list_view.dart';
 import 'package:nonoflex_alpha/view/more/company_list_viewmodel.dart';
+import 'package:nonoflex_alpha/view/more/developer_info_view.dart';
+import 'package:nonoflex_alpha/view/more/developer_info_viewmodel.dart';
 import 'package:nonoflex_alpha/view/more/participant_list_view.dart';
 import 'package:nonoflex_alpha/view/more/participant_list_viewmodel.dart';
 import 'package:nonoflex_alpha/view/more/setting_view.dart';
@@ -42,6 +45,8 @@ import 'package:nonoflex_alpha/view/product/product_list_view.dart';
 import 'package:nonoflex_alpha/view/product/product_list_viewmodel.dart';
 import 'package:nonoflex_alpha/view/splash/splash_view.dart';
 import 'package:nonoflex_alpha/view/splash/splash_viewmodel.dart';
+import 'package:nonoflex_alpha/view/util/make_excel_view.dart';
+import 'package:nonoflex_alpha/view/util/make_excel_viewmodel.dart';
 import 'package:nonoflex_alpha/view/util/scanner_view.dart';
 import 'package:nonoflex_alpha/view/util/scanner_viewModel.dart';
 
@@ -57,7 +62,7 @@ class NonoNavigatorManager {
   Future<dynamic> goSplashPage() async {
     const path = '/';
 
-    return await Get.to(
+    return await Get.off(
       SplashView(),
       routeName: path,
       transition: Transition.fade,
@@ -175,6 +180,18 @@ class NonoNavigatorManager {
     );
   }
 
+  Future<dynamic> goEditNoticePage(int noticeId) async {
+    const path = '/notice/edit';
+
+    return await Get.to(
+      AddNoticeView(),
+      routeName: path,
+      transition: Transition.downToUp,
+      binding: BindingsBuilder(() => Get.lazyPut(() => AddNoticeViewModel(noticeId: noticeId))),
+      // id: rootNavigatorKey,
+    );
+  }
+
   Future<dynamic> goNoticeDetailPage(Notice noticeItem) async {
     const path = '/notice/detail';
 
@@ -242,14 +259,15 @@ class NonoNavigatorManager {
     );
   }
 
-  Future<dynamic> goAddDocumentPage(int documentId) async {
+  Future<dynamic> goAddDocumentPage(DocumentType documentType) async {
     const path = '/document/add';
 
     return await Get.to(
       AddDocumentView(),
       routeName: path,
       transition: Transition.downToUp,
-      binding: BindingsBuilder(() => Get.lazyPut(() => AddDocumentViewModel())),
+      binding: BindingsBuilder(
+          () => Get.lazyPut(() => AddDocumentViewModel(documentType: documentType))),
       // id: rootNavigatorKey,
     );
   }
@@ -320,6 +338,18 @@ class NonoNavigatorManager {
     );
   }
 
+  Future<dynamic> goDeveloperInfoPage() async {
+    const path = '/developer';
+
+    return await Get.to(
+      DeveloperInfoView(),
+      routeName: path,
+      transition: Transition.downToUp,
+      binding: BindingsBuilder(() => Get.lazyPut(() => DeveloperInfoViewModel())),
+      // id: null,
+    );
+  }
+
   // ==== Utils ====
   Future<dynamic> goScannerPage() async {
     const path = '/app/scanner';
@@ -329,6 +359,18 @@ class NonoNavigatorManager {
       routeName: path,
       transition: Transition.downToUp,
       binding: BindingsBuilder(() => Get.lazyPut(() => ScannerViewModel())),
+      // id: null,
+    );
+  }
+
+  Future<dynamic> goMakeExcelPage() async {
+    const path = '/app/excel';
+
+    return await Get.to(
+      MakeExcelView(),
+      routeName: path,
+      transition: Transition.downToUp,
+      binding: BindingsBuilder(() => Get.lazyPut(() => MakeExcelViewModel())),
       // id: null,
     );
   }

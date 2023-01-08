@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
+import 'package:nonoflex_alpha/cmm/ui/dialog.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/view/main/main_admin_home_view.dart';
 import 'package:nonoflex_alpha/view/main/main_admin_home_viewmodel.dart';
@@ -8,10 +9,12 @@ import 'package:nonoflex_alpha/view/main/main_admin_viewmodel.dart';
 import 'package:get/get.dart';
 
 class MainForAdminView extends BaseGetView<MainForAdminViewModel> {
+  @override
+  Future<bool>? willPopCallback() => Get.confirmDialog('정말 종료하시겠습니까?');
 
   @override
   Widget drawBody() {
-    return  Navigator(
+    return Navigator(
       key: Get.nestedKey(1),
       initialRoute: '/home',
       onGenerateRoute: (settings) {
