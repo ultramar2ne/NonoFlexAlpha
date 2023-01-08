@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:nonoflex_alpha/conf/ui/base_widgets.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
-import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/view/notice/add_notice_viewmodel.dart';
 
 import 'package:get/get.dart';
@@ -77,10 +76,15 @@ class AddNoticeView extends BaseGetView<AddNoticeViewModel> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Expanded(
-          child: BNColoredButton(
-            child: Text('AddNoticeViewButtonAddNotice'.tr),
-            onPressed: () => controller.submit(),
-          ),
+          child: controller.viewMode == ViewMode.add
+              ? BNColoredButton(
+                  child: Text('AddNoticeViewButtonAddNotice'.tr),
+                  onPressed: () => controller.submit(),
+                )
+              : BNColoredButton(
+                  child: Text('AddNoticeViewButtonEditNotice'.tr),
+                  onPressed: () => controller.submit(),
+                ),
         ),
       ),
     );

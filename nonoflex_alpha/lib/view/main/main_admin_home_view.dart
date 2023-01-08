@@ -18,7 +18,7 @@ class AdminHomeView extends BaseGetView<AdminHomeViewModel> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Column(
         children: [
-          drawRecentNoticeItem(null),
+          drawRecentNoticeItem(controller.noticeItem),
           const SizedBox(height: 32),
           drawTempDocumentInfoItem()
         ],
@@ -37,14 +37,38 @@ extension MainPageWidget on AdminHomeView {
       item = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            notice.title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  notice.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.listTitle,
+                ),
+              ),
+              if (controller.noticeItem?.isFocused ?? false)
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: theme.primary,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(50.0),
+                    ),
+                  ),
+                ),
+            ],
           ),
-          const SizedBox(height: 4),
-          SingleChildScrollView(child: Text(notice.content!)),
-          const SizedBox(height: 4),
+          const SizedBox(height: 6),
+          Expanded(
+              child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Text(
+                    notice.content!,
+                    style: theme.listBody,
+                  ))),
+          const SizedBox(height: 8),
           Align(
             alignment: Alignment.centerRight,
             child: Text(notice.writer),
@@ -53,17 +77,22 @@ extension MainPageWidget on AdminHomeView {
       );
     } else {
       item = Center(
-          child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'AdminHomeViewMessageAddNotice'.tr,
-            style: theme.subTitle.copyWith(color: theme.textHint),
-          ),
-
-          /// 버튼 ...?
-        ],
-      ));
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 24),
+            Text(
+              'AdminHomeViewMessageAddNotice'.tr,
+              style: theme.subTitle.copyWith(color: theme.textHint),
+            ),
+            const SizedBox(height: 12),
+            BNOutlinedButton(
+              onPressed: () => controller.goNoticeAddPage(),
+              child: const Text('새로운 공지사항 작성하기'),
+            ),
+          ],
+        ),
+      );
     }
 
     return Column(
@@ -72,20 +101,24 @@ extension MainPageWidget on AdminHomeView {
           'AdminHomeViewLabelNoticeArea'.tr,
           item1: BNIconButton(
             onPressed: () => controller.goNoticeListPage(),
-            icon: Assets.icons.icListMenu.image(width: 24, height: 24),
+            icon: Assets.icons.icAdd.image(width: 24, height: 24),
           ),
         ),
         const SizedBox(height: 6),
-        Container(
-          height: 180,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            // border: Border.all(color: theme.shadow.withOpacity(0.1)),
-            color: theme.secondary,
+        InkWell(
+          onTap: (notice != null && notice.content != null)
+              ? () => controller.openNoticeDetail()
+              : null,
+          child: Container(
+            height: 260,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: theme.secondary,
+            ),
+            padding: const EdgeInsets.all(20),
+            child: item,
           ),
-          padding: const EdgeInsets.all(12),
-          child: item,
         )
       ],
     );

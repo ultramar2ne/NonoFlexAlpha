@@ -4,36 +4,39 @@ import 'package:nonoflex_alpha/cmm/ui/dialog.dart';
 import 'package:nonoflex_alpha/cmm/utils.dart';
 import 'package:nonoflex_alpha/conf/ui/base_widgets.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
-import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/view/notice/notice_detail_viewmodel.dart';
 
 import '../../cmm/base.dart';
 
 class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
   @override
-  Widget drawHeader() => drawActionPageTitle(
-        '',
-        titleItem: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('NoticeDetailViewLabelTitle'.tr, style: theme.label.copyWith(fontSize: 12)),
-            const SizedBox(height: 4),
-            Text(
-              controller.noticeItem.title ?? '',
-              style: theme.title.copyWith(
-                color: theme.textDark,
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-              ),
-              // decoration: noticeTitleInputDecoration,
+  Widget drawHeader() {
+    if (controller.noticeItem == null) return const SizedBox.shrink();
+    return drawActionPageTitle(
+      '',
+      titleItem: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('NoticeDetailViewLabelTitle'.tr, style: theme.label.copyWith(fontSize: 12)),
+          const SizedBox(height: 4),
+          Text(
+            controller.noticeItem?.title ?? '',
+            style: theme.title.copyWith(
+              color: theme.textDark,
+              fontWeight: FontWeight.w500,
+              fontSize: 18,
             ),
-          ],
-        ),
-      );
+            // decoration: noticeTitleInputDecoration,
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget drawBody() {
+    if (controller.noticeItem == null) return const SizedBox.shrink();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       width: Get.width,
@@ -44,7 +47,7 @@ class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('NoticeDetailViewLabelContents'.tr, style: theme.label.copyWith(fontSize: 12)),
-              if (controller.noticeItem.isFocused)
+              if (controller.noticeItem?.isFocused ?? false)
                 Container(
                   width: 8,
                   height: 8,
@@ -59,10 +62,10 @@ class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
             ],
           ),
           const SizedBox(height: 4),
-          if (controller.noticeItem.content != null) ...{
+          if (controller.noticeItem!.content != null) ...{
             Expanded(
               child: Text(
-                controller.noticeItem.content!,
+                controller.noticeItem!.content!,
                 style: theme.normal,
                 softWrap: true,
               ),
@@ -81,14 +84,14 @@ class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
           Align(
             alignment: Alignment.centerRight,
             child: Text(
-              controller.noticeItem.writer ?? 'NoticeDetailViewPlaceHolderUnknownUser'.tr,
+              controller.noticeItem?.writer ?? 'NoticeDetailViewPlaceHolderUnknownUser'.tr,
             ),
           ),
           const SizedBox(height: 4),
           Align(
             alignment: Alignment.centerRight,
             child: Text(
-              formatDateYMDHM(controller.noticeItem.updatedAt) ??
+              formatDateYMDHM(controller.noticeItem?.updatedAt ?? DateTime.now()) ??
                   'NoticeDetailViewPlaceHolderUnknownUser'.tr,
               style: theme.hint,
             ),
@@ -101,6 +104,7 @@ class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
 
   @override
   Widget drawFooter() {
+    if (controller.noticeItem == null) return const SizedBox.shrink();
     return Container(
       height: 82,
       width: double.infinity,
@@ -120,9 +124,7 @@ class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
             flex: 2,
             child: BNColoredButton(
               child: Text('NoticeDetailViewButtonEdit'.tr),
-              onPressed: () async {
-                final kk = await Get.alert('안녕');
-              },
+              onPressed: () => controller.editNotice(),
             ),
           ),
         ],

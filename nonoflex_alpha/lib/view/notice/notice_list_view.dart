@@ -15,7 +15,7 @@ class NoticeListView extends BaseGetView<NoticeListViewModel> {
         'NoticeListViewTitle'.tr,
         button1: BNIconButton(
           onPressed: () => controller.onClickedAddNotice(),
-          icon: Assets.icons.icAdd.image(width: 24, height: 24),
+          icon: Assets.icons.icAdd.image(width: 32, height: 32),
         ),
       );
 
@@ -29,10 +29,10 @@ class NoticeListView extends BaseGetView<NoticeListViewModel> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: drawBaseLabel(
             'NoticeListViewLabelNoticeList'.tr,
-            item1: BNIconButton(
-              onPressed: () {},
-              icon: Assets.icons.icListMenu.image(width: 24, height: 24),
-            ),
+            // item1: BNIconButton(
+            //   onPressed: () {},
+            //   icon: Assets.icons.icListMenu.image(width: 24, height: 24),
+            // ),
           ),
         ),
         const SizedBox(height: 12),
@@ -45,11 +45,11 @@ class NoticeListView extends BaseGetView<NoticeListViewModel> {
 
   /// 공지사항 목록 위젯
   Widget _drawNoticeList(List<Notice>? items) {
-    if (items == null) {
+    if (items == null || items.isEmpty) {
       return Center(
         child: Text(
           'commonEmptyListView'.tr,
-          style: theme.title,
+          style: theme.button,
         ),
       );
     }

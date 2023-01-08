@@ -28,10 +28,6 @@ class NoticeListViewModel extends BaseController {
     getNoticeList();
   }
 
-  // Future<void> goNoticeDetail(int noticeId) async {
-  //   this.baseNavigator.goNoticeDetailPage(noticeId);
-  // }
-
   void onClickedAddNotice() async {
     await baseNavigator.goAddNoticePage();
     for (int i = 1; i <= pageNum; i++) {
