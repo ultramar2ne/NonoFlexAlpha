@@ -51,6 +51,7 @@ class ProductRepositoryImpl extends ProductRepository {
     bool? onlyActiveItem,
   }) async {
     return await _remoteDataSource.getProductList(
+        searchValue: searchValue,
         sortType: sortType,
         orderType: orderType,
         size: size,

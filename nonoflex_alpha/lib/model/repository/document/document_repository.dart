@@ -50,6 +50,8 @@ abstract class DocumentRepository {
 
   /// 문서 정보 삭제
   Future<void> deleteDcoumentData(int documentId);
+
+  Future<bool> requestMakeExcelDocument(int year, int month);
 }
 
 class DocumentRepositoryImpl extends DocumentRepository {
@@ -125,7 +127,7 @@ class DocumentRepositoryImpl extends DocumentRepository {
 
   @override
   void getDocumentByComapny() {
-// TODO: implement getDocumentByComapny
+    // TODO: implement getDocumentByComapny
   }
 
   @override
@@ -141,5 +143,11 @@ class DocumentRepositoryImpl extends DocumentRepository {
   @override
   Future<void> deleteDcoumentData(int documentId) {
     return _remoteDataSource.deleteDocument(documentId);
+  }
+
+  @override
+  Future<bool> requestMakeExcelDocument(int year, int month) async {
+    final result = await _remoteDataSource.makeExcelFile(year,month);
+    return result == true;
   }
 }

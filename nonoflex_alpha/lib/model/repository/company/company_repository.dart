@@ -38,20 +38,18 @@ class CompanyRepositoryImpl extends CompanyRepository {
   @override
   Future<void> addCompany(
       {required String name, required CompanyType type, required, String? description}) {
-// TODO: implement addCompany
-    throw UnimplementedError();
+    return _remoteDataSource
+        .addCompany(Company(companyId: 0, name: name, description: description, companyType: type));
   }
 
   @override
   Future<void> deleteCompanyData(int companyId) {
-    // TODO: implement deleteCompanyData
-    throw UnimplementedError();
+    return _remoteDataSource.deleteCompany(companyId);
   }
 
   @override
   Future<Company> getCompanyDetailinfo(int companyId) {
-    // TODO: implement getCompanyDetailinfo
-    throw UnimplementedError();
+    return _remoteDataSource.getCompanyDetailInfoByCompanyId(companyId);
   }
 
   @override
@@ -80,7 +78,6 @@ class CompanyRepositoryImpl extends CompanyRepository {
 
   @override
   Future<void> updateCompanyInfo(Company company) {
-    // TODO: implement updateCompanyInfo
-    throw UnimplementedError();
+    return _remoteDataSource.updateCompany(company: company);
   }
 }

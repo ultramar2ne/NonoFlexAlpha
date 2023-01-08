@@ -44,20 +44,20 @@ class User {
 
   factory User.fromJson(Map<dynamic, dynamic> data) {
     return User(
-      userCode: data['userCode'] ?? -1,
+      userCode: data['userId'] ?? -1,
       id: data['email'] ?? '',
       userName: data['userName'] ?? '',
-      userType: UserType.fromServer(data['userType'] ?? ''),
+      userType: UserType.fromServer(data['role'] ?? ''),
       isActive: data['active'] ?? false,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'userCode': userCode,
+      'userId': userCode,
       'email': id,
       'userName': userName,
-      'userType': userType.serverValue,
+      'role': userType.serverValue,
       'active': isActive,
     };
   }
@@ -67,7 +67,7 @@ class User {
 enum UserType {
   none('none', ''),
   admin('admin', 'ROLE_ADMIN'),
-  participant('admin', 'ROLE_PARTIC');
+  participant('partic', 'ROLE_PARTICIPANT');
 
   const UserType(this.code, this.serverValue);
 

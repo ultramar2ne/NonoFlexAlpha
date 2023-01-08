@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:nonoflex_alpha/cmm/utils.dart';
 import 'package:nonoflex_alpha/conf/config.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
+import 'package:nonoflex_alpha/conf/manager/auth_manager.dart';
 import 'package:nonoflex_alpha/model/data/server.dart';
 import 'package:nonoflex_alpha/model/data/user.dart';
 import 'package:nonoflex_alpha/model/source/local_data_source.dart';
@@ -72,6 +73,10 @@ class AuthRepositoryImpl extends AuthRepository {
 
         await _localDataSource.addTokenInfo(authToken);
         await _localDataSource.addUserInfo(userInfo);
+
+        final authManager = locator.get<AuthManager>();
+        authManager.currentUser = userInfo;
+        authManager.authToken = authToken;
 
         return authToken;
       }

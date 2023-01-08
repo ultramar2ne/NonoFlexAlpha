@@ -360,7 +360,7 @@ class RemoteDataSource {
     Map<String, String> getParams() {
       Map<String, String> params = {};
       if (searchValue != null && searchValue != '') params.addAll({'query': searchValue});
-      if (sortType != null) params.addAll({'column': sortType.toString()}); // 고민
+      if (sortType != null) params.addAll({'column': sortType.serverValue}); // 고민
       if (orderType != null) params.addAll({'order': orderType});
       if (size != null) params.addAll({'size': size.toString()});
       if (page != null) params.addAll({'page': page.toString()});
@@ -463,7 +463,8 @@ class RemoteDataSource {
         final Map<String, dynamic> data = convert.jsonDecode(body);
         final recordList = data['recordList'];
         return recordList
-            .map<RecordOfProduct>((el) => RecordOfProduct.fromJson(el as Map<String, dynamic>, productId))
+            .map<RecordOfProduct>(
+                (el) => RecordOfProduct.fromJson(el as Map<String, dynamic>, productId))
             .toList();
       } else {
         /// error
@@ -572,7 +573,7 @@ class RemoteDataSource {
       Map<String, String> body = {};
       body.addAll({
         'name': company.name,
-        'type': company.companyType.toString(),
+        'type': company.companyType.serverValue,
       });
 
       // additional value
@@ -593,7 +594,8 @@ class RemoteDataSource {
         return Company.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -637,7 +639,8 @@ class RemoteDataSource {
         return CompanyList.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -660,7 +663,8 @@ class RemoteDataSource {
         return Company.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -686,7 +690,7 @@ class RemoteDataSource {
       Map<String, String> body = {};
       body.addAll({
         'name': company.name,
-        'type': company.companyType.toString(),
+        'type': company.companyType.serverValue,
         'category': company.description ?? '',
         'active': company.isActive.toString(),
       });
@@ -706,7 +710,8 @@ class RemoteDataSource {
         return Company.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -740,7 +745,8 @@ class RemoteDataSource {
         return CompanyList.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -772,7 +778,8 @@ class RemoteDataSource {
         }
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -826,7 +833,7 @@ class RemoteDataSource {
         recordItems.add(record);
       });
 
-      body.addAll({'recordList':recordItems.toString()});
+      body.addAll({'recordList': recordItems.toString()});
 
       return body;
     }
@@ -843,7 +850,8 @@ class RemoteDataSource {
         return Document.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -888,7 +896,8 @@ class RemoteDataSource {
         return DocumentList.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -909,13 +918,13 @@ class RemoteDataSource {
         return DocumentDetail.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
     }
   }
-
 
   /// 문서 정보 수정
   /// 문서에 해당하는 record의 수정, 유지, 추가, 삭제는 해당 API를 사용합니다.
@@ -945,10 +954,11 @@ class RemoteDataSource {
         recordItems.add(record);
       });
 
-      body.addAll({'recordList':recordItems.toString()});
+      body.addAll({'recordList': recordItems.toString()});
 
       return body;
     }
+
     try {
       var response = await client.put(
         requestUrl(path),
@@ -961,7 +971,8 @@ class RemoteDataSource {
         return DocumentDetail.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -991,13 +1002,50 @@ class RemoteDataSource {
         }
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
     }
   }
 
+  /// 엑셀 문서 생성
+  /// 연 월 데이터를 기준으로 엑셀 데이터를 생성합니다.
+  /// 정상적으로 요청 되었을 경우, 등록 시 사용했던 관리자의 이메일로 생성된 파일이 전송됩니다.
+  /// 해당 API를 사용하기 위해서는 MANAGER 이상의 권한이 필요합니다.
+  Future<dynamic> makeExcelFile(int year, int month) async {
+    /// Get - api/v1/user/{userCode}
+    const path = '/api/$version/document/excel';
+
+    Map<String, String> getParams() {
+      Map<String, String> params = {
+        'year': year.toString(),
+        'month': month.toString(),
+      };
+      return params;
+    }
+
+    try {
+      var response = await client.get(requestUrl(path, params: getParams()),
+          headers: {'Authorization': 'Bearer ${_config.accessToken ?? ''}', 'Content-Type': '*/*'});
+      if (response.statusCode == 200) {
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = convert.jsonDecode(body);
+        if (data['result'] == true) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        /// error
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   /// endregion
   ///
@@ -1030,7 +1078,8 @@ class RemoteDataSource {
         return User.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -1046,7 +1095,9 @@ class RemoteDataSource {
     const path = '/api/$version/user';
 
     Map<String, String> getParams() {
-      Map<String, String> params = {};
+      Map<String, String> params = {
+        'size': '1000',
+      };
       if (searchValue != null) params.addAll({'query': searchValue});
 
       return params;
@@ -1063,7 +1114,8 @@ class RemoteDataSource {
         return UserList.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -1083,7 +1135,8 @@ class RemoteDataSource {
         return User.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -1102,6 +1155,7 @@ class RemoteDataSource {
       body.addAll({
         'email': user.id,
         'userName': user.userName,
+        'userType': user.userType.serverValue,
         'active': user.isActive.toString(),
       });
 
@@ -1120,7 +1174,8 @@ class RemoteDataSource {
         return User.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -1133,7 +1188,7 @@ class RemoteDataSource {
   /// MANAGER 이상의 권한이 필요합니다.
   Future<dynamic> deleteUser({required int userCode}) async {
     /// delete - api/v1/user/[userCode]
-    final path = '/api/$version/user/[/$userCode';
+    final path = '/api/$version/user/$userCode';
 
     try {
       var response = await client.delete(
@@ -1150,7 +1205,8 @@ class RemoteDataSource {
         }
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;

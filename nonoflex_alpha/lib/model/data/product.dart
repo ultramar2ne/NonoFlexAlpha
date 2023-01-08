@@ -31,14 +31,17 @@ class Product {
   // 물품 바코드 : barcode
   final String? barcode;
 
+  // 물품 바코드 타입 : barcode type
+  final String? barcodeType;
+
   // 재고 : stock
   final int stock;
 
   // 기준 가격 : price
-  final int? price;
+  final double? price;
 
   // 마진율 : marign
-  final int? marginPrice;
+  final double? marginPrice;
 
   // 물품 활성 여부 : active
   final bool isActive;
@@ -54,6 +57,7 @@ class Product {
       required this.unit,
       required this.storageType,
       required this.barcode,
+      required this.barcodeType,
       required this.stock,
       required this.price,
       required this.marginPrice,
@@ -69,9 +73,10 @@ class Product {
     String? unit,
     StorageType? storageType,
     String? barcode,
+    String? barcodeType,
     int? stock,
-    int? price,
-    int? marginPrice,
+    double? price,
+    double? marginPrice,
     bool? isActive,
   }) {
     return Product(
@@ -85,6 +90,7 @@ class Product {
       unit: unit ?? this.unit,
       storageType: storageType ?? this.storageType,
       barcode: barcode ?? this.barcode,
+      barcodeType: barcodeType ?? this.barcodeType,
       stock: stock ?? this.stock,
       price: price ?? this.price,
       marginPrice: marginPrice ?? this.marginPrice,
@@ -106,8 +112,9 @@ class Product {
     // nullable
     final description = data['description'];
     final barcode = data['barcode'];
-    final price = data['price'];
-    final marginPrice = data['margin'];
+    final barcodeType = data['barcodeType'];
+    final price = data['inputPrice'];
+    final marginPrice = data['outputPrice'];
     final imageData = data['image'] != null && data['image']['fileId'] != null
         ? ProductImage.fromJson(data['image'])
         : null;
@@ -124,6 +131,7 @@ class Product {
       isActive: isActive,
       description: description,
       barcode: barcode,
+      barcodeType: barcodeType,
       price: price,
       marginPrice: marginPrice,
       imageData: imageData,
@@ -147,8 +155,9 @@ class Product {
 
     data.addIf(description != null, 'description', description);
     data.addIf(barcode != null, 'barcode', barcode);
-    data.addIf(price != null, 'price', price);
-    data.addIf(marginPrice != null, 'margin', marginPrice);
+    data.addIf(barcodeType != null, 'barcodeType', barcodeType);
+    data.addIf(price != null, 'inputPrice', price);
+    data.addIf(marginPrice != null, 'outputPrice', marginPrice);
     data.addIf(imageData != null, 'image', imageData!.toMap());
 
     return data;
@@ -306,13 +315,48 @@ class ProductList {
 }
 
 enum ProductListSortType {
-  prdCode,
-  name,
-  category,
-  maker,
-  storageType,
-  stock,
-  price,
-  margin,
-  active,
+  prdCode('', 'productCode'),
+  name('', 'name'),
+  stock('', 'stock'),
+  price('', 'inputPrice'),
+  marginPrice('', 'outputPrice');
+  // category('','category'),
+  // maker('','maker'),
+  // storageType('','storageType'),
+  // active('','');
+
+  const ProductListSortType(this.code, this.serverValue);
+
+  final String code;
+  final String serverValue;
+
+  factory ProductListSortType.fromServer(String serverValue) {
+    return ProductListSortType.values.firstWhere((value) => value.serverValue == serverValue,
+        orElse: () => ProductListSortType.name);
+  }
+}
+
+extension CompanyTypeExt on ProductListSortType {
+  String get displayName {
+    switch (this) {
+      case ProductListSortType.prdCode:
+        return '물품 코드';
+      case ProductListSortType.name:
+        return '물품 이름';
+      case ProductListSortType.stock:
+        return '현재 재고';
+      case ProductListSortType.price:
+        return '입고 금액';
+      case ProductListSortType.marginPrice:
+        return '출고 금액';
+      // case ProductListSortType.category:
+      //   return '물품 코드';
+      // case ProductListSortType.maker:
+      //   return '물품 코드';
+      // case ProductListSortType.storageType:
+      //   return '물품 코드';
+      // case ProductListSortType.active:
+      //   return '물품 코드';
+    }
+  }
 }

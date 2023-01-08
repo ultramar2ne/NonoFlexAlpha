@@ -78,7 +78,6 @@ class NoticeRepositoryImpl extends NoticeRepository {
 
   @override
   Future<void> updateNoticeInfo(Notice notice) {
-    // TODO: implement updateNoticeInfo
-    throw UnimplementedError();
+    return _remoteDataSource.updateNotice(notice: notice);
   }
 }
