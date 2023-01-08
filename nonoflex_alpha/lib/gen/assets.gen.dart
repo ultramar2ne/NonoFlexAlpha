@@ -85,6 +85,13 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_info.png
   AssetGenImage get icInfo => const AssetGenImage('assets/icons/ic_info.png');
 
+  /// File path: assets/icons/ic_input.png
+  AssetGenImage get icInput => const AssetGenImage('assets/icons/ic_input.png');
+
+  /// File path: assets/icons/ic_item_cart.png
+  AssetGenImage get icItemCart =>
+      const AssetGenImage('assets/icons/ic_item_cart.png');
+
   /// File path: assets/icons/ic_list_menu.png
   AssetGenImage get icListMenu =>
       const AssetGenImage('assets/icons/ic_list_menu.png');
@@ -112,6 +119,10 @@ class $AssetsIconsGen {
   AssetGenImage get icNaviSetting =>
       const AssetGenImage('assets/icons/ic_navi_setting.png');
 
+  /// File path: assets/icons/ic_output.png
+  AssetGenImage get icOutput =>
+      const AssetGenImage('assets/icons/ic_output.png');
+
   /// File path: assets/icons/ic_print.png
   AssetGenImage get icPrint => const AssetGenImage('assets/icons/ic_print.png');
 
@@ -129,6 +140,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_snc_logo.png
   AssetGenImage get icSncLogo =>
       const AssetGenImage('assets/icons/ic_snc_logo.png');
+
+  /// File path: assets/icons/ic_temp_document.png
+  AssetGenImage get icTempDocument =>
+      const AssetGenImage('assets/icons/ic_temp_document.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
@@ -151,6 +166,8 @@ class $AssetsIconsGen {
         icFlashOff,
         icFlashOn,
         icInfo,
+        icInput,
+        icItemCart,
         icListMenu,
         icMinus,
         icMinusCircle,
@@ -158,11 +175,13 @@ class $AssetsIconsGen {
         icNaviHome,
         icNaviProducts,
         icNaviSetting,
+        icOutput,
         icPrint,
         icRefresh,
         icScan,
         icSearch,
-        icSncLogo
+        icSncLogo,
+        icTempDocument
       ];
 }
 
