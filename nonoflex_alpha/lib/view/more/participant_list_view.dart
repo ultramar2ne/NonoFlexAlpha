@@ -15,7 +15,7 @@ class ParticipantListView extends BaseGetView<ParticipantListViewModel> {
     return drawSubPageTitle(
       'ParticListViewTitle'.tr,
       button1: BNIconButton(
-        onPressed: () {},
+        onPressed: () => showRegisterUser(),
         icon: Assets.icons.icAdd.image(),
       ),
     );
@@ -54,6 +54,7 @@ extension ParticipantListViewExt on ParticipantListView {
     );
   }
 
+  // 사용자 정보
   Future<void> showUserInfo(User user) {
     Widget bottomSheetHandle = Container(
       width: 52,
@@ -85,6 +86,7 @@ extension ParticipantListViewExt on ParticipantListView {
                   ),
                 ),
                 drawUserInfo(user),
+                const SizedBox(height: 12),
                 drawLoginCodeInfo(user),
                 // drawProductDetailInfo(product),
                 const SizedBox(height: 8),
@@ -92,11 +94,207 @@ extension ParticipantListViewExt on ParticipantListView {
                   height: 60,
                   width: Get.width,
                   // margin: const EdgeInsets.all(12),
-                  child: BNColoredButton(
-                    child: Text('더보기'),
+                  child: BNOutlinedButton(
+                    child: Text('삭제하기'),
                     onPressed: () {
-                      // Get.back();
-                      // controller.loadProductDetailInfo(product);
+                      controller.deleteUserInfo(user);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  height: 60,
+                  width: Get.width,
+                  // margin: const EdgeInsets.all(12),
+                  child: BNColoredButton(
+                    child: Text('수정하기'),
+                    onPressed: () {
+                      Get.back();
+                      showUserInfoEdit(user);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 12),
+              ],
+            ),
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  // 사용자 정보 수정
+  Future<void> showUserInfoEdit(User user) {
+    Widget bottomSheetHandle = Container(
+      width: 52,
+      height: 6,
+      decoration: BoxDecoration(
+        color: theme.baseDark,
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+      ),
+    );
+
+    final nameController = TextEditingController(text: user.userName);
+    bool isActive = user.isActive;
+    final RxList<bool> isSelected = [false].obs;
+    isSelected.value.insert(isActive ? 0 : 1, true);
+
+    return Get.bottomSheet(
+      Container(
+        decoration: BoxDecoration(
+          color: theme.base,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12.0), topRight: Radius.circular(12.0)),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: bottomSheetHandle,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                drawBaseLabel('사용자 이름'),
+                const SizedBox(height: 8),
+                BNInputBox(
+                  controller: nameController,
+                  onChanged: (value) {},
+                ),
+                const SizedBox(height: 20),
+                drawBaseLabel('사용자 활성 상태'),
+                const SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Obx(
+                    () => ToggleButtons(
+                      isSelected: isSelected.value,
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderColor: theme.primary,
+                      borderWidth: 2,
+                      selectedBorderColor: theme.primary,
+                      selectedColor: theme.base,
+                      disabledColor: theme.secondary,
+                      fillColor: theme.primary,
+                      onPressed: (index) {
+                        if (index == 0) {
+                          isSelected.value = [true, false];
+                        } else {
+                          isSelected.value = [false, true];
+                        }
+                      },
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 42,
+                          alignment: Alignment.center,
+                          // color: isSelected[0] ? theme.primary : theme.secondary,
+                          child: Text(
+                            '활성화',
+                            style: isSelected[0]
+                                ? theme.listBody.copyWith(color: theme.textLight)
+                                : theme.listBody.copyWith(color: theme.textColored),
+                          ),
+                        ),
+                        Container(
+                          width: 100,
+                          height: 42,
+                          alignment: Alignment.center,
+                          // color: isSelected[1] ? theme.primary : theme.secondary,
+                          child: Text(
+                            '비활성화',
+                            style: isSelected[1]
+                                ? theme.listBody.copyWith(color: theme.textLight)
+                                : theme.listBody.copyWith(color: theme.textColored),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  height: 60,
+                  width: Get.width,
+                  // margin: const EdgeInsets.all(12),
+                  child: BNColoredButton(
+                    child: Text('저장하기'),
+                    onPressed: () {
+                      if (nameController.text.isEmpty) return;
+                      Get.back();
+                      controller.updateUserInfo(user.copyWith(
+                          userName: nameController.text, isActive: isSelected.value[0]));
+                      isSelected.close();
+                    },
+                  ),
+                ),
+                const SizedBox(height: 12),
+              ],
+            ),
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  // 사용자 추가
+  Future<void> showRegisterUser() {
+    Widget bottomSheetHandle = Container(
+      width: 52,
+      height: 6,
+      decoration: BoxDecoration(
+        color: theme.baseDark,
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+      ),
+    );
+
+    final nameController = TextEditingController();
+
+    return Get.bottomSheet(
+      Container(
+        decoration: BoxDecoration(
+          color: theme.base,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12.0), topRight: Radius.circular(12.0)),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: bottomSheetHandle,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                drawBaseLabel('사용자 이름'),
+                const SizedBox(height: 4),
+                BNInputBox(
+                  controller: nameController,
+                  onChanged: (value) {},
+                ),
+                const SizedBox(height: 24),
+                Container(
+                  height: 60,
+                  width: Get.width,
+                  // margin: const EdgeInsets.all(12),
+                  child: BNColoredButton(
+                    child: Text('저장하기'),
+                    onPressed: () {
+                      if (nameController.text.isEmpty) return;
+                      Get.back();
+                      controller.addNewParticipant(nameController.text);
                     },
                   ),
                 ),
@@ -162,17 +360,47 @@ extension UserSummary on ParticipantListView {
   }
 
   Widget drawLoginCodeInfo(User user) {
+    if (!user.isActive) {
+      return Center(
+        child: Text(
+          '* 비활성 사용자는 로그인 코드 발급이 불가합니다.\n   사용자 활성 상태를 확인해주세요.',
+          style: theme.hint,
+        ),
+      );
+    }
     controller.getUserLoginCode(user);
     return Obx(
-      () => Container(
-        alignment: Alignment.center,
-        width: Get.width,
-        padding: EdgeInsets.symmetric(vertical: 12),
-        margin: EdgeInsets.all(12),
-        child: BarcodeWidget(
-          data: controller.userLoginCode.value,
-          barcode: Barcode.qrCode(),
-        ),
+      () => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 8),
+          Container(
+            padding: EdgeInsets.all(4),
+            alignment: Alignment.center,
+            width: 120,
+            decoration: BoxDecoration(
+              color: theme.secondary,
+              borderRadius: BorderRadius.circular(50.0),
+            ),
+            child: Text(
+              controller.userLoginCode.value,
+              style: theme.listSubBody,
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            height: 200,
+            width: Get.width,
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            margin: const EdgeInsets.all(12),
+            child: controller.userLoginCode.value == ''
+                ? const Expanded(child: CircularProgressIndicator())
+                : BarcodeWidget(
+                    data: controller.userLoginCode.value,
+                    barcode: Barcode.qrCode(),
+                  ),
+          ),
+        ],
       ),
     );
   }

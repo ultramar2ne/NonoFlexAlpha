@@ -1,5 +1,8 @@
+import 'package:get/get.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
+import 'package:nonoflex_alpha/cmm/ui/dialog.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
+import 'package:nonoflex_alpha/conf/manager/auth_manager.dart';
 import 'package:nonoflex_alpha/model/data/document.dart';
 import 'package:nonoflex_alpha/model/data/product.dart';
 import 'package:nonoflex_alpha/model/repository/document/document_repository.dart';
@@ -8,6 +11,7 @@ import 'package:nonoflex_alpha/model/repository/product/product_repository.dart'
 class DocumentDetailViewModel extends BaseController {
   DocumentRepository _documentRepository;
   ProductRepository _productRepository;
+  final AuthManager _authManager = locator.get<AuthManager>();
 
   // 문서 id
   final int documentId;
@@ -26,10 +30,15 @@ class DocumentDetailViewModel extends BaseController {
 
   void init() async {
     try {
+      updateLoadingState(true);
       documentInfo = await _documentRepository.getDocumentDetailInfo(documentId);
       update();
+      updateLoadingState(false);
     } catch (e) {
-      /// 오류 표출, 종료
+      logger.e(e);
+      updateLoadingState(false);
+      await Get.alertDialog('알 수 없는 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.');
+      Get.back();
     }
   }
 
@@ -38,9 +47,46 @@ class DocumentDetailViewModel extends BaseController {
   }
 
   void goDocumentEditPage() async {
-    final result = await baseNavigator.goDocumentEditPage(documentId);
-    if (result != null) {
-      init();
+    if (documentInfo == null) return;
+    await baseNavigator.goDocumentEditPage(documentInfo!);
+    init();
+  }
+
+  void deleteDocument() async {
+    if (!await Get.confirmDialog('정말 문서를 삭제하시겠습니까?\n삭제된 문서는 복구할 수 없습니다.')) return;
+    try {
+      await _documentRepository.deleteDcoumentData(documentId);
+      Get.toast('문서가 삭제되었습니다.');
+      Get.back();
+    } catch (e) {
+      logger.e(e);
+      await Get.alertDialog('알 수 없는 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.');
+    }
+  }
+
+  bool checkDocumentDeleteValidation() {
+    if (documentInfo == null) return false;
+
+    final differ = documentInfo!.createdAt.difference(DateTime.now());
+
+    if (configs.isAdminMode) {
+      return differ.inDays < 50;
+    } else {
+      if (documentInfo!.writerId != _authManager.currentUser?.userCode) return false;
+      return differ.inDays < 3;
+    }
+  }
+
+  bool checkDocumentEditValidation() {
+    if (documentInfo == null) return false;
+
+    final differ = documentInfo!.createdAt.difference(DateTime.now());
+
+    if (configs.isAdminMode) {
+      return differ.inDays < 50;
+    } else {
+      if (documentInfo!.writerId != _authManager.currentUser?.userCode) return false;
+      return differ.inDays < 3;
     }
   }
 }

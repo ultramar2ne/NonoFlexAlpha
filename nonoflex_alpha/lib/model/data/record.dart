@@ -17,7 +17,7 @@ abstract class Record {
   final int quantity;
 
   /// 입/출고 금액 : price
-  final int recordPrice;
+  final double recordPrice;
 
   Record(
     this.recordId,
@@ -50,7 +50,7 @@ class RecordOfProduct extends Record {
 
   /// 출입고 가격 : price
   @override
-  final int recordPrice;
+  final double recordPrice;
 
   /// document 입출고 날짜 : date
   final DateTime date;
@@ -76,7 +76,7 @@ class RecordOfProduct extends Record {
   RecordOfProduct copyWith({
     int? quantity,
     int? stock,
-    int? price,
+    double? price,
     DateTime? date,
     DocumentType? docType,
     String? writer,
@@ -162,7 +162,7 @@ class RecordOfDocument extends Record {
 
   /// 출입고 가격 : price
   @override
-  final int recordPrice;
+  final double recordPrice;
 
   RecordOfDocument({
     required this.recordId,
@@ -203,6 +203,43 @@ class RecordOfDocument extends Record {
       'stock': stock,
       'price': recordPrice,
       'documentId': documentId,
+    });
+
+    return data;
+  }
+}
+
+class RecordForAddDocument {
+  // product
+  Product product;
+
+  // 물품 수량
+  int count;
+
+  // 선택된 물품 가격
+  double price;
+
+  RecordForAddDocument(this.product, this.count, this.price);
+
+  RecordForAddDocument copyWith({
+    Product? product,
+    int? count,
+    double? productPrice,
+  }) {
+    return RecordForAddDocument(
+      product ?? this.product,
+      count ?? this.count,
+      productPrice ?? this.price,
+    );
+  }
+
+  Map<String, dynamic> toMap({bool forServer = true}) {
+    Map<String, dynamic> data = {};
+
+    data.addAll({
+      'productId': product.productId,
+      'quantity': count,
+      'price': price,
     });
 
     return data;

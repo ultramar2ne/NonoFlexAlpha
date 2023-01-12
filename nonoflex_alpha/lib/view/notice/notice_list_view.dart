@@ -13,10 +13,12 @@ class NoticeListView extends BaseGetView<NoticeListViewModel> {
   @override
   Widget drawHeader() => drawSubPageTitle(
         'NoticeListViewTitle'.tr,
-        button1: BNIconButton(
-          onPressed: () => controller.onClickedAddNotice(),
-          icon: Assets.icons.icAdd.image(width: 32, height: 32),
-        ),
+        button1: controller.configs.isAdminMode
+            ? BNIconButton(
+                onPressed: () => controller.onClickedAddNotice(),
+                icon: Assets.icons.icAdd.image(width: 32, height: 32),
+              )
+            : null,
       );
 
   @override

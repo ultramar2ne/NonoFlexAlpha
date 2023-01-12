@@ -13,21 +13,23 @@ class MakeExcelViewModel extends BaseController {
   // 현재 선택된 월
   final month = DateTime.now().month.obs;
 
+  final monthList = (List<int>.of([])).obs;
+
   MakeExcelViewModel({
     DocumentRepository? documentRepository,
   }) : _documentRepository = documentRepository ?? locator.get<DocumentRepository>() {
     init();
   }
 
-  void init() {}
+  void init() {
+    updateMonthList(DateTime.now().year);
+  }
 
   void requestMakeExcelDocument() async {
     try {
       final result = await _documentRepository.requestMakeExcelDocument(year.value, month.value);
       if (result) {
-        await Get.alertDialog(
-            '요청이 정상적으로 이루어졌습니다. \n가입시 사용한 메일을 확인 해 주세요. \n10분이 지나도 메일이 도착하지 않을 경우 다시 한번 요청을 시도 해 주세요.');
-        Get.back();
+        await Get.alertDialog('요청이 정상적으로 이루어졌습니다. \n메일을 확인 해 주세요.');
       } else {
         await Get.alertDialog('요청 실패했습니다. \n다시 한번 시도 해 주세요.');
       }
@@ -55,19 +57,35 @@ extension MonthChanger on MakeExcelViewModel {
   void onSelectedYear(int selectedYear) {
     if (selectedYear == year.value) return;
     year.value = selectedYear;
+    updateMonthList(selectedYear);
     update();
   }
 
-  /// 월 정보
-  List<int> get selectableMonthList {
-    List<int> monthList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    return monthList;
-    // if (year.value == DateTime.now().year) {
-    //   final currentYear = DateTime.now().month;
-    //   return monthList.sublist(0, currentYear);
-    // } else {
-    //   return monthList;
-    // }
+  // /// 월 정보
+  // List<int> get selectableMonthList {
+  //   List<int> monthList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  //   return monthList;
+  //   // if (year.value == DateTime.now().year) {
+  //   //   final currentYear = DateTime.now().month;
+  //   //   return monthList.sublist(0, currentYear);
+  //   // } else {
+  //   //   return monthList;
+  //   // }
+  // }
+
+  /// 선택 가능한 월 목록 표시
+  void updateMonthList(int selectedYear) {
+    if (selectedYear == DateTime.now().year) {
+      monthList.value.clear();
+      for (int i = 0; i < DateTime.now().month; i++) {
+        monthList.value.add(i + 1);
+      }
+      if (monthList.value.length < month.value) {
+        month.value = monthList.value.length;
+      }
+    } else {
+      monthList.value = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    }
   }
 
   /// 월 정보 변경 이벤트 (selectbox type)

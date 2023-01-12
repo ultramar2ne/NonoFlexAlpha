@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/cmm/utils.dart';
+import 'package:nonoflex_alpha/conf/config.dart';
 import 'package:nonoflex_alpha/conf/ui/base_widgets.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
+import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/model/data/document.dart';
 import 'package:nonoflex_alpha/model/data/product.dart';
 import 'package:nonoflex_alpha/view/document/document_detail_viewmodel.dart';
@@ -15,7 +17,17 @@ class DocumentDetailView extends BaseGetView<DocumentDetailViewModel> {
     if (controller.documentInfo == null) return const SizedBox.shrink();
 
     final documentInfo = controller.documentInfo!;
-    return drawSubPageTitle(documentInfo.docType.displayName);
+    return drawSubPageTitle(
+      documentInfo.docType.displayName,
+      button1: controller.configs.isAdminMode
+          ? controller.checkDocumentEditValidation()
+              ? BNIconButton(
+                  onPressed: () => controller.goDocumentEditPage(),
+                  icon: Assets.icons.icEdit.image(width: 24, height: 24),
+                )
+              : null
+          : null,
+    );
   }
 
   @override
@@ -23,11 +35,15 @@ class DocumentDetailView extends BaseGetView<DocumentDetailViewModel> {
     if (controller.documentInfo == null) return const SizedBox.shrink();
 
     final documentInfo = controller.documentInfo!;
-    return Column(
-      children: [
-        drawDocumentBasicInfo(documentInfo),
-        drawProductRecords(documentInfo),
-      ],
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          drawDocumentBasicInfo(documentInfo),
+          drawProductRecords(documentInfo),
+        ],
+      ),
     );
   }
 }
@@ -40,7 +56,7 @@ extension DocumentDetailViewItems on DocumentDetailView {
       child: Column(
         children: [
           drawBaseLabel('DocumentDetailViewLabelInfo'.tr),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Container(
             width: Get.width,
             padding: const EdgeInsets.all(8),
@@ -59,35 +75,69 @@ extension DocumentDetailViewItems on DocumentDetailView {
                         : 'DocumentDetailViewLabelDateOutput'.tr,
                     formatDateYMDE(item.date)),
                 _drawDetailInfoItem('DocumentDetailViewLabelPrice'.tr, '${item.totalPrice} ￦'),
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    if (controller.checkDocumentDeleteValidation())
+                      Expanded(
+                        child: SizedBox(
+                          height: 48,
+                          width: Get.width,
+                          child: BNTextButton(
+                            '삭제하기',
+                            onPressed: () => controller.deleteDocument(),
+                            textColor: theme.error,
+                            effectColor: theme.error.withOpacity(0.05),
+                            backgroundColor: Colors.transparent,
+                          ),
+                        ),
+                      ),
+                    if (controller.checkDocumentEditValidation() && !controller.configs.isAdminMode)
+                      Expanded(
+                        child: SizedBox(
+                          height: 48,
+                          width: Get.width,
+                          child: BNTextButton(
+                            '수정하기',
+                            onPressed: () => controller.goDocumentEditPage(),
+                            textColor: theme.nonoYellow,
+                            effectColor: theme.nonoYellow.withOpacity(0.05),
+                            backgroundColor: Colors.transparent,
+                          ),
+                        ),
+                      ),
+                  ],
+                )
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  Widget _drawDetailInfoItem(String title, String content) {
+  Widget _drawDetailInfoItem(String title, String content, {Widget? item}) {
     return Padding(
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.all(4),
       child: Row(
         children: [
           SizedBox(
             width: Get.width / 4,
             child: Text(
               title,
-              style: theme.normal,
+              style: theme.normal.copyWith(fontSize: 14, fontWeight: FontWeight.w600),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
           Expanded(
-            child: Text(
-              content,
-              style: theme.normal,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+            child: item ??
+                Text(
+                  content,
+                  style: theme.normal.copyWith(fontSize: 14),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
           ),
         ],
       ),
@@ -103,12 +153,14 @@ extension DocumentDetailViewItems on DocumentDetailView {
     final recordList = item.recordList;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 8),
         Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: drawBaseLabel(label)),
         const SizedBox(height: 4),
-        SizedBox(
-          height: Get.height / 2,
+        Container(
+          height: recordList.length * 100,
+          constraints: BoxConstraints(minHeight: Get.width / 3),
           child: recordList.isEmpty
               ? Center(
                   child: Text(
@@ -116,16 +168,19 @@ extension DocumentDetailViewItems on DocumentDetailView {
                     style: theme.hint,
                   ),
                 )
-              : ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: recordList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final item = recordList[index];
-                    return drawRecordOfDocumentListItem(
-                      item,
-                      onClicked: () => showProductSummaryInfo(item.productInfo),
-                    );
-                  },
+              : Expanded(
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: recordList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final item = recordList[index];
+                      return drawRecordOfDocumentListItem(
+                        item,
+                        onClicked: () => showProductSummaryInfo(item.productInfo),
+                        isInput: controller.documentInfo!.docType == DocumentType.input,
+                      );
+                    },
+                  ),
                 ),
         )
       ],
@@ -234,6 +289,7 @@ extension DocumentDetailViewProductSummary on DocumentDetailView {
             child: CachedNetworkImage(
               width: 60,
               height: 60,
+              httpHeaders: {'Authorization': 'Bearer ${Configs().accessToken ?? ''}'},
               imageUrl: item.imageData?.thumbnailImageUrl ?? '',
               fit: BoxFit.fill,
               errorWidget: (BuildContext context, String url, dynamic error) {
@@ -267,7 +323,8 @@ extension DocumentDetailViewProductSummary on DocumentDetailView {
             child: Column(
               children: [
                 _drawDetailInfoItem('ProductDetailViewLabelPrdName'.tr, item.prdName),
-                _drawDetailInfoItem('ProductDetailViewLabelBarcode'.tr, item.barcode ?? ''),
+                if (item.barcode != null)
+                  _drawDetailInfoItem('ProductDetailViewLabelBarcode'.tr, item.barcode ?? ''),
                 _drawDetailInfoItem('ProductDetailViewLabelPrdCode'.tr, item.productCode),
                 _drawDetailInfoItem('ProductDetailViewLabelCategory'.tr, item.category.displayName),
                 _drawDetailInfoItem(

@@ -3,6 +3,7 @@ import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/conf/ui/base_widgets.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
+import 'package:nonoflex_alpha/gen/colors.gen.dart';
 import 'package:nonoflex_alpha/model/data/notice.dart';
 import 'package:nonoflex_alpha/view/main/main_admin_home_viewmodel.dart';
 
@@ -14,14 +15,17 @@ class AdminHomeView extends BaseGetView<AdminHomeViewModel> {
 
   @override
   Widget drawBody() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Column(
-        children: [
-          drawRecentNoticeItem(controller.noticeItem),
-          const SizedBox(height: 32),
-          drawTempDocumentInfoItem()
-        ],
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Column(
+          children: [
+            drawRecentNoticeItem(controller.noticeItem),
+            const SizedBox(height: 32),
+            drawTempDocumentInfoItem()
+          ],
+        ),
       ),
     );
   }
@@ -139,14 +143,20 @@ extension MainPageWidget on AdminHomeView {
             color: theme.baseDark,
           ),
           padding: const EdgeInsets.all(12),
-          child: Row(
-            children: [
-              Expanded(child: SizedBox()),
-              BNIconButton(
-                onPressed: () {},
-                icon: Assets.icons.icAdd.image(width: 32, height: 32),
-              ),
-            ],
+          // child: Row(
+          //   children: [
+          //     Expanded(child: SizedBox()),
+          //     BNIconButton(
+          //       onPressed: () {},
+          //       icon: Assets.icons.icAdd.image(width: 32, height: 32),
+          //     ),
+          //   ],
+          // ),
+          child: Center(
+            child: Text(
+              '예정서 기능은 비활성화 되어있습니다.\n관리자에게 문의하세요.',
+              style: theme.listBody.copyWith(color: theme.textHint),
+            ),
           ),
         )
       ],

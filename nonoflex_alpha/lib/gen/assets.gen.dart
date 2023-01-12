@@ -51,9 +51,20 @@ class $AssetsIconsGen {
   AssetGenImage get icCancel =>
       const AssetGenImage('assets/icons/ic_cancel.png');
 
+  /// File path: assets/icons/ic_cancel_circle.png
+  AssetGenImage get icCancelCircle =>
+      const AssetGenImage('assets/icons/ic_cancel_circle.png');
+
+  /// File path: assets/icons/ic_copy.png
+  AssetGenImage get icCopy => const AssetGenImage('assets/icons/ic_copy.png');
+
   /// File path: assets/icons/ic_delete.png
   AssetGenImage get icDelete =>
       const AssetGenImage('assets/icons/ic_delete.png');
+
+  /// File path: assets/icons/ic_document.png
+  AssetGenImage get icDocument =>
+      const AssetGenImage('assets/icons/ic_document.png');
 
   /// File path: assets/icons/ic_edit.png
   AssetGenImage get icEdit => const AssetGenImage('assets/icons/ic_edit.png');
@@ -82,6 +93,10 @@ class $AssetsIconsGen {
   AssetGenImage get icFlashOn =>
       const AssetGenImage('assets/icons/ic_flash_on.png');
 
+  /// File path: assets/icons/ic_gridview.png
+  AssetGenImage get icGridview =>
+      const AssetGenImage('assets/icons/ic_gridview.png');
+
   /// File path: assets/icons/ic_info.png
   AssetGenImage get icInfo => const AssetGenImage('assets/icons/ic_info.png');
 
@@ -95,6 +110,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_list_menu.png
   AssetGenImage get icListMenu =>
       const AssetGenImage('assets/icons/ic_list_menu.png');
+
+  /// File path: assets/icons/ic_listview.png
+  AssetGenImage get icListview =>
+      const AssetGenImage('assets/icons/ic_listview.png');
 
   /// File path: assets/icons/ic_minus.png
   AssetGenImage get icMinus => const AssetGenImage('assets/icons/ic_minus.png');
@@ -141,9 +160,15 @@ class $AssetsIconsGen {
   AssetGenImage get icSncLogo =>
       const AssetGenImage('assets/icons/ic_snc_logo.png');
 
+  /// File path: assets/icons/ic_sort.png
+  AssetGenImage get icSort => const AssetGenImage('assets/icons/ic_sort.png');
+
   /// File path: assets/icons/ic_temp_document.png
   AssetGenImage get icTempDocument =>
       const AssetGenImage('assets/icons/ic_temp_document.png');
+
+  /// File path: assets/icons/ic_user.png
+  AssetGenImage get icUser => const AssetGenImage('assets/icons/ic_user.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
@@ -157,7 +182,10 @@ class $AssetsIconsGen {
         icCalendar,
         icCameraFlip,
         icCancel,
+        icCancelCircle,
+        icCopy,
         icDelete,
+        icDocument,
         icEdit,
         icExpandOff,
         icExpandOn,
@@ -165,10 +193,12 @@ class $AssetsIconsGen {
         icEyeOn,
         icFlashOff,
         icFlashOn,
+        icGridview,
         icInfo,
         icInput,
         icItemCart,
         icListMenu,
+        icListview,
         icMinus,
         icMinusCircle,
         icNaviDocuments,
@@ -181,7 +211,9 @@ class $AssetsIconsGen {
         icScan,
         icSearch,
         icSncLogo,
-        icTempDocument
+        icSort,
+        icTempDocument,
+        icUser
       ];
 }
 
@@ -198,8 +230,25 @@ class $AssetsImagesLogoGen {
   AssetGenImage get appIcon =>
       const AssetGenImage('assets/images/logo/app_icon.png');
 
+  /// File path: assets/images/logo/logo_team.png
+  AssetGenImage get logoTeam =>
+      const AssetGenImage('assets/images/logo/logo_team.png');
+
+  /// File path: assets/images/logo/logo_team_blue.png
+  AssetGenImage get logoTeamBlue =>
+      const AssetGenImage('assets/images/logo/logo_team_blue.png');
+
+  /// File path: assets/images/logo/logo_team_letter.png
+  AssetGenImage get logoTeamLetter =>
+      const AssetGenImage('assets/images/logo/logo_team_letter.png');
+
+  /// File path: assets/images/logo/team_icon.png
+  AssetGenImage get teamIcon =>
+      const AssetGenImage('assets/images/logo/team_icon.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [appIcon];
+  List<AssetGenImage> get values =>
+      [appIcon, logoTeam, logoTeamBlue, logoTeamLetter, teamIcon];
 }
 
 class Assets {

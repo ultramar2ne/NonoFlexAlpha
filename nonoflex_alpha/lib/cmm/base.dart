@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:nonoflex_alpha/conf/config.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
 import 'package:nonoflex_alpha/conf/manager/auth_manager.dart';
 import 'package:nonoflex_alpha/conf/navigator.dart';
@@ -38,6 +39,7 @@ abstract class BaseGetView<T> extends StatelessWidget {
               appBar: defaultAppBar(),
               body: SafeArea(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     drawHeader(),
                     Expanded(child: drawBody()),
@@ -96,6 +98,7 @@ extension BaseGetViewDefaultWidget on BaseGetView {
 
 abstract class BaseController extends GetxController with StateMixin {
   final NonoNavigatorManager baseNavigator;
+  final configs = locator.get<Configs>();
   final logger = locator.get<Logger>();
 
   /// task status

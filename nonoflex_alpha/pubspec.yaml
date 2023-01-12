@@ -30,10 +30,15 @@ dependencies:
   qr_code_scanner: ^1.0.1
 
   # QR Code 생성
-  pretty_qr_code: ^2.0.3
+#  pretty_qr_code: ^2.0.3
+#  qr_flutter: ^4.0.0
+  barcode_widget: ^2.0.3
 
   # image
   cached_network_image: ^3.2.3
+
+  # image picker
+  image_picker: ^0.8.6
 
   # hive DB
   hive: ^2.2.3

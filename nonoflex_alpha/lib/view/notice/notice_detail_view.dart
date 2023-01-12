@@ -19,7 +19,7 @@ class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('NoticeDetailViewLabelTitle'.tr, style: theme.label.copyWith(fontSize: 12)),
-          const SizedBox(height: 4),
+          const SizedBox(height: 6),
           Text(
             controller.noticeItem?.title ?? '',
             style: theme.title.copyWith(
@@ -38,7 +38,7 @@ class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
   Widget drawBody() {
     if (controller.noticeItem == null) return const SizedBox.shrink();
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       width: Get.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +61,7 @@ class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
                 ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           if (controller.noticeItem!.content != null) ...{
             Expanded(
               child: Text(
@@ -105,6 +105,8 @@ class NoticeDetailView extends BaseGetView<NoticeDetailViewModel> {
   @override
   Widget drawFooter() {
     if (controller.noticeItem == null) return const SizedBox.shrink();
+    if (!controller.configs.isAdminMode) return const SizedBox.shrink();
+
     return Container(
       height: 82,
       width: double.infinity,

@@ -83,7 +83,7 @@ class Product {
       productId: productId,
       productCode: productCode ?? this.productCode,
       prdName: prdName ?? this.prdName,
-      imageData: imageData ?? this.imageData,
+      imageData: imageData,
       description: description ?? this.description,
       category: category ?? this.category,
       maker: maker ?? this.maker,
@@ -95,6 +95,26 @@ class Product {
       price: price ?? this.price,
       marginPrice: marginPrice ?? this.marginPrice,
       isActive: isActive ?? this.isActive,
+    );
+  }
+
+  Product clearBarcode() {
+    return Product(
+      productId: productId,
+      productCode: productCode,
+      prdName: prdName,
+      imageData: imageData,
+      description: description,
+      category: category,
+      maker: maker,
+      unit: unit,
+      storageType: storageType,
+      barcode: null,
+      barcodeType: null,
+      stock: stock,
+      price: price,
+      marginPrice: marginPrice,
+      isActive: isActive,
     );
   }
 
@@ -115,7 +135,7 @@ class Product {
     final barcodeType = data['barcodeType'];
     final price = data['inputPrice'];
     final marginPrice = data['outputPrice'];
-    final imageData = data['image'] != null && data['image']['fileId'] != null
+    final imageData = data['image'] != null && data['image']['imageId'] != null
         ? ProductImage.fromJson(data['image'])
         : null;
 
@@ -166,7 +186,7 @@ class Product {
 
 class ProductImage {
   // file id : fileId
-  final int fileId;
+  final int imageId;
 
   // 원본 이미지 url : originalUrl
   final String imageUrl;
@@ -175,18 +195,18 @@ class ProductImage {
   final String thumbnailImageUrl;
 
   ProductImage({
-    required this.fileId,
+    required this.imageId,
     required this.imageUrl,
     required this.thumbnailImageUrl,
   });
 
   factory ProductImage.fromJson(Map<String, dynamic> data) {
-    final fileId = data['fileId'];
+    final fileId = data['imageId'];
     final imageUrl = data['originalUrl'];
     final thumbnailImageUrl = data['thumbnailUrl'];
 
     return ProductImage(
-      fileId: fileId,
+      imageId: fileId,
       imageUrl: imageUrl,
       thumbnailImageUrl: thumbnailImageUrl,
     );
@@ -196,7 +216,7 @@ class ProductImage {
     Map<String, dynamic> data = {};
 
     data.addAll({
-      'fileId': fileId,
+      'imageId': imageId,
       'originalUrl': imageUrl,
       'thumbnailUrl': thumbnailImageUrl,
     });
@@ -209,6 +229,9 @@ enum ProductCategory {
   none('', ''),
   operation('operation', '운영물품'),
   food('food', '식재료'),
+  hwaseong('hwaseong','화성용'),
+  bonboo('bonboo','본부물품'),
+  somo('소모품','소모품'),
   etc('etc', '기타');
 
   const ProductCategory(this.code, this.serverValue);
@@ -233,6 +256,12 @@ extension ProductCategoryExt on ProductCategory {
         return 'productCategoryFood'.tr;
       case ProductCategory.etc:
         return 'productCategoryEtc'.tr;
+      case ProductCategory.hwaseong:
+        return '화성용';
+      case ProductCategory.bonboo:
+        return '본부물품';
+      case ProductCategory.somo:
+        return '소모품';
     }
   }
 }
@@ -315,7 +344,7 @@ class ProductList {
 }
 
 enum ProductListSortType {
-  prdCode('', 'productCode'),
+  productCode('', 'productCode'),
   name('', 'name'),
   stock('', 'stock'),
   price('', 'inputPrice'),
@@ -336,10 +365,10 @@ enum ProductListSortType {
   }
 }
 
-extension CompanyTypeExt on ProductListSortType {
+extension ProductListSortTypeExt on ProductListSortType {
   String get displayName {
     switch (this) {
-      case ProductListSortType.prdCode:
+      case ProductListSortType.productCode:
         return '물품 코드';
       case ProductListSortType.name:
         return '물품 이름';
@@ -358,5 +387,69 @@ extension CompanyTypeExt on ProductListSortType {
       // case ProductListSortType.active:
       //   return '물품 코드';
     }
+  }
+}
+
+/// 물품 정렬 기준 모음
+/// 물품 정렬 기준을 로컬 저장할때 사용한다.
+class ProductSortingSet {
+  // 정렬 방향
+  final bool isDesc;
+
+  // 비활성 물품 노출 여부
+  final bool onlyActive;
+
+  // 목록 표현 방식
+  final bool isGridLayout;
+
+  // 정렬 기준
+  final ProductListSortType sortType;
+
+  ProductSortingSet({
+    required this.isDesc,
+    required this.onlyActive,
+    required this.isGridLayout,
+    required this.sortType,
+  });
+
+  ProductSortingSet copyWith({
+    bool? isDesc,
+    bool? onlyActive,
+    bool? isGridLayout,
+    ProductListSortType? sortType,
+  }) {
+    return ProductSortingSet(
+      isDesc: isDesc ?? this.isDesc,
+      onlyActive: onlyActive ?? this.onlyActive,
+      isGridLayout: isGridLayout ?? this.isGridLayout,
+      sortType: sortType ?? this.sortType,
+    );
+  }
+
+  factory ProductSortingSet.fromMap(Map<dynamic, dynamic> data) {
+    final isDesc = data['isDesc'] ?? false;
+    final onlyActive = data['onlyActive'] ?? true;
+    final isGridLayout = data['isGridLayout'] ?? false;
+    final sortTypeValue = data['sortType'] ?? 'productCode';
+
+    return ProductSortingSet(
+      isDesc: isDesc,
+      onlyActive: onlyActive,
+      isGridLayout: isGridLayout,
+      sortType: ProductListSortType.fromServer(sortTypeValue),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> data = {};
+
+    data.addAll({
+      'isDesc': isDesc,
+      'onlyActive': onlyActive,
+      'isGridLayout': isGridLayout,
+      'sortType': sortType.serverValue,
+    });
+
+    return data;
   }
 }

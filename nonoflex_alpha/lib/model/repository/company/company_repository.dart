@@ -8,13 +8,15 @@ abstract class CompanyRepository {
       {required String name, required CompanyType type, required, String? description});
 
   /// 거래처 목록 조회
-  Future<CompanyList> getCompanyList(
-      {String? searchValue,
-      CompanyListSortType? sortType,
-      String? orderType,
-      int? size,
-      int? page,
-      bool? onlyActive});
+  Future<CompanyList> getCompanyList({
+    String? searchValue,
+    CompanyListSortType? sortType,
+    String? orderType,
+    int? size,
+    int? page,
+    bool? onlyActive,
+    String? type,
+  });
 
   /// 거래처 상세 정보 조회
   Future<Company> getCompanyDetailinfo(int companyId);
@@ -53,13 +55,15 @@ class CompanyRepositoryImpl extends CompanyRepository {
   }
 
   @override
-  Future<CompanyList> getCompanyList(
-      {String? searchValue,
-      CompanyListSortType? sortType,
-      String? orderType,
-      int? size,
-      int? page,
-      bool? onlyActive}) {
+  Future<CompanyList> getCompanyList({
+    String? searchValue,
+    CompanyListSortType? sortType,
+    String? orderType,
+    int? size,
+    int? page,
+    bool? onlyActive,
+    String? type,
+  }) {
     return _remoteDataSource.getCompanyList(
       searchValue: searchValue,
       sortType: sortType,
@@ -67,6 +71,7 @@ class CompanyRepositoryImpl extends CompanyRepository {
       size: size,
       page: page,
       onlyActiveItem: onlyActive,
+      type: type,
     );
   }
 

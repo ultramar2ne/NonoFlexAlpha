@@ -96,7 +96,7 @@ class AddProductView extends BaseGetView<AddProductViewModel> {
                 child: controller.barcode.value.code == null
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'AddProductViewPlaceHolderBarcode'.tr,
@@ -104,8 +104,8 @@ class AddProductView extends BaseGetView<AddProductViewModel> {
                           ),
                           const SizedBox(width: 8),
                           Assets.icons.icScan.image(
-                            width: 20,
-                            height: 20,
+                            width: 24,
+                            height: 24,
                           ),
                         ],
                       )
@@ -115,7 +115,7 @@ class AddProductView extends BaseGetView<AddProductViewModel> {
                             barcode: controller.fromScanner(controller.barcode.value.format)!)
                         : Column(
                             children: [
-                              Text('바코드 형식을 확인할 수 없습니다.'),
+                              const Text('바코드 형식을 확인할 수 없습니다.'),
                               Text(controller.barcode.value.code!),
                             ],
                           ),
@@ -196,28 +196,54 @@ class AddProductView extends BaseGetView<AddProductViewModel> {
               const SizedBox(height: 16),
               drawBaseActionLabel('AddProductViewLabelInputPrice'.tr),
               const SizedBox(height: 8),
-              BNInputBox(
-                controller: controller.inputPrice,
-                onChanged: (value) {},
-                // hintText: 'inputPriceErrorMessage'.tr,
-                keyboardType: TextInputType.number,
-                errorMessage: controller.inputPriceErrorMessage.value != ''
-                    ? controller.inputPriceErrorMessage.value
-                    : null,
+              Row(
+                children: [
+                  Expanded(
+                    child: BNInputBox(
+                      controller: controller.inputPrice,
+                      onChanged: (value) {},
+                      // hintText: 'inputPriceErrorMessage'.tr,
+                      keyboardType: TextInputType.number,
+                      errorMessage: controller.inputPriceErrorMessage.value != ''
+                          ? controller.inputPriceErrorMessage.value
+                          : null,
+                    ),
+                  ),
+                  const SizedBox(width: 36),
+                  Text(
+                    '원',
+                    style: theme.listTitle,
+                  ),
+                  const SizedBox(width: 12),
+                ],
               ),
 
               // 출고 금액
               const SizedBox(height: 16),
               drawBaseActionLabel('AddProductViewLabelOutputPrice'.tr),
               const SizedBox(height: 8),
-              BNInputBox(
-                controller: controller.outputPrice,
-                onChanged: (value) {},
-                // hintText: 'AddProductViewPlaceHolderName'.tr,
-                errorMessage: controller.outputPriceErrorMessage.value != ''
-                    ? controller.outputPriceErrorMessage.value
-                    : null,
+              Row(
+                children: [
+                  Expanded(
+                    child: BNInputBox(
+                      keyboardType: TextInputType.number,
+                      controller: controller.outputPrice,
+                      onChanged: (value) {},
+                      // hintText: 'AddProductViewPlaceHolderName'.tr,
+                      errorMessage: controller.outputPriceErrorMessage.value != ''
+                          ? controller.outputPriceErrorMessage.value
+                          : null,
+                    ),
+                  ),
+                  const SizedBox(width: 36),
+                  Text(
+                    '원',
+                    style: theme.listTitle,
+                  ),
+                  const SizedBox(width: 12),
+                ],
               ),
+              const SizedBox(height: 50),
             ],
           ),
         ),
@@ -227,13 +253,14 @@ class AddProductView extends BaseGetView<AddProductViewModel> {
 
   @override
   Widget drawFooter() {
-    if (controller.viewMode == ViewMode.edit && controller.currentProduct == null)
+    if (controller.viewMode == ViewMode.edit && controller.currentProduct == null) {
       return const SizedBox.shrink();
+    }
 
     return Container(
       width: Get.width,
       height: 76,
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       child: BNColoredButton(
         child: Text(
           '저장하기',
@@ -291,15 +318,30 @@ extension AddProductViewExt on AddProductView {
           SizedBox(
             width: Get.width,
             height: 42,
-            child: BNColoredButton(
-                child: Text('불러오기'),
-                onPressed: () async {
-                  final _picker = ImagePicker();
-                  final image = await _picker.pickImage(source: ImageSource.gallery);
-                  if (image != null) {
-                    controller.imagePath.value = image.path;
-                  }
-                }),
+            child: Row(
+              children: [
+                Expanded(
+                  child: BNColoredButton(
+                    child: Text('불러오기'),
+                    onPressed: () async {
+                      final _picker = ImagePicker();
+                      final image = await _picker.pickImage(source: ImageSource.gallery);
+                      if (image != null) {
+                        controller.imagePath.value = image.path;
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                BNTextButton(
+                  '초기화',
+                  onPressed: () async {
+                    controller.onClickedInitialImage();
+                  },
+                  textColor: theme.primaryDark,
+                ),
+              ],
+            ),
           ),
         ],
       ),

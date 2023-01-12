@@ -1,3 +1,4 @@
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:nonoflex_alpha/cmm/utils.dart';
 import 'package:nonoflex_alpha/conf/ui/widgets.dart';
 import 'package:nonoflex_alpha/gen/assets.gen.dart';
 import 'package:nonoflex_alpha/model/data/company.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../model/data/document.dart';
 import '../../model/data/product.dart';
@@ -20,13 +22,22 @@ extension BaseWidget on BaseGetView {
   /// - 아이템 라벨 [drawBaseLabel]
 
   // 메인 페이지에서 공통적으로 나타나는 타이틀 위젯
-  Widget drawMainPageTitle(String title, {BNIconButton? button1, BNIconButton? button2}) {
+  Widget drawMainPageTitle(String title, {List<Widget>? buttonList, bool showBackButton = false}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: showBackButton
+          ? const EdgeInsets.only(right: 16)
+          : const EdgeInsets.symmetric(horizontal: 16),
       height: 82,
       width: Get.width,
       child: Row(
         children: [
+          if (showBackButton) ...[
+            IconButton(
+              onPressed: () => Get.back(),
+              icon: Assets.icons.icArrowBack.image(width: 20, height: 20),
+            ),
+            const SizedBox(width: 8),
+          ],
           Expanded(
             child: Text(
               title,
@@ -37,9 +48,7 @@ extension BaseWidget on BaseGetView {
               ),
             ),
           ),
-          button1 ?? const SizedBox.shrink(),
-          const SizedBox(width: 4),
-          button2 ?? const SizedBox.shrink(),
+          if (buttonList != null) ...buttonList
         ],
       ),
     );
@@ -52,6 +61,7 @@ extension BaseWidget on BaseGetView {
       height: 60,
       width: Get.width,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           BNIconButton(
             onPressed: () => Get.back(),
@@ -71,23 +81,23 @@ extension BaseWidget on BaseGetView {
             ),
           ),
           const SizedBox(width: 4),
-          button1 ?? const SizedBox(width: 24),
+          button1 ?? const SizedBox(width: 46),
         ],
       ),
     );
   }
 
   /// 액션 페이지에서 공통적으로 나타나는 타이틀 위젯
-  Widget drawActionPageTitle(String title, {Widget? titleItem}) {
+  Widget drawActionPageTitle(String title, {Widget? titleItem, double? fontSize, double? padding}) {
     final item = titleItem ??
         Text(
           title,
-          style: theme.title.copyWith(fontSize: 26),
+          style: theme.title.copyWith(fontSize: fontSize ?? 26),
         );
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      height: 80,
+      padding: EdgeInsets.symmetric(horizontal: padding ?? 16),
+      height: padding == 0 ? 52 : 80,
       width: Get.width,
       child: Row(
         children: [
@@ -156,7 +166,7 @@ extension BaseWidget on BaseGetView {
 
     return TextButton(
       onPressed: onClicked,
-      style: listItemStyle,
+      style: item.isActive ? listItemStyle : listItemStyleDark,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -167,7 +177,7 @@ extension BaseWidget on BaseGetView {
               width: 50,
               height: 50,
               imageUrl: item.imageData?.thumbnailImageUrl ?? '',
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
               errorWidget: (BuildContext context, String url, dynamic error) {
                 return emptyImageBackground;
               },
@@ -186,19 +196,149 @@ extension BaseWidget on BaseGetView {
                   item.prdName,
                   maxLines: 1,
                   overflow: TextOverflow.visible,
-                  style: theme.listTitle,
+                  style: theme.listTitle
+                      .copyWith(color: theme.textDark.withOpacity(item.isActive ? 1 : 0.45)),
                 ),
                 Text(
                   '${item.stock} ${item.unit}',
                   maxLines: 1,
                   overflow: TextOverflow.visible,
                   style: theme.listBody.copyWith(
-                    color: theme.nonoOrange,
+                    color: theme.nonoOrange.withOpacity(item.isActive ? 1 : 0.45),
                   ),
                 )
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  /// grid view 용 물품 목록
+  Widget drawProductGridItem(Product item, {VoidCallback? onClicked}) {
+    final emptyImageBackground = Container(
+      width: 50,
+      height: 50,
+      color: theme.baseDark,
+    );
+
+    return TextButton(
+      onPressed: onClicked,
+      style: item.isActive ? listItemStyle : listItemStyleDark,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // image
+          ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            child: CachedNetworkImage(
+              width: Get.width / 2,
+              height: Get.width / 4,
+              imageUrl: item.imageData?.thumbnailImageUrl ?? '',
+              fit: BoxFit.cover,
+              errorWidget: (BuildContext context, String url, dynamic error) {
+                return emptyImageBackground;
+              },
+              placeholder: (BuildContext context, String url) {
+                return emptyImageBackground;
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            item.prdName,
+            maxLines: 2,
+            overflow: TextOverflow.visible,
+            style: theme.listTitle
+                .copyWith(color: theme.textDark.withOpacity(item.isActive ? 1 : 0.45)),
+          ),
+          Text(
+            '${item.stock} ${item.unit}',
+            maxLines: 1,
+            overflow: TextOverflow.visible,
+            style: theme.listBody.copyWith(
+              color: theme.nonoOrange.withOpacity(item.isActive ? 1 : 0.45),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget drawProductBarcodeListItem(Product item, {VoidCallback? onClicked}) {
+    final emptyImageBackground = Container(
+      width: 50,
+      height: 50,
+      color: theme.baseDark,
+    );
+
+    return TextButton(
+      onPressed: onClicked,
+      style: item.isActive ? listItemStyle : listItemStyleDark,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // image
+          ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            child: CachedNetworkImage(
+              width: 50,
+              height: 50,
+              imageUrl: item.imageData?.thumbnailImageUrl ?? '',
+              fit: BoxFit.fitWidth,
+              errorWidget: (BuildContext context, String url, dynamic error) {
+                return emptyImageBackground;
+              },
+              placeholder: (BuildContext context, String url) {
+                return emptyImageBackground;
+              },
+            ),
+          ),
+          const SizedBox(width: 12),
+          // product name, more info ..?
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.prdName,
+                  maxLines: 1,
+                  overflow: TextOverflow.visible,
+                  style: theme.listTitle
+                      .copyWith(color: theme.textDark.withOpacity(item.isActive ? 1 : 0.45)),
+                ),
+                Text(
+                  item.barcode == null || item.barcode == '' ? '바코드 정보가 존재하지 않습니다.' : item.barcode!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.listBody.copyWith(
+                    color: theme.nonoOrange
+                        .withOpacity(item.barcode == null || item.barcode == '' ? 0.45 : 1),
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(width: 20),
+          if (item.barcode != null)
+            OutlinedButton(
+              onPressed: onClicked,
+              child: Utils.fromScanner(
+                        BarcodeTypesExtension.fromString(item.barcodeType ?? ''),
+                      ) !=
+                      null
+                  ? BarcodeWidget(
+                      width: 60,
+                      height: 50,
+                      data: item.barcode!,
+                      drawText: false,
+                      barcode: Utils.fromScanner(
+                        BarcodeTypesExtension.fromString(item.barcodeType ?? ''),
+                      )!,
+                    )
+                  : const SizedBox.shrink(),
+            ),
         ],
       ),
     );
@@ -267,16 +407,25 @@ extension BaseWidget on BaseGetView {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.companyName,
-                  style: theme.listTitle,
-                ),
-                const SizedBox(height: 6),
-                Text('${formatDateMD(item.date)} | ${item.writer}', style: theme.hint),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.companyName,
+                    style: theme.listTitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    '${formatDateMD(item.date)} | ${item.writer}',
+                    style: theme.hint,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -301,7 +450,8 @@ extension BaseWidget on BaseGetView {
   }
 
   // 문서에 대한 입출고 기록
-  Widget drawRecordOfDocumentListItem(RecordOfDocument item, {VoidCallback? onClicked}) {
+  Widget drawRecordOfDocumentListItem(RecordOfDocument item,
+      {VoidCallback? onClicked, bool isInput = false}) {
     final emptyImageBackground = Container(
       width: 50,
       height: 50,
@@ -312,7 +462,7 @@ extension BaseWidget on BaseGetView {
       onPressed: onClicked,
       style: listItemStyle,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // image
           ClipRRect(
@@ -321,7 +471,7 @@ extension BaseWidget on BaseGetView {
               width: 50,
               height: 50,
               imageUrl: item.productInfo.imageData?.thumbnailImageUrl ?? '',
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
               errorWidget: (BuildContext context, String url, dynamic error) {
                 return emptyImageBackground;
               },
@@ -338,12 +488,71 @@ extension BaseWidget on BaseGetView {
               children: [
                 Text(
                   item.productInfo.prdName,
+                  maxLines: 2,
+                  overflow: TextOverflow.visible,
+                  style: theme.listTitle,
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  '${isInput ? '+' : '-'} ${item.quantity}  →  ${item.stock} ${item.productInfo.unit}',
+                  maxLines: 1,
+                  overflow: TextOverflow.visible,
+                  style: theme.listBody.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: isInput ? theme.nonoBlue : theme.error,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  '${item.recordPrice} 원',
+                  maxLines: 1,
+                  overflow: TextOverflow.visible,
+                  style: theme.listBody.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    // color: isInput ? theme.nonoBlue : theme.error,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget drawProductItemWithStock(
+    Product item,
+    int count,
+    double price,
+    bool isInput, {
+    VoidCallback? onClicked,
+    VoidCallback? onDeleted,
+  }) {
+    final isAdded = count > 0;
+    final fixString = isInput ? '+ ' : '- ';
+    final textColor = isInput ? theme.primary : theme.error;
+
+    return TextButton(
+      onPressed: onClicked,
+      style: isAdded ? listItemStyleSelected : listItemStyle,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.prdName,
                   maxLines: 1,
                   overflow: TextOverflow.visible,
                   style: theme.listTitle,
                 ),
+                const SizedBox(height: 6),
                 Text(
-                  '${item.stock} ${item.productInfo.unit}',
+                  '현재 재고 : ${item.stock} ${item.unit}',
                   maxLines: 1,
                   overflow: TextOverflow.visible,
                   style: theme.listBody.copyWith(
@@ -353,6 +562,20 @@ extension BaseWidget on BaseGetView {
               ],
             ),
           ),
+          const Spacer(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text('$fixString$count', style: theme.listTitle.copyWith(color: textColor)),
+              const SizedBox(height: 6),
+              Text('$price 원', style: theme.listTitle),
+            ],
+          ),
+          if (onDeleted != null) ...[
+            const SizedBox(width: 12),
+            BNIconButton(
+                onPressed: onDeleted, icon: Assets.icons.icCancel.image(width: 24, height: 24)),
+          ]
         ],
       ),
     );
@@ -363,7 +586,7 @@ extension BaseWidget on BaseGetView {
 
     return TextButton(
       onPressed: onClicked,
-      style: listItemStyle,
+      style: item.isActive ? listItemStyle : listItemStyleDark,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6),
         child: Row(
@@ -375,11 +598,16 @@ extension BaseWidget on BaseGetView {
               children: [
                 Text(
                   item.userName,
-                  style: theme.listTitle,
+                  style: theme.listTitle
+                      .copyWith(color: theme.textDark.withOpacity(item.isActive ? 1 : 0.45)),
                 ),
                 if (isAdmin) ...[
                   const SizedBox(height: 6),
-                  Text(item.id, style: theme.hint),
+                  Text(
+                    item.id,
+                    style: theme.hint
+                        .copyWith(color: theme.textDark.withOpacity(item.isActive ? 1 : 0.45)),
+                  ),
                 ],
               ],
             ),
@@ -399,7 +627,8 @@ extension BaseWidget on BaseGetView {
     final badge = Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
       decoration: BoxDecoration(
-        color: item.companyType == CompanyType.input ? theme.nonoBlue : theme.error,
+        color: (item.companyType == CompanyType.input ? theme.nonoBlue : theme.error)
+            .withOpacity(item.isActive ? 1 : 0.3),
         borderRadius: BorderRadius.circular(50),
       ),
       child: Center(
@@ -413,7 +642,7 @@ extension BaseWidget on BaseGetView {
 
     return TextButton(
       onPressed: onClicked,
-      style: listItemStyle,
+      style: item.isActive ? listItemStyle : listItemStyleDark,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6),
         child: Row(
@@ -427,12 +656,17 @@ extension BaseWidget on BaseGetView {
                 const SizedBox(height: 4),
                 Text(
                   item.name,
-                  style: theme.listTitle,
+                  style: theme.listTitle
+                      .copyWith(color: theme.textDark.withOpacity(item.isActive ? 1 : 0.3)),
                 ),
-                // if (isAdmin) ...[
-                //   const SizedBox(height: 6),
-                //   Text(item.id, style: theme.hint),
-                // ],
+                if (item.description != null && item.description != '') ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    item.description!,
+                    style: theme.hint
+                        .copyWith(color: theme.textDark.withOpacity(item.isActive ? 1 : 0.45)),
+                  ),
+                ],
               ],
             ),
             if (onMenuClicked != null)
@@ -464,6 +698,18 @@ extension BaseWidget on BaseGetView {
         backgroundColor: MaterialStateProperty.all<Color>(theme.base),
       );
 
+  ButtonStyle get listItemStyleSelected => ButtonStyle(
+        padding: MaterialStateProperty.all<EdgeInsets>(
+          const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        ),
+        shape: MaterialStateProperty.all<OutlinedBorder>(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        elevation: MaterialStateProperty.all<double>(0),
+        overlayColor: MaterialStateProperty.all<Color>(theme.secondaryDark),
+        backgroundColor: MaterialStateProperty.all<Color>(theme.secondary),
+      );
+
   ButtonStyle get listItemStyleDark => ButtonStyle(
         padding: MaterialStateProperty.all<EdgeInsets>(
           const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -472,8 +718,8 @@ extension BaseWidget on BaseGetView {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         elevation: MaterialStateProperty.all<double>(0),
-        overlayColor: MaterialStateProperty.all<Color>(theme.secondary),
-        backgroundColor: MaterialStateProperty.all<Color>(theme.base),
+        overlayColor: MaterialStateProperty.all<Color>(theme.secondaryDark),
+        backgroundColor: MaterialStateProperty.all<Color>(theme.baseDark),
       );
 
 // endregion

@@ -107,10 +107,15 @@ extension LoginViewExtForAdminMode on LoginView {
                 style: theme.label,
               ),
             ),
-            BNInputBox(
-              controller: controller.emailEditingController,
-              onChanged: (value) {},
-              hintText: 'LoginViewHintEmailField'.tr,
+            Obx(
+              () => BNInputBox(
+                controller: controller.emailEditingController,
+                onChanged: (value) => controller.onChangedUserEmail(value),
+                hintText: 'LoginViewHintEmailField'.tr,
+                errorMessage: controller.emailErrorMessage.value.isEmpty
+                    ? null
+                    : controller.emailErrorMessage.value,
+              ),
             ),
             const SizedBox(height: 10),
             Padding(
@@ -120,11 +125,16 @@ extension LoginViewExtForAdminMode on LoginView {
                 style: theme.label,
               ),
             ),
-            BNInputBox(
-              controller: controller.passwordEditingController,
-              onChanged: (value) => controller.onChangedUserPassword(value),
-              hintText: 'LoginViewHintPasswordField'.tr,
-              obscureText: true,
+            Obx(
+              () => BNInputBox(
+                controller: controller.passwordEditingController,
+                onChanged: (value) => controller.onChangedUserPassword(value),
+                hintText: 'LoginViewHintPasswordField'.tr,
+                obscureText: true,
+                errorMessage: controller.passwordErrorMessage.value.isEmpty
+                    ? null
+                    : controller.passwordErrorMessage.value,
+              ),
             ),
             const SizedBox(height: 60),
             Container(
@@ -195,8 +205,7 @@ extension LoginViewExtForParticMode on LoginView {
                 child: Text('LoginViewButtonLogin'.tr,
                     style: theme.button.copyWith(color: theme.base)),
                 onPressed: () {
-                  // controller.change('',status: RxStatus.loading());
-                  // stateController.updateLoadingState(!stateController.isLoading.value);
+                  controller.insertUserCode();
                 },
               ),
             ),
@@ -260,10 +269,12 @@ extension LoginViewExtForParticMode on LoginView {
               }
               final newValue = value.length == 2 ? value.substring(1) : value;
               controller.text = newValue;
-              if (nextNode != null) {
-                // FocusScope.of(this.).requestFocus(nextNode);
-              } else {
-                // FocusScope.of(context).unfocus();
+              if (Get.context != null) {
+                if (nextNode != null) {
+                  FocusScope.of(Get.context!).requestFocus(nextNode);
+                } else {
+                  FocusScope.of(Get.context!).unfocus();
+                }
               }
             }
           },

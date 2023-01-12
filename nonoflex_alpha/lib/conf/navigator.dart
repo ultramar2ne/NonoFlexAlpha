@@ -85,7 +85,7 @@ class NonoNavigatorManager {
   }
 
   // ==== Main ====
-  Future<dynamic> goMainPage() async {
+  Future<dynamic> goParticMainPage() async {
     const path = '/main';
 
     return await Get.off(
@@ -122,6 +122,15 @@ class NonoNavigatorManager {
   Future<dynamic> goProductListPage({bool isNested = false}) async {
     const path = '/products';
 
+    if (!isNested) {
+      return Get.to(
+        ProductListView(),
+        routeName: path,
+        transition: Transition.downToUp,
+        binding: BindingsBuilder(() => Get.lazyPut(() => ProductListViewModel())),
+      );
+    }
+
     return await Get.off(
       ProductListView(),
       routeName: path,
@@ -133,6 +142,15 @@ class NonoNavigatorManager {
 
   Future<dynamic> goDocumentListPage({bool isNested = false}) async {
     const path = '/documents';
+
+    if (!isNested) {
+      return Get.to(
+        DocumentListView(),
+        routeName: path,
+        transition: Transition.downToUp,
+        binding: BindingsBuilder(() => Get.lazyPut(() => DocumentListViewModel())),
+      );
+    }
 
     return await Get.off(
       DocumentListView(),
@@ -272,15 +290,16 @@ class NonoNavigatorManager {
     );
   }
 
-  Future<dynamic> goDocumentEditPage(int documentId) async {
+  Future<dynamic> goDocumentEditPage(DocumentDetail document) async {
     const path = '/document/edit';
 
     return await Get.to(
-      EditDocumentView(),
+      AddDocumentView(),
       routeName: path,
       transition: Transition.downToUp,
       // arguments: {'productId': product.productId.toString()},
-      binding: BindingsBuilder(() => Get.lazyPut(() => EditDocumentViewModel())),
+      binding: BindingsBuilder(() => Get.lazyPut(
+          () => AddDocumentViewModel(document: document, documentType: document.docType))),
       // id: rootNavigatorKey,
     );
   }

@@ -103,7 +103,7 @@ class MakeExcelView extends BaseGetView<MakeExcelViewModel> {
           value: yearList[i],
           child: Container(
             child: Text(
-              yearList[i].toString(),
+              '${yearList[i]} 년',
               style: theme.listSubBody,
             ),
           ),
@@ -128,7 +128,7 @@ class MakeExcelView extends BaseGetView<MakeExcelViewModel> {
   }
 
   Widget _drawMonthSelector() {
-    final monthList = controller.selectableMonthList;
+    final monthList = controller.monthList.value;
     List<DropdownMenuItem<int>> menuItems = [];
 
     for (int i = 0; i < monthList.length; i++) {
@@ -138,7 +138,7 @@ class MakeExcelView extends BaseGetView<MakeExcelViewModel> {
           value: monthList[i],
           child: Container(
             child: Text(
-              monthList[i].toString(),
+              '${monthList[i]} 월',
               style: theme.listSubBody,
             ),
           ),

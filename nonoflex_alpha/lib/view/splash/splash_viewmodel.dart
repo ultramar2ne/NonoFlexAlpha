@@ -1,4 +1,6 @@
+import 'package:get/get.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
+import 'package:nonoflex_alpha/cmm/ui/dialog.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
 import 'package:nonoflex_alpha/conf/manager/auth_manager.dart';
 import 'package:nonoflex_alpha/model/data/user.dart';
@@ -27,20 +29,29 @@ class SplashViewModel extends BaseController {
       await checkServerStatus();
 
       await _authManager.initAuthInfo();
+      updateLoadingState(false);
       if (_authManager.isLoggedIn) {
         // 로그인 정보가 존재할경우
         if (_authManager.currentUser!.userType == UserType.admin) {
           baseNavigator.goAdminMainPage();
         } else {
-          baseNavigator.goMainPage();
+          baseNavigator.goParticMainPage();
         }
       } else {
         // 로그인 정보가 존재하지 않을 경우
         baseNavigator.goLoginPage();
       }
     } catch (e) {
+      updateLoadingState(false);
       errorMessage = e.toString();
+      Get.toast('초기화 과정에서 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      update();
     }
+  }
+
+  void onClickRetry() {
+    updateLoadingState(true);
+    confirmIsInitialized();
   }
 }
 

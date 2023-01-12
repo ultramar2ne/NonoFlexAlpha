@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
+import 'package:nonoflex_alpha/model/data/product.dart';
 import 'package:nonoflex_alpha/model/data/server.dart';
 import 'package:nonoflex_alpha/model/source/hive/hive_adapter.dart';
 import 'package:nonoflex_alpha/model/data/user.dart';
@@ -35,6 +36,16 @@ abstract class LocalDataSource {
 
   /// 로컬 저장소에 존재하는 토큰정보를 초기화한다.
   Future<void> deleteTokenInfo();
+
+  /// ==== Product List ====
+  /// Product List Sorting 관련 설정을 저장한다.
+  Future<void> updateProductSortingSet(int userId, ProductSortingSet sortingSet);
+
+  /// Product List 정렬 기준 정보를 불러온다.
+  Future<ProductSortingSet?> getProductSortingSet(int userId);
+
+  /// Product List 정렬 기준 정보를 초기화한다.
+  Future<void> clearProductSortingSet(int userId);
 }
 
 class LocalDataSourceImpl extends LocalDataSource {
@@ -48,10 +59,15 @@ class LocalDataSourceImpl extends LocalDataSource {
     await Hive.initFlutter();
     Hive.registerAdapter(UserAdapter());
     Hive.registerAdapter(AuthTokenAdapter());
+    Hive.registerAdapter(ProductSortingSetAdapter());
   }
 
   Future<Box<User>> get userBox async => await Hive.openBox<User>('userInfo');
+
   Future<Box<AuthToken>> get authTokenBox async => await Hive.openBox<AuthToken>('tokenInfo');
+
+  Future<Box<ProductSortingSet>> get productSortingSetBox async =>
+      await Hive.openBox<ProductSortingSet>('productSortingSet');
 
   @override
   Future<void> addUserInfo(User user) async {
@@ -115,5 +131,30 @@ class LocalDataSourceImpl extends LocalDataSource {
     var box = await authTokenBox;
     await box.clear();
     _logger.i('Token Info Data deleted');
+  }
+
+  @override
+  Future<void> updateProductSortingSet(int userId, ProductSortingSet sortingSet) async {
+    var box = await productSortingSetBox;
+    box.put(userId, sortingSet);
+    _logger.i('Product 정렬 기준 업데이트 됨}');
+  }
+
+  @override
+  Future<ProductSortingSet?> getProductSortingSet(int userId) async {
+    var box = await productSortingSetBox;
+    try {
+      return box.get(userId);
+    } catch (e) {
+      _logger.e(e);
+      return null;
+    }
+  }
+
+  @override
+  Future<void> clearProductSortingSet(int userId) async {
+    var box = await productSortingSetBox;
+    box.clear();
+    _logger.i('Product Sorting Info Data deleted');
   }
 }

@@ -1,6 +1,7 @@
 import 'package:nonoflex_alpha/conf/locator.dart';
 import 'package:nonoflex_alpha/model/data/product.dart';
 import 'package:nonoflex_alpha/model/data/record.dart';
+import 'package:nonoflex_alpha/model/source/local_data_source.dart';
 import 'package:nonoflex_alpha/model/source/remote_data_source.dart';
 
 abstract class ProductRepository {
@@ -28,13 +29,27 @@ abstract class ProductRepository {
 
   // 물품 정보 삭제
   Future<void> deleteProductData(Product producte);
+
+  // 물품 이미지 등록
+  Future<ProductImage> uploadProductImage(String filePath);
+
+  // 물품 목록 정렬 기준 조회
+  Future<ProductSortingSet?> getProductSortInfo();
+
+  // 물품 목록 정렬 기준 업데이트
+  Future<void> updateProductSortInfo(ProductSortingSet sortingSet);
+
+  // 물품 목록 정렬 기준 초기화
+  Future<void> clearProductSortInfo();
 }
 
 class ProductRepositoryImpl extends ProductRepository {
-  RemoteDataSource _remoteDataSource;
+  final RemoteDataSource _remoteDataSource;
+  final LocalDataSource _localDataSource;
 
-  ProductRepositoryImpl({RemoteDataSource? remoteDataSource})
-      : _remoteDataSource = remoteDataSource ?? locator.get<RemoteDataSource>();
+  ProductRepositoryImpl({RemoteDataSource? remoteDataSource, LocalDataSource? localDataSource})
+      : _remoteDataSource = remoteDataSource ?? locator.get<RemoteDataSource>(),
+        _localDataSource = localDataSource ?? locator.get<LocalDataSource>();
 
   @override
   Future<void> addProduct(Product product) async {
@@ -70,18 +85,46 @@ class ProductRepositoryImpl extends ProductRepository {
   }
 
   @override
-  Future<List<RecordOfProduct>> getRecordByProduct(int productId, {int? year, int? month}) async {
-    return await _remoteDataSource.getProductRecords(
-        productId: productId, year: year, month: month);
+  Future<List<RecordOfProduct>> getRecordByProduct(int productId, {int? year, int? month}) {
+    return _remoteDataSource.getProductRecords(productId: productId, year: year, month: month);
   }
 
   @override
-  Future<void> updateProductInfo(Product product) async {
-    return await _remoteDataSource.updateProduct(product: product);
+  Future<void> updateProductInfo(Product product) {
+    return _remoteDataSource.updateProduct(product: product);
   }
 
   @override
   Future<void> deleteProductData(Product product) async {
     await _remoteDataSource.deleteProduct(product.productId);
+  }
+
+  @override
+  Future<ProductImage> uploadProductImage(String filePath) {
+    return _remoteDataSource.uploadProductImage(filePath);
+  }
+
+  @override
+  Future<ProductSortingSet?> getProductSortInfo() async {
+    final userInfo = await _localDataSource.getUserInfo();
+    if (userInfo == null) return null;
+
+    return await _localDataSource.getProductSortingSet(userInfo.userCode);
+  }
+
+  @override
+  Future<void> updateProductSortInfo(ProductSortingSet sortingSet) async {
+    final userInfo = await _localDataSource.getUserInfo();
+    if (userInfo == null) return; // TODO: throw...?
+
+    await _localDataSource.updateProductSortingSet(userInfo.userCode, sortingSet);
+  }
+
+  @override
+  Future<void> clearProductSortInfo() async {
+    final userInfo = await _localDataSource.getUserInfo();
+    if (userInfo == null) return; // TODO: throw...?
+
+    await _localDataSource.clearProductSortingSet(userInfo.userCode);
   }
 }

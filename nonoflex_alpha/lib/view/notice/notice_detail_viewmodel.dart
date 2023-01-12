@@ -41,7 +41,7 @@ class NoticeDetailViewModel extends BaseController {
   }
 
   void deleteNotice() async {
-    if (!await Get.alert('정말로 삭제하시겠습니까?')) return;
+    if (!await Get.confirmDialog('정말로 삭제하시겠습니까?')) return;
 
     try {
       await _noticeRepository.deleteNotice(noticeId);

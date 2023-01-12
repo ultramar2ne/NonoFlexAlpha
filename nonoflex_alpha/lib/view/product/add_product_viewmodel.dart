@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
@@ -90,8 +88,8 @@ class AddProductViewModel extends BaseController {
           code.text = currentProduct!.productCode;
           description.text = currentProduct!.description ?? '';
           if (currentProduct!.barcode != null && currentProduct!.barcode != '') {
-            barcode.value =
-                scanner.Barcode(currentProduct!.barcode!, scanner.BarcodeFormat.aztec, null);
+            barcode.value = scanner.Barcode(currentProduct!.barcode!,
+                scanner.BarcodeTypesExtension.fromString(currentProduct!.barcodeType ?? ''), null);
           }
           category.value = currentProduct!.category;
           storageType.value = currentProduct!.storageType;
@@ -108,52 +106,96 @@ class AddProductViewModel extends BaseController {
     }
   }
 
+  void onClickedInitialImage() {
+    networkImageInfo = null;
+    imagePath.value = '';
+  }
+
   void onClickedSaveButton() async {
-    if (!await Get.alert('진짜 저장하시겠습니까?')) return;
+    if (name.text.replaceAll(' ', '') == '') {
+      Get.toast('물품 이름을 입력 해 주세요.');
+      return;
+    }
+
+    if (code.text.replaceAll(' ', '') == '') {
+      Get.toast('물품 코드를 입력 해 주세요.');
+      return;
+    }
+
+    if (category.value == ProductCategory.none) {
+      Get.toast('물품 분류를 선택 해 주세요.');
+      return;
+    }
+
+    if (storageType.value == StorageType.none) {
+      Get.toast('보관 방법을 선택 해 주세요.');
+      return;
+    }
+
+    if (standard.text.replaceAll(' ', '') == '') {
+      Get.toast('물품 규격을 입력 해 주세요.');
+      return;
+    }
+
+    final message = viewMode == ViewMode.add ? '물품을 추가하시겠습니까?' : '수정된 정보를 저장하시겠습니까?';
+    if (!await Get.confirmDialog(message)) return;
 
     // 안되는 조건
 
     try {
       if (viewMode == ViewMode.add) {
+        ProductImage? imageData;
+        if (imagePath.value != '') {
+          imageData = await _productRepository.uploadProductImage(imagePath.value);
+        }
+
         final product = Product(
           productId: 0,
           productCode: code.text,
           prdName: name.text,
-          imageData: null,
+          imageData: imageData,
           description: description.text,
           category: category.value,
           maker: maker.text,
           unit: standard.text,
           storageType: storageType.value,
           barcode: barcode.value.code,
+          barcodeType: barcode.value.format.formatName,
           stock: int.tryParse(stock.value.text) ?? 0,
-          price: int.tryParse(inputPrice.value.text),
-          marginPrice: int.tryParse(outputPrice.value.text),
+          price: double.tryParse(inputPrice.value.text),
+          marginPrice: double.tryParse(outputPrice.value.text),
           isActive: true,
         );
 
         await _productRepository.addProduct(product);
       } else {
+        ProductImage? imageData;
+        if (imagePath.value != '') {
+          imageData = await _productRepository.uploadProductImage(imagePath.value);
+        }
+
         final product = currentProduct!.copyWith(
           productCode: code.text,
           prdName: name.text,
-          imageData: null,
+          imageData: imageData,
           description: description.text,
           category: category.value,
           maker: maker.text,
           unit: standard.text,
           storageType: storageType.value,
           barcode: barcode.value.code,
-          price: int.tryParse(inputPrice.value.text),
-          marginPrice: int.tryParse(outputPrice.value.text),
-          isActive: true,
+          barcodeType: barcode.value.format.formatName,
+          price: double.tryParse(inputPrice.value.text),
+          marginPrice: double.tryParse(outputPrice.value.text),
         );
 
         await _productRepository.updateProductInfo(product);
       }
+      await Get.alertDialog('물품 정보가 추가되었습니다.');
       Get.back();
     } catch (e) {
       logger.e(e);
+      Get.alertDialog('알 수 없는 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.');
     }
   }
 }

@@ -33,7 +33,7 @@ extension BNDialog on GetInterface {
       contentPadding: EdgeInsets.zero,
       content: Container(
         width: 320,
-        height: 180,
+        height: 220,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
@@ -71,7 +71,7 @@ extension BNDialog on GetInterface {
                       child: Center(
                           child: Text(
                         'commonDialogButtonCancel'.tr,
-                        style: theme.button.copyWith(color: theme.textDark),
+                        style: theme.button.copyWith(color: theme.textDark, overflow: TextOverflow.clip),
                       )),
                     ),
                   ),

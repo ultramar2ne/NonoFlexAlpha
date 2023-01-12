@@ -26,7 +26,7 @@ abstract class DocumentRepository {
     required DateTime date,
     required DocumentType type,
     required int companyId,
-    required List<Record> recordList,
+    required List<RecordForAddDocument> recordList,
   });
 
   /// 문서 목록 조회
@@ -46,7 +46,13 @@ abstract class DocumentRepository {
   Future<DocumentDetail> getDocumentDetailInfo(int documentId);
 
   /// 문서 정보 수정
-  Future<void> updateDocumentInfo(DocumentDetail document);
+  Future<void> updateDocumentInfo({
+    required int documentId,
+    required DateTime date,
+    required DocumentType type,
+    required int companyId,
+    required List<RecordForAddDocument> recordList,
+  });
 
   /// 문서 정보 삭제
   Future<void> deleteDcoumentData(int documentId);
@@ -95,7 +101,7 @@ class DocumentRepositoryImpl extends DocumentRepository {
     required DateTime date,
     required DocumentType type,
     required int companyId,
-    required List<Record> recordList,
+    required List<RecordForAddDocument> recordList,
   }) async {
     return await _remoteDataSource.addDocument(
       date: date,
@@ -136,8 +142,20 @@ class DocumentRepositoryImpl extends DocumentRepository {
   }
 
   @override
-  Future<void> updateDocumentInfo(DocumentDetail document) {
-    return _remoteDataSource.updateDocument(document: document);
+  Future<void> updateDocumentInfo({
+    required int documentId,
+    required DateTime date,
+    required DocumentType type,
+    required int companyId,
+    required List<RecordForAddDocument> recordList,
+  }) {
+    return _remoteDataSource.updateDocument(
+      documentId: documentId,
+      date: date,
+      type: type,
+      companyId: companyId,
+      recordList: recordList,
+    );
   }
 
   @override
@@ -147,7 +165,7 @@ class DocumentRepositoryImpl extends DocumentRepository {
 
   @override
   Future<bool> requestMakeExcelDocument(int year, int month) async {
-    final result = await _remoteDataSource.makeExcelFile(year,month);
+    final result = await _remoteDataSource.makeExcelFile(year, month);
     return result == true;
   }
 }

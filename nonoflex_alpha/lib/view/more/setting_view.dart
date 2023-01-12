@@ -125,6 +125,8 @@ extension SettingViewItems on SettingView {
               child: Text(
                 title,
                 style: theme.listTitle,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
               ),
             ),
             Assets.icons.icArrowForward.image(width: 16, height: 16),

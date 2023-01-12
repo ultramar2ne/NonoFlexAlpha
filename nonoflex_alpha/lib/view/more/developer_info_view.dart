@@ -18,11 +18,11 @@ class DeveloperInfoView extends BaseGetView<DeveloperInfoViewModel> {
       children: [
         Expanded(
           child: Center(
-            child: Assets.images.logo.appIcon.image(width: 120, height: 120),
+            child: Assets.images.logo.logoTeam.image(width: 300, height: 300),
           ),
         ),
         Container(
-          width: 5,
+          width: 3,
           height: 100,
           margin: EdgeInsets.only(bottom: 50),
           decoration: BoxDecoration(
@@ -58,10 +58,20 @@ class DeveloperInfoView extends BaseGetView<DeveloperInfoViewModel> {
           const SizedBox(height: 12),
           InkWell(
             onTap: () => Clipboard.setData(const ClipboardData(text: 'cornflo3er@gmail.com')),
-              child: Text(
-            'cornflo3er@gmail.com',
-            style: theme.listBody,
-          )),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(width: 24),
+                Text(
+                  'cornflo3er@gmail.com',
+                  style: theme.listBody,
+                ),
+                const SizedBox(width: 8),
+                Assets.icons.icCopy.image(width: 16,height: 16),
+              ],
+            ),
+          ),
         ],
       ),
     );

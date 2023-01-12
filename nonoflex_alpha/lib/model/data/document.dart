@@ -33,7 +33,7 @@ class Document {
     final documentId = data['documentId'];
     final date = DateTime.parse(data['date']);
     final docType = DocumentType.getByServer(data['type']);
-    final companyName = data['companyName'];
+    final companyName = data['companyName'] ?? '알 수 없는 거래처';
     final createdAt = DateTime.parse(data['createdAt']);
     final updatedAt = DateTime.parse(data['updatedAt']);
 
@@ -74,6 +74,9 @@ class DocumentDetail extends Document {
   @override
   final String companyName;
 
+  /// 거래처 Id : companyId
+  final int companyId;
+
   /// 문서 생성 시각 : createdAt
   @override
   final DateTime createdAt;
@@ -85,11 +88,14 @@ class DocumentDetail extends Document {
   /// 문서 작성자 이름 : writer
   final String writer;
 
+  /// 문서 작성자 Id : writerId
+  final int writerId;
+
   /// 문서 record 개수 : recordCount
   final int recordCount;
 
   /// 문서 record 전체 가격 : totalPrice
-  final int totalPrice;
+  final double totalPrice;
 
   /// record 목록 : recordList
   final List<RecordOfDocument> recordList;
@@ -99,9 +105,11 @@ class DocumentDetail extends Document {
     required this.date,
     required this.docType,
     required this.companyName,
+    required this.companyId,
     required this.createdAt,
     required this.updatedAt,
     required this.writer,
+    required this.writerId,
     required this.recordCount,
     required this.totalPrice,
     required this.recordList,
@@ -114,14 +122,46 @@ class DocumentDetail extends Document {
           updatedAt: updatedAt,
         );
 
+  DocumentDetail copyWith({
+    int? documentId,
+    DateTime? date,
+    DocumentType? docType,
+    String? companyName,
+    int? companyId,
+    // createdAt,
+    // updatedAt,
+    // String? writer,
+    // int? writerId,
+    // int? recordCount,
+    // double? totalPrice,
+    List<RecordOfDocument>? recordList,
+  }) {
+    return DocumentDetail(
+      documentId: documentId ?? this.documentId,
+      date: date ?? this.date,
+      docType: docType ?? this.docType,
+      companyName: companyName ?? this.companyName,
+      companyId: companyId ?? this.companyId,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      writer: writer,
+      writerId: writerId,
+      recordCount: recordCount,
+      totalPrice: totalPrice,
+      recordList: recordList ?? this.recordList,
+    );
+  }
+
   factory DocumentDetail.fromJson(Map<String, dynamic> data) {
     final documentId = data['documentId'];
     final date = DateTime.parse(data['date']);
     final docType = DocumentType.getByServer(data['type']);
-    final companyName = data['companyName'];
+    final companyName = data['companyName'] ?? '알 수 없는 거래처';
+    final companyId = data['companyId'] ?? -1;
     final createdAt = DateTime.parse(data['createdAt']);
     final updatedAt = DateTime.parse(data['updatedAt']);
-    final writer = data['writer'];
+    final writer = data['writer'] ?? '알 수 없는 사용자';
+    final writerId = data['writerId'] ?? -1;
     final recordCount = data['recordCount'];
     final totalPrice = data['totalPrice'];
     final recordList = data['recordList'];
@@ -131,9 +171,11 @@ class DocumentDetail extends Document {
       date: date,
       docType: docType,
       companyName: companyName,
+      companyId: companyId,
       createdAt: createdAt,
       updatedAt: updatedAt,
       writer: writer,
+      writerId: writerId,
       recordCount: recordCount,
       totalPrice: totalPrice,
       recordList: recordList
@@ -200,7 +242,9 @@ class TempDocumentList {}
 /// 문서 타입
 enum DocumentType {
   input('input', 'INPUT'),
-  output('OUTPUT', 'OUTPUT');
+  output('output', 'OUTPUT'),
+  tempInput('input', 'INPUT'),
+  tempOutput('output', 'OUTPUT');
 
   const DocumentType(this.code, this.serverValue);
 
@@ -220,13 +264,29 @@ extension DocumentTypeExt on DocumentType {
         return '입고서';
       case DocumentType.output:
         return '출고서';
+      case DocumentType.tempInput:
+        return '입고 예정서';
+      case DocumentType.tempOutput:
+        return '출고 예정서';
     }
   }
 }
 
 enum DocumentListSortType {
-  type,
-  company,
-  createdAt,
-  date,
+  type('', 'type'),
+  company('', 'company'),
+  createdAt('', 'createdAt'),
+  date('', 'date');
+
+  const DocumentListSortType(this.code, this.serverValue);
+
+  final String code;
+  final String serverValue;
+
+  factory DocumentListSortType.fromServer(String serverValue) {
+    return DocumentListSortType.values.firstWhere((value) => value.serverValue == serverValue,
+        orElse: () => DocumentListSortType.createdAt);
+  }
 }
+
+extension DocumentListSortTypeExt on DocumentListSortType {}

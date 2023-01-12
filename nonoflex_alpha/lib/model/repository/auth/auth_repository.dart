@@ -66,21 +66,32 @@ class AuthRepositoryImpl extends AuthRepository {
 
     try {
       final payload = Utils.parseJwt(authToken.accessToken);
-      if (payload['userId'] != null) {
+      if (payload['userId'] != null && payload['username'] != null && payload['ROLE'] != null) {
         _config.updateTokenInfo(authToken);
         final userCode = payload['userId'];
-        final userInfo = await _remoteDataSource.getUserDetailInfo(userCode);
+        final userName = payload['username'];
+        final userType = payload['ROLE'];
+
+        final loggedInUser = User(
+          userCode: userCode,
+          id: '',
+          userName: userName,
+          userType: UserType.fromServer(userType),
+          isActive: true,
+        );
+
+        _config.updateUserInfo(loggedInUser);
 
         await _localDataSource.addTokenInfo(authToken);
-        await _localDataSource.addUserInfo(userInfo);
+        await _localDataSource.addUserInfo(loggedInUser);
 
         final authManager = locator.get<AuthManager>();
-        authManager.currentUser = userInfo;
+        authManager.currentUser = loggedInUser;
         authManager.authToken = authToken;
 
         return authToken;
       }
-      throw('');
+      throw ('');
     } catch (e) {
       rethrow;
     }

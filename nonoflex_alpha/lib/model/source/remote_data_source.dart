@@ -1,6 +1,9 @@
 import 'dart:convert' as convert;
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:nonoflex_alpha/conf/config.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
 import 'package:nonoflex_alpha/conf/manager/auth_manager.dart';
@@ -310,15 +313,16 @@ class RemoteDataSource {
         'maker': product.maker,
         'unit': product.unit,
         'stock': '${product.stock}',
-        'storageType': product.storageType.name,
+        'storageType': product.storageType.serverValue,
       });
 
       // additional value
       if (product.description != null) body['description'] = product.description!;
       if (product.barcode != null) body['barcode'] = product.barcode!;
-      if (product.price != null) body['price'] = '${product.price!}';
-      if (product.marginPrice != null) body['margin'] = '${product.marginPrice!}';
-      // if (product.fileUri != null) body['image'] = product.fileUri!;
+      if (product.barcodeType != null) body['barcodeType'] = product.barcodeType!;
+      if (product.price != null) body['inputPrice'] = '${product.price!}';
+      if (product.marginPrice != null) body['outputPrice'] = '${product.marginPrice!}';
+      if (product.imageData != null) body['imageFileId'] = '${product.imageData!.imageId}';
 
       return body;
     }
@@ -364,7 +368,7 @@ class RemoteDataSource {
       if (orderType != null) params.addAll({'order': orderType});
       if (size != null) params.addAll({'size': size.toString()});
       if (page != null) params.addAll({'page': page.toString()});
-      if (onlyActiveItem != null) params.addAll({'onlyFocusedItem': onlyActiveItem.toString()});
+      if (onlyActiveItem != null) params.addAll({'active': onlyActiveItem.toString()});
 
       return params;
     }
@@ -483,8 +487,8 @@ class RemoteDataSource {
     // Put - api/v1/product/[productId]
     final path = 'api/$version/product/${product.productId}';
 
-    Map<String, String> getBody() {
-      Map<String, String> body = {};
+    Map<String, dynamic> getBody() {
+      Map<String, dynamic> body = {};
       body.addAll({
         'productCode': product.productCode,
         'name': product.prdName,
@@ -494,14 +498,16 @@ class RemoteDataSource {
         'stock': '${product.stock}',
         'storageType': product.storageType.name,
         'active': product.isActive.toString(),
+        // 'imageField' : product.imageData?.imageId,
       });
 
       // additional value
       if (product.description != null) body['description'] = product.description!;
       if (product.barcode != null) body['barcode'] = product.barcode!;
-      if (product.price != null) body['price'] = '${product.price!}';
-      if (product.marginPrice != null) body['margin'] = '${product.marginPrice!}';
-      // if (product.imageData != null) body['image'] = P!;
+      if (product.barcodeType != null) body['barcodeType'] = product.barcodeType!;
+      if (product.price != null) body['inputPrice'] = '${product.price!}';
+      if (product.marginPrice != null) body['outputPrice'] = '${product.marginPrice!}';
+      if (product.imageData != null) body['imageFileId'] = '${product.imageData!.imageId}';
 
       return body;
     }
@@ -548,6 +554,50 @@ class RemoteDataSource {
         } else {
           return data['message'];
         }
+      } else {
+        /// error
+        throw (response.body);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// 물품 이미지 업로드
+  /// 물품 이미지를 업로드한다.
+  /// MANAGER 이상의 권한이 필요합니다.
+  /// 요청 성공 시 image 데이터를 반환받습니다.
+  Future<ProductImage> uploadProductImage(String filePath) async {
+    /// Post - api/v1/product/image
+    const path = '/api/$version/product/image';
+
+    try {
+      if (!await File(filePath).exists()) throw ('파일이 존재하지 않습니다.');
+
+      var request = http.MultipartRequest('POST', requestUrl(path));
+      // header 추가
+      request.headers.addAll({
+        'Authorization': 'Bearer ${_config.accessToken ?? ''}',
+        'Content-Type': 'multipart/form-data'
+      });
+      // Multipart image 추가
+      request.files.add(await http.MultipartFile.fromPath('imageFile', filePath));
+
+      var response = await http.Response.fromStream(await request.send());
+      if (response.statusCode == 200) {
+        final body = utf8.decode(response.bodyBytes);
+        final data = convert.jsonDecode(body);
+
+        if (data['imageId'] == null ||
+            data['originalUrl'] == null ||
+            data['thumbnailUrl'] == null) {
+          throw (data.toString());
+        }
+        return ProductImage(
+          imageId: data['imageId'],
+          imageUrl: data['originalUrl'],
+          thumbnailImageUrl: data['thumbnailUrl'],
+        );
       } else {
         /// error
         throw (response.body);
@@ -612,9 +662,11 @@ class RemoteDataSource {
     int? size, // 한 요청에서 가져올 데이터 수 (default -> 10)
     int? page, // 페이지 번호
     bool? onlyActiveItem, // 활성 거래처만 보기
+    String? type, // 거래처 종류 ( input / output)
   }) async {
     // Get - api/v1/company?[query]
-    const path = '/api/$version/company';
+    String path = '/api/$version/company';
+    if (type == 'input' || type == 'output') path = '$path/${type!}';
 
     Map<String, String> getParams() {
       Map<String, String> params = {};
@@ -623,7 +675,7 @@ class RemoteDataSource {
       if (orderType != null) params.addAll({'order': orderType});
       if (size != null) params.addAll({'size': size.toString()});
       if (page != null) params.addAll({'page': page.toString()});
-      if (onlyActiveItem != null) params.addAll({'onlyFocusedItem': onlyActiveItem.toString()});
+      if (onlyActiveItem != null) params.addAll({'active': onlyActiveItem.toString()});
 
       return params;
     }
@@ -808,15 +860,15 @@ class RemoteDataSource {
     required DateTime date,
     required DocumentType type,
     required int companyId,
-    required List<Record> recordList,
+    required List<RecordForAddDocument> recordList,
   }) async {
     // Post - api/v1/document
     const path = '/api/$version/document';
 
-    Map<String, String> getBody() {
-      Map<String, String> body = {};
+    Map<String, dynamic> getBody() {
+      Map<String, dynamic> body = {};
       body.addAll({
-        'date': date.toString(),
+        'date': DateFormat('yyyy-MM-dd').format(date).toString(),
         'type': type.serverValue,
         'companyId': companyId.toString(),
       });
@@ -825,15 +877,15 @@ class RemoteDataSource {
       recordList.forEach((el) {
         final Map<String, String> record = {};
         record.addAll({
-          'productId': el.productId.toString(),
-          'quantity': el.quantity.toString(),
-          'price': el.recordPrice.toString(),
+          'productId': el.product.productId.toString(),
+          'quantity': el.count.toString(),
+          'price': el.price.toString(),
         });
 
         recordItems.add(record);
       });
 
-      body.addAll({'recordList': recordItems.toString()});
+      body.addAll({'recordList': recordItems});
 
       return body;
     }
@@ -930,31 +982,37 @@ class RemoteDataSource {
   /// 문서에 해당하는 record의 수정, 유지, 추가, 삭제는 해당 API를 사용합니다.
   /// 해당 API를 사용하기 위해서는 권한... ?
   /// 수정 부분은 이야기가 필요해보임
-  Future<dynamic> updateDocument({required DocumentDetail document}) async {
+  Future<dynamic> updateDocument({
+    required int documentId,
+    required DateTime date,
+    required DocumentType type,
+    required int companyId,
+    required List<RecordForAddDocument> recordList,
+  }) async {
     // Put - api/v1/document/[documentId]
-    final path = 'api/$version/document/${document.documentId}';
+    final path = 'api/$version/document/$documentId';
 
-    Map<String, String> getBody() {
-      Map<String, String> body = {};
+    Map<String, dynamic> getBody() {
+      Map<String, dynamic> body = {};
       body.addAll({
-        'date': document.date.toString(),
-        'type': document.docType.serverValue,
-        'companyName': document.companyName,
+        'date': date.toString(),
+        'type': type.serverValue,
+        'companyId': '$companyId',
       });
 
       List<Map<String, String>> recordItems = [];
-      document.recordList.forEach((el) {
+      recordList.forEach((el) {
         final Map<String, String> record = {};
         record.addAll({
-          'productId': el.productId.toString(),
-          'quantity': el.quantity.toString(),
-          'price': el.recordPrice.toString(),
+          'productId': el.product.productId.toString(),
+          'quantity': el.count.toString(),
+          'price': el.price.toString(),
         });
 
         recordItems.add(record);
       });
 
-      body.addAll({'recordList': recordItems.toString()});
+      body.addAll({'recordList': recordItems});
 
       return body;
     }

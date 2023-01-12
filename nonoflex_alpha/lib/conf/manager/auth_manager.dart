@@ -1,3 +1,4 @@
+import 'package:nonoflex_alpha/cmm/utils.dart';
 import 'package:nonoflex_alpha/conf/config.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
 import 'package:nonoflex_alpha/model/data/server.dart';
@@ -27,29 +28,55 @@ class AuthManager {
   }
 
   Future<void> initAuthInfo() async {
-    // 토큰 정보
-    AuthToken? token = await _authRepository.getCurrentTokeInfo();
-    if (token != null) {
-      if (token.refreshExpiredAt.isBefore(DateTime.now())) {
-        token = await _authRepository.refreshAuthToken(refreshToken: token.refreshToken);
-        _config.updateTokenInfo(token);
-        authToken = token;
+    try {
+      // 토큰 정보
+      AuthToken? token = await _authRepository.getCurrentTokeInfo();
+      if (token != null) {
+        if (token.refreshExpiredAt.isBefore(DateTime.now())) {
+          token = await _authRepository.refreshAuthToken(refreshToken: token.refreshToken);
+          _config.updateTokenInfo(token);
+          authToken = token;
+        }
       }
-    }
 
-    // 현재 유저 정보
-    User? user = await _authRepository.getCurrentUserInfo();
-    if (user != null && _config.accessToken != null) {
-      user = await _userRepository.getUserDetailInfo(user.userCode);
-      if (user.isActive) {
-        currentUser = user;
+      // 현재 유저 정보
+      User? user = await _authRepository.getCurrentUserInfo();
+      if (user != null && _config.accessToken != null) {
+        final payload = Utils.parseJwt(_config.accessToken!);
+        if (payload['userId'] != null && payload['username'] != null && payload['ROLE'] != null) {
+          final userCode = payload['userId'];
+          final userName = payload['username'];
+          final userType = payload['ROLE'];
+
+          final loggedInUser = User(
+              userCode: userCode,
+              id: '',
+              userName: userName,
+              userType: UserType.fromServer(userType));
+          currentUser = loggedInUser;
+        }
+
+        if (user.isActive) {
+          _config.updateUserInfo(user);
+          currentUser = user;
+        }
       }
-    }
 
-    if (currentUser == null || token == null) {
+      if (currentUser == null || authToken == null) {
+        currentUser = null;
+        authToken = null;
+        await _authRepository.clearCurrentAuthInfo();
+      }
+    } catch(e){
       currentUser = null;
       authToken = null;
       await _authRepository.clearCurrentAuthInfo();
     }
+  }
+
+  Future<void> clearAuthInfo() async {
+    currentUser = null;
+    authToken = null;
+    await _authRepository.clearCurrentAuthInfo();
   }
 }

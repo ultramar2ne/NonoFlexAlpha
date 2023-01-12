@@ -1,4 +1,5 @@
 import 'package:hive_flutter/adapters.dart';
+import 'package:nonoflex_alpha/model/data/product.dart';
 import 'package:nonoflex_alpha/model/data/server.dart';
 import 'package:nonoflex_alpha/model/data/user.dart';
 
@@ -28,6 +29,21 @@ class AuthTokenAdapter extends TypeAdapter<AuthToken> {
 
   @override
   void write(BinaryWriter writer, AuthToken obj) {
+    writer.writeMap(obj.toMap());
+  }
+}
+
+class ProductSortingSetAdapter extends TypeAdapter<ProductSortingSet> {
+  @override
+  final typeId = 2;
+
+  @override
+  ProductSortingSet read(BinaryReader reader) {
+    return ProductSortingSet.fromMap(reader.readMap());
+  }
+
+  @override
+  void write(BinaryWriter writer, ProductSortingSet obj) {
     writer.writeMap(obj.toMap());
   }
 }

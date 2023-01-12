@@ -123,7 +123,7 @@ class LightTheme extends BNTheme {
   Color get textColored => const Color(0xFF1F6DE2);
 
   @override
-  Color get textColoredDark => const Color(0xFF0B005C);
+  Color get textColoredDark => const Color(0xFF0043AF);
 
   @override
   Color get textDark => const Color(0xFF2E2E2E);

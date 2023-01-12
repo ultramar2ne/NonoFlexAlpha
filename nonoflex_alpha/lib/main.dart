@@ -26,6 +26,10 @@ void main() async {
     initialBinding: BindingsBuilder(() => Get.lazyPut(() => SplashViewModel())),
     translations: Resource(),
     locale: Get.deviceLocale,
+    // supportedLocales: const [
+    //   Locale('en', 'US'),
+    //   Locale('ko', 'KR')
+    // ],
     debugShowCheckedModeBanner: false,
   ));
 }

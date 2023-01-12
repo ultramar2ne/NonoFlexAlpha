@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart' as scanner;
+import 'package:barcode_widget/barcode_widget.dart' as viewer;
 
 class Utils {
   /// Decode JWT 토큰
@@ -37,6 +39,45 @@ class Utils {
     }
 
     return payloadMap;
+  }
+
+  static viewer.Barcode? fromScanner(scanner.BarcodeFormat scannerformat) {
+    switch (scannerformat) {
+      case scanner.BarcodeFormat.aztec:
+        return viewer.Barcode.aztec();
+      case scanner.BarcodeFormat.codabar:
+        return viewer.Barcode.codabar();
+      case scanner.BarcodeFormat.code39:
+        return viewer.Barcode.code39();
+      case scanner.BarcodeFormat.code93:
+        return viewer.Barcode.code93();
+      case scanner.BarcodeFormat.code128:
+        return viewer.Barcode.code128();
+      case scanner.BarcodeFormat.dataMatrix:
+        return viewer.Barcode.dataMatrix();
+      case scanner.BarcodeFormat.ean8:
+        return viewer.Barcode.ean8();
+      case scanner.BarcodeFormat.ean13:
+        return viewer.Barcode.ean13();
+      case scanner.BarcodeFormat.itf:
+        return viewer.Barcode.itf();
+      case scanner.BarcodeFormat.pdf417:
+        return viewer.Barcode.pdf417();
+      case scanner.BarcodeFormat.qrcode:
+        return viewer.Barcode.qrCode();
+      case scanner.BarcodeFormat.upcA:
+        return viewer.Barcode.upcA();
+      case scanner.BarcodeFormat.upcE:
+        return viewer.Barcode.upcE();
+      case scanner.BarcodeFormat.upcEanExtension:
+        return viewer.Barcode.upcE();
+
+      case scanner.BarcodeFormat.maxicode:
+      case scanner.BarcodeFormat.rss14:
+      case scanner.BarcodeFormat.rssExpanded:
+      case scanner.BarcodeFormat.unknown:
+        return null;
+    }
   }
 }
 
