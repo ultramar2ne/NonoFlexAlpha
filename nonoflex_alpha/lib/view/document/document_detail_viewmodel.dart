@@ -67,26 +67,26 @@ class DocumentDetailViewModel extends BaseController {
   bool checkDocumentDeleteValidation() {
     if (documentInfo == null) return false;
 
-    final differ = documentInfo!.createdAt.difference(DateTime.now());
+    final differ = documentInfo!.date.difference(DateTime.now());
 
     if (configs.isAdminMode) {
-      return differ.inDays < 50;
+      return differ.inDays.abs() < 50;
     } else {
       if (documentInfo!.writerId != _authManager.currentUser?.userCode) return false;
-      return differ.inDays < 3;
+      return differ.inDays.abs() < 3;
     }
   }
 
   bool checkDocumentEditValidation() {
     if (documentInfo == null) return false;
 
-    final differ = documentInfo!.createdAt.difference(DateTime.now());
+    final differ = documentInfo!.date.difference(DateTime.now());
 
     if (configs.isAdminMode) {
-      return differ.inDays < 50;
+      return differ.inDays.abs() < 50;
     } else {
       if (documentInfo!.writerId != _authManager.currentUser?.userCode) return false;
-      return differ.inDays < 3;
+      return differ.inDays.abs() < 3;
     }
   }
 }

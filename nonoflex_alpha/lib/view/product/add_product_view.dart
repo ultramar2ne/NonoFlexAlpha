@@ -281,14 +281,74 @@ extension AddProductViewExt on AddProductView {
         width: 80,
         height: 80,
         child: controller.imagePath.value != ''
-            ? Image.file(
-                File(controller.imagePath.value),
-                fit: BoxFit.cover,
+            ? InkWell(
+                onTap: () => Get.dialog(
+                    Material(
+                      color: theme.base,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: InteractiveViewer(
+                              child: Image.file(
+                                File(controller.imagePath.value),
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: BNIconButton(
+                                onPressed: () => Get.back(),
+                                icon: Assets.icons.icCancelCircle
+                                    .image(width: 50, height: 50, color: theme.primary),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                        ],
+                      ),
+                    ),
+                    barrierDismissible: true),
+                child: Image.file(
+                  File(controller.imagePath.value),
+                  fit: BoxFit.cover,
+                ),
               )
             : controller.networkImageInfo != null
-                ? CachedNetworkImage(
-                    imageUrl: controller.networkImageInfo!.thumbnailImageUrl,
-                    fit: BoxFit.cover,
+                ? InkWell(
+                    onTap: () => Get.dialog(
+                        Material(
+                          color: theme.base,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: InteractiveViewer(
+                                  child: CachedNetworkImage(
+                                    imageUrl: controller.networkImageInfo!.thumbnailImageUrl,
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: BNIconButton(
+                                    onPressed: () => Get.back(),
+                                    icon: Assets.icons.icCancelCircle
+                                        .image(width: 50, height: 50, color: theme.primary),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 30),
+                            ],
+                          ),
+                        ),
+                        barrierDismissible: true),
+                    child: CachedNetworkImage(
+                      imageUrl: controller.networkImageInfo!.thumbnailImageUrl,
+                      fit: BoxFit.cover,
+                    ),
                   )
                 : ColoredBox(color: theme.secondaryDark),
       ),
@@ -315,12 +375,11 @@ extension AddProductViewExt on AddProductView {
             ),
           ),
           const SizedBox(width: 12),
-          SizedBox(
-            width: Get.width,
-            height: 42,
-            child: Row(
-              children: [
-                Expanded(
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 52,
                   child: BNColoredButton(
                     child: Text('불러오기'),
                     onPressed: () async {
@@ -332,16 +391,24 @@ extension AddProductViewExt on AddProductView {
                     },
                   ),
                 ),
+              ),
+              if (controller.imagePath.value != '') ...[
                 const SizedBox(width: 8),
-                BNTextButton(
-                  '초기화',
-                  onPressed: () async {
-                    controller.onClickedInitialImage();
-                  },
-                  textColor: theme.primaryDark,
+                SizedBox(
+                  width: 76,
+                  height: 52,
+                  child: BNTextButton(
+                    '초기화',
+                    onPressed: () async {
+                      controller.onClickedInitialImage();
+                    },
+                    textColor: theme.primaryDark,
+                    backgroundColor: Colors.transparent,
+                    effectColor: theme.primary.withOpacity(0.1),
+                  ),
                 ),
-              ],
-            ),
+              ]
+            ],
           ),
         ],
       ),

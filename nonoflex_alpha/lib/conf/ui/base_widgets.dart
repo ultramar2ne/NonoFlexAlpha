@@ -452,11 +452,9 @@ extension BaseWidget on BaseGetView {
   // 문서에 대한 입출고 기록
   Widget drawRecordOfDocumentListItem(RecordOfDocument item,
       {VoidCallback? onClicked, bool isInput = false}) {
-    final emptyImageBackground = Container(
-      width: 50,
-      height: 50,
-      color: theme.baseDark,
-    );
+    final fixString = isInput ? '+ ' : '- ';
+    final fixString2 = isInput ? '입고 후 재고' : '출고 후 재고';
+    final textColor = isInput ? theme.primary : theme.error;
 
     return TextButton(
       onPressed: onClicked,
@@ -464,24 +462,6 @@ extension BaseWidget on BaseGetView {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // image
-          ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-            child: CachedNetworkImage(
-              width: 50,
-              height: 50,
-              imageUrl: item.productInfo.imageData?.thumbnailImageUrl ?? '',
-              fit: BoxFit.cover,
-              errorWidget: (BuildContext context, String url, dynamic error) {
-                return emptyImageBackground;
-              },
-              placeholder: (BuildContext context, String url) {
-                return emptyImageBackground;
-              },
-            ),
-          ),
-          const SizedBox(width: 12),
-          // product name, more info ..?
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -494,28 +474,23 @@ extension BaseWidget on BaseGetView {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  '${isInput ? '+' : '-'} ${item.quantity}  →  ${item.stock} ${item.productInfo.unit}',
+                  '$fixString2: ${item.stock} ${item.productInfo.unit}',
                   maxLines: 1,
                   overflow: TextOverflow.visible,
                   style: theme.listBody.copyWith(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: isInput ? theme.nonoBlue : theme.error,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  '${item.recordPrice} 원',
-                  maxLines: 1,
-                  overflow: TextOverflow.visible,
-                  style: theme.listBody.copyWith(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    // color: isInput ? theme.nonoBlue : theme.error,
-                  ),
+                      fontSize: 14, fontWeight: FontWeight.w400, color: theme.secondaryDark),
                 ),
               ],
             ),
+          ),
+          const SizedBox(height: 6),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text('$fixString${item.quantity}', style: theme.listTitle.copyWith(color: textColor)),
+              const SizedBox(height: 6),
+              Text('${item.recordPrice} 원', style: theme.listTitle),
+            ],
           ),
         ],
       ),
@@ -546,7 +521,7 @@ extension BaseWidget on BaseGetView {
               children: [
                 Text(
                   item.prdName,
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.visible,
                   style: theme.listTitle,
                 ),
@@ -562,7 +537,6 @@ extension BaseWidget on BaseGetView {
               ],
             ),
           ),
-          const Spacer(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [

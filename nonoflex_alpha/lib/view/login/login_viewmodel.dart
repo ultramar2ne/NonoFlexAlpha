@@ -68,7 +68,7 @@ class LoginViewModel extends BaseController {
       if (code == null || code
           .toString()
           .length != 6) {
-        Fluttertoast.showToast(msg: '정보가 올바르지 않습니다.\n다시 확인해주세요.');
+        Get.toast('정보가 올바르지 않습니다.\n다시 확인해주세요.');
       } else {
         loginWidthCode(result.code!);
       }

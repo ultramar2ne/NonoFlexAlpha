@@ -34,13 +34,16 @@ class DeveloperInfoView extends BaseGetView<DeveloperInfoViewModel> {
           ),
         ),
         drawInfo(),
+        const SizedBox(height: 8),
+        Obx(() => Text('v${controller.version.value}',style: theme.hint,)),
+        const SizedBox(height: 20),
       ],
     );
   }
 
   Widget drawInfo() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 30, top: 12, right: 20, left: 20),
+      margin: const EdgeInsets.only(bottom: 10, top: 12, right: 20, left: 20),
       width: Get.width,
       height: 160,
       decoration: BoxDecoration(
@@ -68,7 +71,7 @@ class DeveloperInfoView extends BaseGetView<DeveloperInfoViewModel> {
                   style: theme.listBody,
                 ),
                 const SizedBox(width: 8),
-                Assets.icons.icCopy.image(width: 16,height: 16),
+                Assets.icons.icCopy.image(width: 16, height: 16),
               ],
             ),
           ),

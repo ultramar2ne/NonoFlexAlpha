@@ -102,7 +102,7 @@ extension ProductDetailViewItems on ProductDetailView {
           const SizedBox(width: 8),
           // image
           InkWell(
-            onTap: () => Get.dialog(
+            onTap: () => item.imageData != null ? Get.dialog(
                 Material(
                   color: theme.base,
                   child: Column(
@@ -110,17 +110,19 @@ extension ProductDetailViewItems on ProductDetailView {
                       Expanded(
                         child: Hero(
                           tag: item.productId,
-                          child: CachedNetworkImage(
-                            httpHeaders: {
-                              'Authorization': 'Bearer ${controller.configs.accessToken ?? ''}'
-                            },
-                            imageUrl: item.imageData?.imageUrl ?? '',
-                            errorWidget: (BuildContext context, String url, dynamic error) {
-                              return emptyImageBackground;
-                            },
-                            placeholder: (BuildContext context, String url) {
-                              return emptyImageBackground;
-                            },
+                          child: InteractiveViewer(
+                            child: CachedNetworkImage(
+                              httpHeaders: {
+                                'Authorization': 'Bearer ${controller.configs.accessToken ?? ''}'
+                              },
+                              imageUrl: item.imageData?.imageUrl ?? '',
+                              errorWidget: (BuildContext context, String url, dynamic error) {
+                                return emptyImageBackground;
+                              },
+                              placeholder: (BuildContext context, String url) {
+                                return emptyImageBackground;
+                              },
+                            ),
                           ),
                         ),
                       ),
@@ -139,7 +141,7 @@ extension ProductDetailViewItems on ProductDetailView {
                     ],
                   ),
                 ),
-                barrierDismissible: true),
+                barrierDismissible: true) : {},
             child: ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(8.0)),
               child: Hero(
@@ -272,7 +274,7 @@ extension ProductDetailViewItems on ProductDetailView {
               title,
               style: theme.normal.copyWith(fontSize: 14, fontWeight: FontWeight.w600),
               maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.visible,
             ),
           ),
           Expanded(
@@ -281,7 +283,7 @@ extension ProductDetailViewItems on ProductDetailView {
                   content,
                   style: theme.normal.copyWith(fontSize: 14),
                   maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.visible,
                 ),
           ),
         ],
@@ -291,6 +293,20 @@ extension ProductDetailViewItems on ProductDetailView {
 
   /// 물품 입출고 기록 영역
   Widget drawProductRecords(List<RecordOfProduct> recordList) {
+    List<Widget> recordListItems = [];
+    for (int i = 0; i < recordList.length; i++) {
+      final item = recordList[i];
+      recordListItems.add(
+        drawRecordOfProductListItem(
+          item,
+          onClicked: () async {
+            final documentInfo = await controller.getDocumentDetailInfo(item.documentId);
+            if (documentInfo != null) showDocumentSummaryInfo(documentInfo);
+          },
+        ),
+      );
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -313,33 +329,19 @@ extension ProductDetailViewItems on ProductDetailView {
           ),
         ),
         const SizedBox(height: 4),
-        Container(
-          height: recordList.length * 90,
-          constraints: BoxConstraints(minHeight: Get.width / 3),
-          child: recordList.isEmpty
-              ? Center(
-                  child: Text(
-                  'ProductDetailViewPlaceHolderEmptyRecords'.tr,
-                  style: theme.hint,
-                ))
-              : ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  // physics: const NeverScrollableScrollPhysics(),
-                  itemCount: recordList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final item = recordList[index];
-                    return drawRecordOfProductListItem(
-                      item,
-                      onClicked: () async {
-                        final documentInfo =
-                            await controller.getDocumentDetailInfo(item.documentId);
-                        if (documentInfo != null) showDocumentSummaryInfo(documentInfo);
-                      },
-                    );
-                  },
-                ),
+        Visibility(
+          visible: recordListItems.isEmpty,
+          child: Container(
+            height: 350,
+            alignment: Alignment.center,
+            child: Text(
+              'ProductDetailViewPlaceHolderEmptyRecords'.tr,
+              style: theme.hint,
+            ),
+          ),
         ),
-        const SizedBox(height: 4),
+        ...recordListItems,
+        const SizedBox(height: 10),
       ],
     );
   }
@@ -660,7 +662,7 @@ extension ProductDetailViewDocumentSummary on ProductDetailView {
               title,
               style: theme.normal,
               maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.visible,
             ),
           ),
           Expanded(
@@ -668,7 +670,7 @@ extension ProductDetailViewDocumentSummary on ProductDetailView {
               content,
               style: theme.normal,
               maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.visible,
             ),
           ),
         ],

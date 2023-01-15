@@ -16,13 +16,13 @@ class AddDocumentViewModel extends BaseController {
   final ProductRepository _productRepository;
   final CompanyRepository _companyRepository;
 
-  DocumentType documentType;
+  final DocumentType documentType;
 
   bool get isTemp =>
       documentType == DocumentType.tempOutput || documentType == DocumentType.tempInput;
 
   bool get isInput =>
-      documentType == DocumentType.tempInput || documentType == DocumentType.tempInput;
+      documentType == DocumentType.tempInput || documentType == DocumentType.input;
 
   bool get isEditMode => currentDocument != null;
 

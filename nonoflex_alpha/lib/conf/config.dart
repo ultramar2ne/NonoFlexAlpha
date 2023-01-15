@@ -22,10 +22,12 @@ class Configs {
   // 토큰 정보
   String? accessToken;
   String? refreshToken;
+  AuthToken? authToken;
 
   updateTokenInfo(AuthToken authToken) {
     accessToken = authToken.accessToken;
     refreshToken = authToken.refreshToken;
+    this.authToken = authToken;
   }
 
   // 유저 정보

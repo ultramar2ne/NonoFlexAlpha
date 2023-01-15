@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
+import 'package:nonoflex_alpha/cmm/ui/dialog.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
+import 'package:nonoflex_alpha/conf/manager/auth_manager.dart';
 import 'package:nonoflex_alpha/model/data/product.dart';
 import 'package:nonoflex_alpha/model/repository/product/product_repository.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ProductListViewModel extends BaseController {
   final ProductRepository _productRepository;
@@ -55,6 +58,9 @@ class ProductListViewModel extends BaseController {
 
   Future<void> getProductList() async {
     try {
+      // 토큰 정보 초기화
+      await locator<AuthManager>().refreshTokenInfo();
+
       if (pageNum == 1) productItems.clear();
       final productList = await _productRepository.getProductList(
         searchValue: searchValue.text,
@@ -97,6 +103,34 @@ extension ProductListExt on ProductListViewModel {
   void onChangedSearchValue(String value) {
     if (value == '') {
       onSearch(value);
+    }
+  }
+
+  // 바코드로 검색
+  void onSearchByBarcode() async {
+    try {
+      final result = await baseNavigator.goScannerPage();
+      if (result.runtimeType == Barcode) {
+        final code = int.tryParse((result as Barcode).code ?? '');
+        if (code == null) {
+          Get.toast('정보가 올바르지 않습니다.\n다시 확인해주세요.');
+          return;
+        }
+      } else {
+        return;
+      }
+
+      final productItem = await _productRepository.getProductDetailInfo(barcode: result.code);
+      if (productItem == null) {
+        Get.toast('물품을 찾을 수 없습니다.');
+        return;
+      }
+      await baseNavigator.goProductDetailPage(productItem);
+      initListStatus();
+      getProductList();
+    } catch (e) {
+      logger.e(e);
+      Get.toast('알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
     }
   }
 

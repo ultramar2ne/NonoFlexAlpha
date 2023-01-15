@@ -127,7 +127,7 @@ extension DocumentDetailViewItems on DocumentDetailView {
               title,
               style: theme.normal.copyWith(fontSize: 14, fontWeight: FontWeight.w600),
               maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.visible,
             ),
           ),
           Expanded(
@@ -136,7 +136,7 @@ extension DocumentDetailViewItems on DocumentDetailView {
                   content,
                   style: theme.normal.copyWith(fontSize: 14),
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.visible,
                 ),
           ),
         ],
@@ -152,37 +152,37 @@ extension DocumentDetailViewItems on DocumentDetailView {
 
     final recordList = item.recordList;
 
+    List<Widget> recordListItems = [];
+    for (int i = 0; i < recordList.length; i++) {
+      final item = recordList[i];
+      recordListItems.add(
+        drawRecordOfDocumentListItem(
+          item,
+          onClicked: () => showProductSummaryInfo(item.productInfo),
+          isInput: controller.documentInfo!.docType == DocumentType.input,
+        ),
+      );
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 8),
         Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: drawBaseLabel(label)),
         const SizedBox(height: 4),
-        Container(
-          height: recordList.length * 100,
-          constraints: BoxConstraints(minHeight: Get.width / 3),
-          child: recordList.isEmpty
-              ? Center(
-                  child: Text(
-                    'DocumentDetailViewPlaceHolderEmptyRecords'.tr,
-                    style: theme.hint,
-                  ),
-                )
-              : Expanded(
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: recordList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final item = recordList[index];
-                      return drawRecordOfDocumentListItem(
-                        item,
-                        onClicked: () => showProductSummaryInfo(item.productInfo),
-                        isInput: controller.documentInfo!.docType == DocumentType.input,
-                      );
-                    },
-                  ),
-                ),
-        )
+        Visibility(
+          visible: recordListItems.isEmpty,
+          child: Container(
+            height: 350,
+            alignment: Alignment.center,
+            child: Text(
+              'DocumentDetailViewPlaceHolderEmptyRecords'.tr,
+              style: theme.hint,
+            ),
+          ),
+        ),
+        ...recordListItems,
+        const SizedBox(height: 10),
       ],
     );
   }
@@ -284,20 +284,68 @@ extension DocumentDetailViewProductSummary on DocumentDetailView {
           ),
           const SizedBox(width: 8),
           // image
-          ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-            child: CachedNetworkImage(
-              width: 60,
-              height: 60,
-              httpHeaders: {'Authorization': 'Bearer ${Configs().accessToken ?? ''}'},
-              imageUrl: item.imageData?.thumbnailImageUrl ?? '',
-              fit: BoxFit.fill,
-              errorWidget: (BuildContext context, String url, dynamic error) {
-                return emptyImageBackground;
-              },
-              placeholder: (BuildContext context, String url) {
-                return emptyImageBackground;
-              },
+          InkWell(
+            onTap: () => item.imageData != null
+                ? Get.dialog(
+                    Material(
+                      color: theme.base,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Hero(
+                              tag: item.productId,
+                              child: InteractiveViewer(
+                                child: CachedNetworkImage(
+                                  httpHeaders: {
+                                    'Authorization':
+                                        'Bearer ${controller.configs.accessToken ?? ''}'
+                                  },
+                                  imageUrl: item.imageData?.imageUrl ?? '',
+                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                    return emptyImageBackground;
+                                  },
+                                  placeholder: (BuildContext context, String url) {
+                                    return emptyImageBackground;
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: BNIconButton(
+                                onPressed: () => Get.back(),
+                                icon: Assets.icons.icCancelCircle
+                                    .image(width: 50, height: 50, color: theme.primary),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                        ],
+                      ),
+                    ),
+                    barrierDismissible: true)
+                : {},
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+              child: Hero(
+                tag: item.productId,
+                child: CachedNetworkImage(
+                  width: 60,
+                  height: 60,
+                  httpHeaders: {'Authorization': 'Bearer ${Configs().accessToken ?? ''}'},
+                  imageUrl: item.imageData?.thumbnailImageUrl ?? '',
+                  fit: BoxFit.fill,
+                  errorWidget: (BuildContext context, String url, dynamic error) {
+                    return emptyImageBackground;
+                  },
+                  placeholder: (BuildContext context, String url) {
+                    return emptyImageBackground;
+                  },
+                ),
+              ),
             ),
           ),
         ],

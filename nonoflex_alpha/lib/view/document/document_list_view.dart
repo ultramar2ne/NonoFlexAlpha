@@ -43,24 +43,30 @@ class DocumentListView extends BaseGetView<DocumentListViewModel> {
           const SizedBox(height: 8),
           Row(
             children: [
-              const SizedBox(width: 16),
+              const SizedBox(width: 8),
               Expanded(
                 child: SizedBox(
                   height: 64,
                   child: BNTextButton(
                     '',
                     onPressed: () => controller.goAddDocument(DocumentType.input),
-                    item: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Assets.icons.icInput.image(width: 24, height: 24, color: theme.primary),
-                        const SizedBox(width: 8),
-                        Text(
-                          '입고서 작성',
-                          style: theme.button.copyWith(color: theme.textDark),
-                        ),
-                      ],
+                    item: Center(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Assets.icons.icInput.image(width: 24, height: 24, color: theme.primary),
+                          const SizedBox(width: 4),
+                          Text(
+                            '입고서 작성',
+                            style: theme.button.copyWith(color: theme.textDark),
+                            maxLines: 1,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ],
+                      ),
                     ),
+                    padding: EdgeInsets.zero,
                   ),
                 ),
               ),
@@ -71,17 +77,23 @@ class DocumentListView extends BaseGetView<DocumentListViewModel> {
                   child: BNTextButton(
                     '',
                     onPressed: () => controller.goAddDocument(DocumentType.output),
-                    item: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Assets.icons.icInput.image(width: 24, height: 24, color: theme.error),
-                        const SizedBox(width: 8),
-                        Text(
-                          '출고서 작성',
-                          style: theme.button.copyWith(color: theme.textDark),
-                        ),
-                      ],
+                    item: Center(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Assets.icons.icInput.image(width: 24, height: 24, color: theme.error),
+                          const SizedBox(width: 4),
+                          Text(
+                            '출고서 작성',
+                            style: theme.button.copyWith(color: theme.textDark),
+                            maxLines: 1,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ],
+                      ),
                     ),
+                    padding: EdgeInsets.zero,
                   ),
                 ),
               ),

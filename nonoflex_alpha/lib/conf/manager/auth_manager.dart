@@ -67,10 +67,26 @@ class AuthManager {
         authToken = null;
         await _authRepository.clearCurrentAuthInfo();
       }
-    } catch(e){
+    } catch (e) {
       currentUser = null;
       authToken = null;
       await _authRepository.clearCurrentAuthInfo();
+    }
+  }
+
+  Future<void> refreshTokenInfo() async {
+    AuthToken? token = authToken ?? await _authRepository.getCurrentTokeInfo();
+    final currentDate = DateTime.now();
+    if (token != null) {
+      if (token.accessExpiredAt.isBefore(currentDate)) return;
+      if (token.accessExpiredAt.isAfter(currentDate) &&
+          token.refreshExpiredAt.isBefore(currentDate)) {
+        token = await _authRepository.refreshAuthToken(refreshToken: token.refreshToken);
+        _config.updateTokenInfo(token);
+        authToken = token;
+      }
+    } else {
+      throw ('토큰 정보가 존재하지 않습니다.');
     }
   }
 

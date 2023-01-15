@@ -188,16 +188,24 @@ extension AddDocumentViewBottomSheetExt on AddDocumentView {
                   ),
                 ),
                 const SizedBox(height: 16),
-                BNInputBox(
-                  controller: controller.company_searchValue,
-                  onChanged: (value) {
-                    if (value == '') controller.getCompanyList();
-                  },
-                  onSubmitted: (value) {
-                    controller.getCompanyList();
-                  },
-                  showSearchButton: true,
-                  hintText: '거래처 이름을 입력 해 주세요.',
+                Row(
+                  children: [
+                    Expanded(
+                      child: BNInputBox(
+                        controller: controller.company_searchValue,
+                        onChanged: (value) {
+                          if (value == '') controller.getCompanyList();
+                        },
+                        onSubmitted: (value) {
+                          controller.getCompanyList();
+                        },
+                        showSearchButton: true,
+                        hintText: '거래처 이름을 입력 해 주세요.',
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    BNIconButton(onPressed: () => Get.back(), icon: Assets.icons.icCancel.image()),
+                  ],
                 ),
                 const SizedBox(height: 16),
                 Expanded(
@@ -248,12 +256,20 @@ extension AddDocumentViewBottomSheetExt on AddDocumentView {
                   ),
                 ),
                 const SizedBox(height: 16),
-                BNInputBox(
-                  controller: controller.company_searchValue,
-                  onChanged: (value) => controller.onChangedSearchValue(value),
-                  onSubmitted: (value) => controller.onSearchProduct(value),
-                  showSearchButton: true,
-                  hintText: '물품 이름을 입력 해 주세요.',
+                Row(
+                  children: [
+                    Expanded(
+                      child: BNInputBox(
+                        controller: controller.company_searchValue,
+                        onChanged: (value) => controller.onChangedSearchValue(value),
+                        onSubmitted: (value) => controller.onSearchProduct(value),
+                        showSearchButton: true,
+                        hintText: '물품 이름을 입력 해 주세요.',
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    BNIconButton(onPressed: () => Get.back(), icon: Assets.icons.icCancel.image()),
+                  ],
                 ),
                 const SizedBox(height: 16),
                 Expanded(

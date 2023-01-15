@@ -23,8 +23,10 @@ class RemoteDataSource {
   static const String portNum = Configs.portNum;
   static const String version = Configs.version;
 
-  Map<String, String> get header =>
-      {'Authorization': 'Bearer ${_config.accessToken ?? ''}', 'Content-Type': 'application/json'};
+  Map<String, String> get header => {
+        'Authorization': 'Bearer ${_config.accessToken ?? ''}',
+        'Content-Type': 'application/json',
+      };
 
   Uri requestUrl(String path, {Map<String, String>? params}) =>
       Uri.http('$serverAddr:$portNum', path, params);
@@ -384,7 +386,8 @@ class RemoteDataSource {
         return ProductList.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -407,7 +410,8 @@ class RemoteDataSource {
         return Product.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -430,7 +434,8 @@ class RemoteDataSource {
         return Product.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -472,7 +477,8 @@ class RemoteDataSource {
             .toList();
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -524,7 +530,8 @@ class RemoteDataSource {
         return Product.fromJson(data);
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -556,7 +563,8 @@ class RemoteDataSource {
         }
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;
@@ -600,7 +608,8 @@ class RemoteDataSource {
         );
       } else {
         /// error
-        throw (response.body);
+        final body = utf8.decode(response.bodyBytes);
+        throw (body);
       }
     } catch (e) {
       rethrow;

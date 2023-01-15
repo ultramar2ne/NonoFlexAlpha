@@ -55,6 +55,7 @@ class BNTextButton extends ElevatedButton {
     Color? effectColor,
     Color? backgroundColor,
     double? elevation,
+    EdgeInsets? padding,
   }) : super(
           key: key,
           onPressed: onDisable ? null : onPressed,
@@ -89,7 +90,7 @@ class BNTextButton extends ElevatedButton {
             ),
             elevation: MaterialStateProperty.all<double>(elevation ?? 0),
             padding: MaterialStateProperty.all<EdgeInsets>(
-              const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                padding ?? const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             ),
             shape: MaterialStateProperty.all<OutlinedBorder>(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

@@ -74,7 +74,7 @@ class CompanyListViewModel extends BaseController {
 
   Future<void> deleteCompnayInfo(Company compnay) async {
     if (!await Get.confirmDialog(
-        '정말로 삭제하시겠습니까? \n삭제된 데이터는 복구할 수 없습니다. \n영구적인 삭제를 원하지 않으신다면 비활성화를 추천드립니다.')) {
+        '정말로 삭제하시겠습니까? \n삭제된 데이터는 복구할 수 없습니다.')) {
       return;
     }
 

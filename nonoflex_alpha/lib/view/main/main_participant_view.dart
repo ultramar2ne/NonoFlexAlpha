@@ -290,7 +290,7 @@ class MainForParticView extends BaseGetView<MainForParticViewModel> {
                 Text(
                   user.userName,
                   style: theme.listTitle,
-                  overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.visible,
                 ),
                 Text(
                   user.id,
@@ -298,7 +298,7 @@ class MainForParticView extends BaseGetView<MainForParticViewModel> {
                     color: theme.textHint,
                     fontSize: 12,
                   ),
-                  overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.visible,
                 ),
               ],
             ),

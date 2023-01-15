@@ -49,20 +49,31 @@ class ProductListView extends BaseGetView<ProductListViewModel> {
           return AnimatedContainer(
             duration: const Duration(seconds: 1),
             curve: Curves.fastLinearToSlowEaseIn,
-            height: controller.searchVarVisible.value ? 80 : 0,
+            height: controller.searchVarVisible.value ? 160 : 0,
             alignment: Alignment.center,
+            padding: const EdgeInsets.all(16),
             child: AnimatedOpacity(
               opacity: controller.searchVarVisible.value ? 1 : 0,
               duration: const Duration(milliseconds: 500),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
-                child: BNInputBox(
-                  controller: controller.searchValue,
-                  onChanged: (value) => controller.onChangedSearchValue(value),
-                  onSubmitted: (value) => controller.onSearch(value),
-                  showSearchButton: true,
-                  hintText: '물품 이름을 입력 해 주세요.',
-                ),
+              child: Column(
+                children: [
+                  BNInputBox(
+                    controller: controller.searchValue,
+                    onChanged: (value) => controller.onChangedSearchValue(value),
+                    onSubmitted: (value) => controller.onSearch(value),
+                    showSearchButton: true,
+                    hintText: '물품 이름을 입력 해 주세요.',
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: Get.width,
+                    height: 52,
+                    child: BNColoredButton(
+                      onPressed: () => controller.onSearchByBarcode(),
+                      child: Text('바코드로 검색'),
+                    ),
+                  )
+                ],
               ),
             ),
           );

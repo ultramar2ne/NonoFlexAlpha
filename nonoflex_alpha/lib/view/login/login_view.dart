@@ -19,24 +19,25 @@ class LoginView extends BaseGetView<LoginViewModel> {
         initialIndex: 0,
         length: 2,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Wrap(
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'LoginViewTitle'.tr,
                   style: theme.title,
                 ),
-                // Assets.images.logo.appIcon.image(width: 100),
+                const SizedBox(width: 50),
                 Container(
                   decoration: BoxDecoration(
                     color: ColorName.base,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: TabBar(
-                    labelPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                    labelPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     isScrollable: true,
                     indicatorColor: ColorName.primary,
                     indicator: BoxDecoration(
@@ -62,7 +63,6 @@ class LoginView extends BaseGetView<LoginViewModel> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -138,7 +138,7 @@ extension LoginViewExtForAdminMode on LoginView {
             ),
             const SizedBox(height: 60),
             Container(
-              height: 52,
+              height: 60,
               width: double.infinity,
               constraints: const BoxConstraints(maxWidth: 500),
               child: BNColoredButton(
@@ -189,7 +189,7 @@ extension LoginViewExtForParticMode on LoginView {
             const SizedBox(height: 50),
             SizedBox(
               width: double.infinity,
-              height: 52,
+              height: 60,
               child: BNOutlinedButton(
                 onPressed: () => controller.scanUserCode(),
                 child: Text('LoginViewButtonLoginUseBarcode'.tr,
@@ -198,7 +198,7 @@ extension LoginViewExtForParticMode on LoginView {
             ),
             const SizedBox(height: 10),
             Container(
-              height: 52,
+              height: 60,
               width: double.infinity,
               constraints: const BoxConstraints(maxWidth: 500),
               child: BNColoredButton(

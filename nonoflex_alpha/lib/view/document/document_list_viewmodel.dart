@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
+import 'package:nonoflex_alpha/conf/manager/auth_manager.dart';
 import 'package:nonoflex_alpha/model/data/document.dart';
 import 'package:nonoflex_alpha/model/repository/document/document_repository.dart';
 
@@ -47,6 +48,9 @@ class DocumentListViewModel extends BaseController {
 
   Future<void> getDocumentList({bool getAll = false}) async {
     try {
+      // 토큰 정보 초기화
+      await locator<AuthManager>().refreshTokenInfo();
+
       if (pageNum == 1) documentItems.clear();
       final documentList = await _documentRepository.getDocumentList(
         searchValue: searchValue,
