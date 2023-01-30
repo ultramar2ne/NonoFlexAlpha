@@ -10,75 +10,75 @@ import 'package:get/get.dart';
 class LoginView extends BaseGetView<LoginViewModel> {
   @override
   Widget drawBody() {
-    return Container(
-      width: double.infinity,
-      alignment: Alignment.center,
-      constraints: const BoxConstraints(maxWidth: 500, maxHeight: 800),
-      margin: const EdgeInsets.only(left: 20, right: 20, top: 50),
-      child: DefaultTabController(
-        initialIndex: 0,
-        length: 2,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Wrap(
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'LoginViewTitle'.tr,
-                  style: theme.title,
-                ),
-                const SizedBox(width: 50),
-                Container(
+    return Center(
+      child: Container(
+        width: double.infinity,
+        alignment: Alignment.center,
+        constraints: const BoxConstraints(maxWidth: 500, maxHeight: 800),
+        margin: const EdgeInsets.only(left: 20, right: 20, top: 50),
+        child: DefaultTabController(
+          initialIndex: 0,
+          length: 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'LoginViewTitle'.tr,
+                    style: theme.title,
+                    textScaleFactor: 1.0,
+                  ),
+                  const SizedBox(width: 50),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: ColorName.base,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: TabBar(
+                      labelPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      isScrollable: true,
+                      indicatorColor: ColorName.primary,
+                      indicator: BoxDecoration(
+                        color: theme.baseDark,
+                        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                      ),
+                      tabs: <Widget>[
+                        Text(
+                          'LoginViewLabelParticMode'.tr,
+                          style: theme.normal.copyWith(color: theme.primary),
+                          textScaleFactor: 1.0,
+                        ),
+                        Text(
+                          'LoginViewLabelAdminMode'.tr,
+                          style: theme.normal.copyWith(color: theme.primary),
+                          textScaleFactor: 1.0,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Container(
                   decoration: BoxDecoration(
                     color: ColorName.base,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  child: TabBar(
-                    labelPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                    isScrollable: true,
-                    indicatorColor: ColorName.primary,
-                    indicator: BoxDecoration(
-                      color: theme.baseDark,
-                      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                    ),
-                    tabs: <Widget>[
-                      Expanded(
-                        child: Text(
-                          'LoginViewLabelParticMode'.tr,
-                          style: theme.normal.copyWith(color: theme.primary),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          'LoginViewLabelAdminMode'.tr,
-                          style: theme.normal.copyWith(color: theme.primary),
-                        ),
-                      ),
+                  child: TabBarView(
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      Tab(child: drawParticLoginBody()),
+                      Tab(child: drawAdminLoginBody()),
                     ],
                   ),
                 ),
-              ],
-            ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: ColorName.base,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: TabBarView(
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    Tab(child: drawParticLoginBody()),
-                    Tab(child: drawAdminLoginBody()),
-                  ],
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

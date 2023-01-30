@@ -48,18 +48,15 @@ class CompanyListView extends BaseGetView<CompanyListViewModel> {
                 borderRadius: const BorderRadius.all(Radius.circular(8.0)),
               ),
               tabs: <Widget>[
-                Expanded(
-                  child: Text(
-                    '입고처',
-                    style: theme.button.copyWith(color: theme.primary),
-                  ),
+                Text(
+                  '입고처',
+                  style: theme.button.copyWith(color: theme.primary),
+                  textScaleFactor: 1.0,
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    '출고처',
-                    style: theme.button.copyWith(color: theme.error),
-                  ),
+                Text(
+                  '출고처',
+                  style: theme.button.copyWith(color: theme.error),
+                  textScaleFactor: 1.0,
                 ),
               ],
             ),
