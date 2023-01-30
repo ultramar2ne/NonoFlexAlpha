@@ -102,46 +102,49 @@ extension ProductDetailViewItems on ProductDetailView {
           const SizedBox(width: 8),
           // image
           InkWell(
-            onTap: () => item.imageData != null ? Get.dialog(
-                Material(
-                  color: theme.base,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Hero(
-                          tag: item.productId,
-                          child: InteractiveViewer(
-                            child: CachedNetworkImage(
-                              httpHeaders: {
-                                'Authorization': 'Bearer ${controller.configs.accessToken ?? ''}'
-                              },
-                              imageUrl: item.imageData?.imageUrl ?? '',
-                              errorWidget: (BuildContext context, String url, dynamic error) {
-                                return emptyImageBackground;
-                              },
-                              placeholder: (BuildContext context, String url) {
-                                return emptyImageBackground;
-                              },
+            onTap: () => item.imageData != null
+                ? Get.dialog(
+                    Material(
+                      color: theme.base,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Hero(
+                              tag: item.productId,
+                              child: InteractiveViewer(
+                                child: CachedNetworkImage(
+                                  httpHeaders: {
+                                    'Authorization':
+                                        'Bearer ${controller.configs.accessToken ?? ''}'
+                                  },
+                                  imageUrl: item.imageData?.imageUrl ?? '',
+                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                    return emptyImageBackground;
+                                  },
+                                  placeholder: (BuildContext context, String url) {
+                                    return emptyImageBackground;
+                                  },
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Center(
-                        child: SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: BNIconButton(
-                            onPressed: () => Get.back(),
-                            icon: Assets.icons.icCancelCircle
-                                .image(width: 50, height: 50, color: theme.primary),
+                          Center(
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: BNIconButton(
+                                onPressed: () => Get.back(),
+                                icon: Assets.icons.icCancelCircle
+                                    .image(width: 50, height: 50, color: theme.primary),
+                              ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: 30),
+                        ],
                       ),
-                      const SizedBox(height: 30),
-                    ],
-                  ),
-                ),
-                barrierDismissible: true) : {},
+                    ),
+                    barrierDismissible: true)
+                : {},
             child: ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(8.0)),
               child: Hero(
@@ -176,8 +179,14 @@ extension ProductDetailViewItems on ProductDetailView {
           drawBaseLabel('ProductDetailViewLabelInfo'.tr,
               item1: controller.configs.isAdminMode
                   ? BNIconButton(
+                      onPressed: () => controller.deleteProductInfo(),
+                      icon: Assets.icons.icDelete.image(width: 24, height: 24),
+                    )
+                  : null,
+              item2: controller.configs.isAdminMode
+                  ? BNIconButton(
                       onPressed: () => showProductSetting(item),
-                      icon: Assets.icons.icNaviSetting.image(width: 16, height: 16),
+                      icon: Assets.icons.icNaviSetting.image(width: 20, height: 20),
                     )
                   : null),
           const SizedBox(height: 8),

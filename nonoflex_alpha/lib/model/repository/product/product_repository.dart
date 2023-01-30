@@ -28,7 +28,7 @@ abstract class ProductRepository {
   Future<void> updateProductInfo(Product product);
 
   // 물품 정보 삭제
-  Future<void> deleteProductData(Product producte);
+  Future<void> deleteProductData(int productId);
 
   // 물품 이미지 등록
   Future<ProductImage> uploadProductImage(String filePath);
@@ -95,8 +95,8 @@ class ProductRepositoryImpl extends ProductRepository {
   }
 
   @override
-  Future<void> deleteProductData(Product product) async {
-    await _remoteDataSource.deleteProduct(product.productId);
+  Future<void> deleteProductData(int productId) async {
+    await _remoteDataSource.deleteProduct(productId);
   }
 
   @override

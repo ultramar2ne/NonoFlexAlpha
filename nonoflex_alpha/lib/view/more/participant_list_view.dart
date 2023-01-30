@@ -394,7 +394,7 @@ extension UserSummary on ParticipantListView {
             padding: const EdgeInsets.symmetric(vertical: 12),
             margin: const EdgeInsets.all(12),
             child: controller.userLoginCode.value == ''
-                ? const Expanded(child: CircularProgressIndicator())
+                ? const CircularProgressIndicator()
                 : BarcodeWidget(
                     data: controller.userLoginCode.value,
                     barcode: Barcode.qrCode(),

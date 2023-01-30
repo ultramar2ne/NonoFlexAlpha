@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:nonoflex_alpha/cmm/base.dart';
+import 'package:nonoflex_alpha/cmm/ui/dialog.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
 import 'package:nonoflex_alpha/model/data/document.dart';
 import 'package:nonoflex_alpha/model/data/product.dart';
@@ -105,6 +106,23 @@ class ProductDetailViewModel extends BaseController {
   // 문서 상세 페이지로 이동
   Future<void> goDocumentDetailPage(int documentId) async {
     await baseNavigator.goDocumentDetailPage(documentId);
+  }
+
+  void deleteProductInfo() async {
+    const alertTitle = '경고';
+    const alertMessage = '삭제된 정보는 복구할 수 없습니다.\n정말 삭제하시겠습니까?\n';
+
+    if (!await Get.confirmDialog(alertMessage, title: alertTitle)) return;
+
+    try {
+      await _productRepository.deleteProductData(productId);
+      await Get.alertDialog('물품 정보가 삭제되었습니다.');
+      Get.back();
+    } catch (e) {
+      logger.e(e);
+      Get.toast('알 수 없는 오류가 발생했습니다.');
+      Get.back();
+    }
   }
 }
 

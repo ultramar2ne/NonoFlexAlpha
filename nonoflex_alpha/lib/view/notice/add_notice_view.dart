@@ -75,17 +75,15 @@ class AddNoticeView extends BaseGetView<AddNoticeViewModel> {
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        child: Expanded(
-          child: controller.viewMode == ViewMode.add
-              ? BNColoredButton(
-                  child: Text('AddNoticeViewButtonAddNotice'.tr),
-                  onPressed: () => controller.submit(),
-                )
-              : BNColoredButton(
-                  child: Text('AddNoticeViewButtonEditNotice'.tr),
-                  onPressed: () => controller.submit(),
-                ),
-        ),
+        child: controller.viewMode == ViewMode.add
+            ? BNColoredButton(
+                child: Text('AddNoticeViewButtonAddNotice'.tr),
+                onPressed: () => controller.submit(),
+              )
+            : BNColoredButton(
+                child: Text('AddNoticeViewButtonEditNotice'.tr),
+                onPressed: () => controller.submit(),
+              ),
       ),
     );
   }

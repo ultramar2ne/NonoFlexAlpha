@@ -63,7 +63,7 @@ class NonoNavigatorManager {
     const path = '/';
 
     return await Get.off(
-      SplashView(),
+      () => SplashView(),
       routeName: path,
       transition: Transition.fade,
       binding: BindingsBuilder(() => Get.lazyPut(() => SplashViewModel())),
@@ -76,7 +76,7 @@ class NonoNavigatorManager {
     const path = '/login';
 
     return await Get.off(
-      LoginView(),
+      () => LoginView(),
       routeName: path,
       transition: Transition.fade,
       binding: BindingsBuilder(() => Get.lazyPut(() => LoginViewModel())),
@@ -89,7 +89,7 @@ class NonoNavigatorManager {
     const path = '/main';
 
     return await Get.off(
-      MainForParticView(),
+      () => MainForParticView(),
       routeName: path,
       transition: Transition.fade,
       binding: BindingsBuilder(() => Get.lazyPut(() => MainForParticViewModel())),
@@ -100,7 +100,7 @@ class NonoNavigatorManager {
     const path = '/admin/main';
 
     return await Get.off(
-      MainForAdminView(),
+      () => MainForAdminView(),
       routeName: path,
       transition: Transition.fade,
       binding: BindingsBuilder(() => Get.lazyPut(() => MainForAdminViewModel())),
@@ -111,7 +111,7 @@ class NonoNavigatorManager {
     const path = '/home';
 
     return await Get.off(
-      AdminHomeView(),
+      () => AdminHomeView(),
       routeName: path,
       transition: Transition.fade,
       binding: BindingsBuilder(() => Get.lazyPut(() => AdminHomeViewModel())),
@@ -124,7 +124,7 @@ class NonoNavigatorManager {
 
     if (!isNested) {
       return Get.to(
-        ProductListView(),
+        () => ProductListView(),
         routeName: path,
         transition: Transition.downToUp,
         binding: BindingsBuilder(() => Get.lazyPut(() => ProductListViewModel())),
@@ -132,7 +132,7 @@ class NonoNavigatorManager {
     }
 
     return await Get.off(
-      ProductListView(),
+      () => ProductListView(),
       routeName: path,
       transition: Transition.fade,
       binding: BindingsBuilder(() => Get.lazyPut(() => ProductListViewModel())),
@@ -145,7 +145,7 @@ class NonoNavigatorManager {
 
     if (!isNested) {
       return Get.to(
-        DocumentListView(),
+        () => DocumentListView(),
         routeName: path,
         transition: Transition.downToUp,
         binding: BindingsBuilder(() => Get.lazyPut(() => DocumentListViewModel())),
@@ -153,7 +153,7 @@ class NonoNavigatorManager {
     }
 
     return await Get.off(
-      DocumentListView(),
+      () => DocumentListView(),
       routeName: path,
       transition: Transition.fade,
       binding: BindingsBuilder(() => Get.lazyPut(() => DocumentListViewModel())),
@@ -165,7 +165,7 @@ class NonoNavigatorManager {
     const path = '/setting';
 
     return await Get.off(
-      SettingView(),
+      () => SettingView(),
       routeName: path,
       transition: Transition.fade,
       binding: BindingsBuilder(() => Get.lazyPut(() => SettingViewModel())),
@@ -178,7 +178,7 @@ class NonoNavigatorManager {
     const path = '/notice';
 
     return await Get.to(
-      NoticeListView(),
+      () => NoticeListView(),
       routeName: path,
       transition: Transition.downToUp,
       binding: BindingsBuilder(() => Get.lazyPut(() => NoticeListViewModel())),
@@ -190,7 +190,7 @@ class NonoNavigatorManager {
     const path = '/notice/add';
 
     return await Get.to(
-      AddNoticeView(),
+      () => AddNoticeView(),
       routeName: path,
       transition: Transition.downToUp,
       binding: BindingsBuilder(() => Get.lazyPut(() => AddNoticeViewModel())),
@@ -202,7 +202,7 @@ class NonoNavigatorManager {
     const path = '/notice/edit';
 
     return await Get.to(
-      AddNoticeView(),
+      () => AddNoticeView(),
       routeName: path,
       transition: Transition.downToUp,
       binding: BindingsBuilder(() => Get.lazyPut(() => AddNoticeViewModel(noticeId: noticeId))),
@@ -214,7 +214,7 @@ class NonoNavigatorManager {
     const path = '/notice/detail';
 
     return await Get.to(
-      NoticeDetailView(),
+      () => NoticeDetailView(),
       routeName: path,
       arguments: {'noticeId': noticeItem.noticeId.toString()},
       transition: Transition.downToUp,
@@ -229,7 +229,7 @@ class NonoNavigatorManager {
     const path = '/product/detail';
 
     return await Get.to(
-      ProductDetailView(),
+      () => ProductDetailView(),
       routeName: path,
       transition: Transition.downToUp,
       arguments: {'productId': product.productId.toString()},
@@ -243,7 +243,7 @@ class NonoNavigatorManager {
     const path = '/product/add';
 
     return await Get.to(
-      AddProductView(),
+      () => AddProductView(),
       routeName: path,
       transition: Transition.downToUp,
       binding: BindingsBuilder(() => Get.lazyPut(() => AddProductViewModel())),
@@ -255,7 +255,7 @@ class NonoNavigatorManager {
     const path = '/product/edit';
 
     return await Get.to(
-      AddProductView(),
+      () => AddProductView(),
       routeName: path,
       transition: Transition.downToUp,
       binding: BindingsBuilder(() => Get.lazyPut(() => AddProductViewModel(productId: productId))),
@@ -268,7 +268,7 @@ class NonoNavigatorManager {
     const path = '/document/detail';
 
     return await Get.to(
-      DocumentDetailView(),
+      () => DocumentDetailView(),
       routeName: path,
       transition: Transition.downToUp,
       binding:
@@ -281,7 +281,7 @@ class NonoNavigatorManager {
     const path = '/document/add';
 
     return await Get.to(
-      AddDocumentView(),
+      () => AddDocumentView(),
       routeName: path,
       transition: Transition.downToUp,
       binding: BindingsBuilder(
@@ -294,7 +294,7 @@ class NonoNavigatorManager {
     const path = '/document/edit';
 
     return await Get.to(
-      AddDocumentView(),
+      () => AddDocumentView(),
       routeName: path,
       transition: Transition.downToUp,
       // arguments: {'productId': product.productId.toString()},
@@ -309,7 +309,7 @@ class NonoNavigatorManager {
     const path = '/products/barcode';
 
     return await Get.to(
-      BarcodeSettingView(),
+      () => BarcodeSettingView(),
       routeName: path,
       transition: Transition.downToUp,
       // arguments: {'productId': product.productId.toString()},
@@ -322,7 +322,7 @@ class NonoNavigatorManager {
     const path = '/company';
 
     return await Get.to(
-      CompanyListView(),
+      () => CompanyListView(),
       routeName: path,
       transition: Transition.downToUp,
       // arguments: {'productId': product.productId.toString()},
@@ -335,7 +335,7 @@ class NonoNavigatorManager {
     const path = '/user';
 
     return await Get.to(
-      UserListView(),
+      () => UserListView(),
       routeName: path,
       transition: Transition.downToUp,
       // arguments: {'productId': product.productId.toString()},
@@ -348,7 +348,7 @@ class NonoNavigatorManager {
     const path = '/user/participant';
 
     return await Get.to(
-      ParticipantListView(),
+      () => ParticipantListView(),
       routeName: path,
       transition: Transition.downToUp,
       // arguments: {'productId': product.productId.toString()},
@@ -361,7 +361,7 @@ class NonoNavigatorManager {
     const path = '/developer';
 
     return await Get.to(
-      DeveloperInfoView(),
+      () => DeveloperInfoView(),
       routeName: path,
       transition: Transition.downToUp,
       binding: BindingsBuilder(() => Get.lazyPut(() => DeveloperInfoViewModel())),
@@ -374,7 +374,7 @@ class NonoNavigatorManager {
     const path = '/app/scanner';
 
     return await Get.to(
-      ScannerView(),
+      () => ScannerView(),
       routeName: path,
       transition: Transition.downToUp,
       binding: BindingsBuilder(() => Get.lazyPut(() => ScannerViewModel())),
@@ -386,7 +386,7 @@ class NonoNavigatorManager {
     const path = '/app/excel';
 
     return await Get.to(
-      MakeExcelView(),
+      () => MakeExcelView(),
       routeName: path,
       transition: Transition.downToUp,
       binding: BindingsBuilder(() => Get.lazyPut(() => MakeExcelViewModel())),
