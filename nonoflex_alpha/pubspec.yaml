@@ -2,7 +2,7 @@ name: nonoflex_alpha
 description: 노노유통의 재고관리 시스템
 
 # 버전 정보
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ">=2.18.2 <3.0.0"
