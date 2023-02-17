@@ -21,7 +21,7 @@ class RemoteDataSource {
   final Configs _config;
 
   static const String serverAddr = Configs.serverAddress;
-  static const String portNum = Configs.portNum;
+  // static const String portNum = Configs.portNum;
   static const String version = Configs.version;
 
   Map<String, String> get header => {
@@ -30,7 +30,7 @@ class RemoteDataSource {
       };
 
   Uri requestUrl(String path, {Map<String, String>? params}) =>
-      Uri.http('$serverAddr:$portNum', path, params);
+      Uri.https(serverAddr, path, params);
 
   final client = http.Client();
 
