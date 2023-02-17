@@ -123,7 +123,7 @@ class Resource extends Translations {
           // Product Detail
           'ProductDetailViewTitle' : '상세 정보',
           'ProductDetailViewLabelInfo' : '물품 정보',
-          'ProductDetailViewLabelPrdName' : '상품명',
+          'ProductDetailViewLabelPrdName' : '물품명',
           'ProductDetailViewLabelBarcode' : '바코드',
           'ProductDetailViewLabelPrdCode' : '물품 코드',
           'ProductDetailViewLabelCategory' : '물품 분류',

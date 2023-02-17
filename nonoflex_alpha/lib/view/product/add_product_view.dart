@@ -53,6 +53,8 @@ class AddProductView extends BaseGetView<AddProductViewModel> {
                 errorMessage: controller.nameErrorMessage.value != ''
                     ? controller.nameErrorMessage.value
                     : null,
+                maxLength: 20,
+                maxLines: 1,
               ),
 
               // 물품 설명
@@ -67,8 +69,8 @@ class AddProductView extends BaseGetView<AddProductViewModel> {
                     ? controller.descriptionErrorMessage.value
                     : null,
                 maxLines: 3,
+                maxLength: 250,
               ),
-
               // 물품 코드
               const SizedBox(height: 16),
               drawBaseActionLabel('AddProductViewLabelCode'.tr, isRequired: true),
@@ -80,6 +82,8 @@ class AddProductView extends BaseGetView<AddProductViewModel> {
                 errorMessage: controller.codeErrorMessage.value != ''
                     ? controller.codeErrorMessage.value
                     : null,
+                maxLines: 1,
+                maxLength: 20,
               ),
 
               // 물품 바코드
@@ -161,6 +165,8 @@ class AddProductView extends BaseGetView<AddProductViewModel> {
                 errorMessage: controller.standardErrorMessage.value != ''
                     ? controller.standardErrorMessage.value
                     : null,
+                maxLength: 5,
+                maxLines: 1,
               ),
 
               // 제조사
@@ -174,6 +180,8 @@ class AddProductView extends BaseGetView<AddProductViewModel> {
                 errorMessage: controller.makerErrorMessage.value != ''
                     ? controller.makerErrorMessage.value
                     : null,
+                maxLength: 20,
+                maxLines: 1,
               ),
 
               // 재고
