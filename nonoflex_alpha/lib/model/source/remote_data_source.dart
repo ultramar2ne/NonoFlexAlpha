@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:nonoflex_alpha/conf/config.dart';
 import 'package:nonoflex_alpha/conf/locator.dart';
 import 'package:nonoflex_alpha/conf/manager/auth_manager.dart';
@@ -50,6 +51,8 @@ class RemoteDataSource {
     }
 
     try {
+      Logger logger = Logger();
+      logger.i('deleteProduct: ${requestUrl(path)}');
       final response = await client.post(
         requestUrl(path),
         headers: {'Content-Type': 'application/json'},
@@ -549,6 +552,8 @@ class RemoteDataSource {
     final path = '/api/$version/product/$productId';
 
     try {
+      Logger logger = Logger();
+      logger.i('deleteProduct: ${requestUrl(path)}');
       var response = await client.delete(
         requestUrl(path),
         headers: header,

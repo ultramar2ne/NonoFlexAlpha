@@ -193,114 +193,120 @@ extension CompanyListViewExt on CompanyListView {
     isSelected.value.insert(isActive ? 0 : 1, true);
 
     return Get.bottomSheet(
-      Container(
-        decoration: BoxDecoration(
-          color: theme.base,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(12.0), topRight: Radius.circular(12.0)),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
-                    child: bottomSheetHandle,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                drawBaseLabel('거래처 이름'),
-                const SizedBox(height: 8),
-                BNInputBox(
-                  controller: nameController,
-                  onChanged: (value) {},
-                ),
-                const SizedBox(height: 12),
-                drawBaseLabel('설명'),
-                const SizedBox(height: 8),
-                BNInputBox(
-                  controller: descController,
-                  onChanged: (value) {},
-                ),
-                const SizedBox(height: 20),
-                drawBaseLabel('사용자 활성 상태'),
-                const SizedBox(height: 8),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Obx(
-                    () => ToggleButtons(
-                      isSelected: isSelected.value,
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderColor: theme.primary,
-                      borderWidth: 2,
-                      selectedBorderColor: theme.primary,
-                      selectedColor: theme.base,
-                      disabledColor: theme.secondary,
-                      fillColor: theme.primary,
-                      onPressed: (index) {
-                        if (index == 0) {
-                          isSelected.value = [true, false];
-                        } else {
-                          isSelected.value = [false, true];
-                        }
-                      },
-                      children: [
-                        Container(
-                          width: 100,
-                          height: 42,
-                          alignment: Alignment.center,
-                          // color: isSelected[0] ? theme.primary : theme.secondary,
-                          child: Text(
-                            '활성화',
-                            style: isSelected[0]
-                                ? theme.listBody.copyWith(color: theme.textLight)
-                                : theme.listBody.copyWith(color: theme.textColored),
-                          ),
-                        ),
-                        Container(
-                          width: 100,
-                          height: 42,
-                          alignment: Alignment.center,
-                          // color: isSelected[1] ? theme.primary : theme.secondary,
-                          child: Text(
-                            '비활성화',
-                            style: isSelected[1]
-                                ? theme.listBody.copyWith(color: theme.textLight)
-                                : theme.listBody.copyWith(color: theme.textColored),
-                          ),
-                        ),
-                      ],
+      SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+            color: theme.base,
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12.0), topRight: Radius.circular(12.0)),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: bottomSheetHandle,
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  height: 60,
-                  width: Get.width,
-                  // margin: const EdgeInsets.all(12),
-                  child: BNColoredButton(
-                    child: const Text('수정하기'),
-                    onPressed: () {
-                      if (nameController.text.isEmpty) {
-                        Get.toast('거래처 이름을 입력 해 주세요.');
-                        return;
-                      }
-                      final updatedCompany = company.copyWith(
-                        name: nameController.text,
-                        description: descController.text != '' ? descController.text : null,
-                        isActive: isSelected[0],
-                      );
-                      controller.updateCompanyInfo(updatedCompany);
-                      Get.back();
-                    },
+                  const SizedBox(height: 12),
+                  drawBaseLabel('거래처 이름'),
+                  const SizedBox(height: 8),
+                  BNInputBox(
+                    controller: nameController,
+                    onChanged: (value) {},
+                    maxLength: 30,
+                    maxLines: 1,
                   ),
-                ),
-                const SizedBox(height: 12),
-              ],
+                  const SizedBox(height: 12),
+                  drawBaseLabel('설명'),
+                  const SizedBox(height: 8),
+                  BNInputBox(
+                    controller: descController,
+                    onChanged: (value) {},
+                    maxLength: 30,
+                    maxLines: 1,
+                  ),
+                  const SizedBox(height: 20),
+                  drawBaseLabel('사용자 활성 상태'),
+                  const SizedBox(height: 8),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Obx(
+                      () => ToggleButtons(
+                        isSelected: isSelected.value,
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderColor: theme.primary,
+                        borderWidth: 2,
+                        selectedBorderColor: theme.primary,
+                        selectedColor: theme.base,
+                        disabledColor: theme.secondary,
+                        fillColor: theme.primary,
+                        onPressed: (index) {
+                          if (index == 0) {
+                            isSelected.value = [true, false];
+                          } else {
+                            isSelected.value = [false, true];
+                          }
+                        },
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 42,
+                            alignment: Alignment.center,
+                            // color: isSelected[0] ? theme.primary : theme.secondary,
+                            child: Text(
+                              '활성화',
+                              style: isSelected[0]
+                                  ? theme.listBody.copyWith(color: theme.textLight)
+                                  : theme.listBody.copyWith(color: theme.textColored),
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            height: 42,
+                            alignment: Alignment.center,
+                            // color: isSelected[1] ? theme.primary : theme.secondary,
+                            child: Text(
+                              '비활성화',
+                              style: isSelected[1]
+                                  ? theme.listBody.copyWith(color: theme.textLight)
+                                  : theme.listBody.copyWith(color: theme.textColored),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    height: 60,
+                    width: Get.width,
+                    // margin: const EdgeInsets.all(12),
+                    child: BNColoredButton(
+                      child: const Text('수정하기'),
+                      onPressed: () {
+                        if (nameController.text.isEmpty) {
+                          Get.toast('거래처 이름을 입력 해 주세요.');
+                          return;
+                        }
+                        final updatedCompany = company.copyWith(
+                          name: nameController.text,
+                          description: descController.text != '' ? descController.text : null,
+                          isActive: isSelected[0],
+                        );
+                        controller.updateCompanyInfo(updatedCompany);
+                        Get.back();
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                ],
+              ),
             ),
           ),
         ),
@@ -326,109 +332,115 @@ extension CompanyListViewExt on CompanyListView {
     isSelected.value.insert(isActive ? 0 : 1, true);
 
     return Get.bottomSheet(
-      Container(
-        decoration: BoxDecoration(
-          color: theme.base,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(12.0), topRight: Radius.circular(12.0)),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
-                    child: bottomSheetHandle,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                drawBaseLabel('거래처 이름'),
-                const SizedBox(height: 8),
-                BNInputBox(
-                  controller: nameController,
-                  onChanged: (value) {},
-                ),
-                const SizedBox(height: 12),
-                drawBaseLabel('설명'),
-                const SizedBox(height: 8),
-                BNInputBox(
-                  controller: descController,
-                  onChanged: (value) {},
-                ),
-                const SizedBox(height: 20),
-                drawBaseLabel('거래처 활성 상태'),
-                const SizedBox(height: 8),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Obx(
-                    () => ToggleButtons(
-                      isSelected: isSelected.value,
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderColor: theme.primary,
-                      borderWidth: 2,
-                      selectedBorderColor: theme.primary,
-                      selectedColor: theme.base,
-                      disabledColor: theme.secondary,
-                      fillColor: theme.primary,
-                      onPressed: (index) {
-                        if (index == 0) {
-                          isSelected.value = [true, false];
-                        } else {
-                          isSelected.value = [false, true];
-                        }
-                      },
-                      children: [
-                        Container(
-                          width: 100,
-                          height: 42,
-                          alignment: Alignment.center,
-                          // color: isSelected[0] ? theme.primary : theme.secondary,
-                          child: Text(
-                            '입고처',
-                            style: isSelected[0]
-                                ? theme.listBody.copyWith(color: theme.textLight)
-                                : theme.listBody.copyWith(color: theme.textColored),
-                          ),
-                        ),
-                        Container(
-                          width: 100,
-                          height: 42,
-                          alignment: Alignment.center,
-                          // color: isSelected[1] ? theme.primary : theme.secondary,
-                          child: Text(
-                            '출고처',
-                            style: isSelected[1]
-                                ? theme.listBody.copyWith(color: theme.textLight)
-                                : theme.listBody.copyWith(color: theme.textColored),
-                          ),
-                        ),
-                      ],
+      SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+            color: theme.base,
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12.0), topRight: Radius.circular(12.0)),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: bottomSheetHandle,
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  height: 60,
-                  width: Get.width,
-                  child: BNColoredButton(
-                    child: Text('저장하기'),
-                    onPressed: () {
-                      if (nameController.text.isEmpty) {
-                        Get.toast('거래처 이름을 입력 해 주세요.');
-                        return;
-                      }
-                      Get.back();
-                      controller.addNewCompany(nameController.text, descController.text,
-                          isSelected[0] ? CompanyType.input : CompanyType.output);
-                    },
+                  const SizedBox(height: 12),
+                  drawBaseLabel('거래처 이름'),
+                  const SizedBox(height: 8),
+                  BNInputBox(
+                    controller: nameController,
+                    onChanged: (value) {},
+                    maxLines: 1,
+                    maxLength: 30,
                   ),
-                ),
-                const SizedBox(height: 12),
-              ],
+                  const SizedBox(height: 12),
+                  drawBaseLabel('설명'),
+                  const SizedBox(height: 8),
+                  BNInputBox(
+                    controller: descController,
+                    onChanged: (value) {},
+                    maxLines: 1,
+                    maxLength: 30,
+                  ),
+                  const SizedBox(height: 20),
+                  drawBaseLabel('거래처 활성 상태'),
+                  const SizedBox(height: 8),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Obx(
+                      () => ToggleButtons(
+                        isSelected: isSelected.value,
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderColor: theme.primary,
+                        borderWidth: 2,
+                        selectedBorderColor: theme.primary,
+                        selectedColor: theme.base,
+                        disabledColor: theme.secondary,
+                        fillColor: theme.primary,
+                        onPressed: (index) {
+                          if (index == 0) {
+                            isSelected.value = [true, false];
+                          } else {
+                            isSelected.value = [false, true];
+                          }
+                        },
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 42,
+                            alignment: Alignment.center,
+                            // color: isSelected[0] ? theme.primary : theme.secondary,
+                            child: Text(
+                              '입고처',
+                              style: isSelected[0]
+                                  ? theme.listBody.copyWith(color: theme.textLight)
+                                  : theme.listBody.copyWith(color: theme.textColored),
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            height: 42,
+                            alignment: Alignment.center,
+                            // color: isSelected[1] ? theme.primary : theme.secondary,
+                            child: Text(
+                              '출고처',
+                              style: isSelected[1]
+                                  ? theme.listBody.copyWith(color: theme.textLight)
+                                  : theme.listBody.copyWith(color: theme.textColored),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    height: 60,
+                    width: Get.width,
+                    child: BNColoredButton(
+                      child: Text('저장하기'),
+                      onPressed: () {
+                        if (nameController.text.isEmpty) {
+                          Get.toast('거래처 이름을 입력 해 주세요.');
+                          return;
+                        }
+                        Get.back();
+                        controller.addNewCompany(nameController.text, descController.text,
+                            isSelected[0] ? CompanyType.input : CompanyType.output);
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                ],
+              ),
             ),
           ),
         ),
